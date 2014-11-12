@@ -2,7 +2,7 @@
 WOFF data packers.
 """
 
-import sstruct
+from fontTools.misc import sstruct
 from utilities import padData, calcHeadCheckSumAdjustment
 
 # ------------------

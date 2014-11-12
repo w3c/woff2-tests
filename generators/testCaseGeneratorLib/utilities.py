@@ -3,8 +3,9 @@ Miscellaneous utilities.
 """
 
 import struct
-import sstruct
-from fontTools.ttLib.sfnt import calcChecksum, getSearchRange,\
+from fontTools.misc import sstruct
+from fontTools.ttLib import getSearchRange
+from fontTools.ttLib.sfnt import calcChecksum,\
     SFNTDirectoryEntry, sfntDirectoryFormat, sfntDirectorySize, sfntDirectoryEntryFormat, sfntDirectoryEntrySize
 
 # -------
@@ -95,7 +96,7 @@ def calcHeadCheckSumAdjustmentSFNT(directory, tableData, flavor=None):
                 break
     assert flavor in ("OTTO", "\000\001\000\000")
     # make the sfnt header
-    searchRange, entrySelector, rangeShift = getSearchRange(len(directory))
+    searchRange, entrySelector, rangeShift = getSearchRange(len(directory), 16)
     sfntHeaderData = dict(
         sfntVersion=flavor,
         numTables=len(directory),

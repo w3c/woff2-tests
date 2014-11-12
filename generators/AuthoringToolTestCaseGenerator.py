@@ -22,7 +22,7 @@ import shutil
 import glob
 import struct
 import zipfile
-import sstruct
+from fontTools.misc import sstruct
 from fontTools.ttLib.sfnt import sfntDirectorySize, sfntDirectoryEntrySize
 from testCaseGeneratorLib.defaultData import defaultSFNTTestData
 from testCaseGeneratorLib.sfnt import packSFNT

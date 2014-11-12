@@ -3,9 +3,9 @@ SFNT data extractor.
 """
 
 import zlib
-import sstruct
-from fontTools.ttLib import TTFont
-from fontTools.ttLib.sfnt import getSearchRange,\
+from fontTools.misc import sstruct
+from fontTools.ttLib import TTFont, getSearchRange
+from fontTools.ttLib.sfnt import \
     SFNTDirectoryEntry, sfntDirectoryFormat, sfntDirectorySize, sfntDirectoryEntryFormat, sfntDirectoryEntrySize
 from utilities import padData, calcHeadCheckSumAdjustmentSFNT
 
@@ -50,7 +50,7 @@ def packSFNT(header, directory, tableData, flavor="cff",
             f = "\000\001\000\000"
         calcHeadCheckSumAdjustmentSFNT(directory, tableData, flavor=f)
     # update the header
-    cSearchRange, cEntrySelector, cRangeShift = getSearchRange(len(directory))
+    cSearchRange, cEntrySelector, cRangeShift = getSearchRange(len(directory), 16)
     if searchRange is None:
         searchRange = cSearchRange
     if entrySelector is None:
