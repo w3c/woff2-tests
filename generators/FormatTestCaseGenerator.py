@@ -44,11 +44,11 @@ specificationURL = "http://dev.w3.org/webfonts/WOFF/spec/"
 # ------------------
 
 if not os.path.exists(formatDirectory):
-    os.mkdir(formatDirectory)
+    os.makedirs(formatDirectory)
 if not os.path.exists(formatTestDirectory):
-    os.mkdir(formatTestDirectory)
+    os.makedirs(formatTestDirectory)
 if not os.path.exists(formatResourcesDirectory):
-    os.mkdir(formatResourcesDirectory)
+    os.makedirs(formatResourcesDirectory)
 
 # -------------------
 # Move HTML Resources

@@ -48,13 +48,13 @@ specificationURL = "http://dev.w3.org/webfonts/WOFF/spec/"
 # ------------------
 
 if not os.path.exists(userAgentDirectory):
-    os.mkdir(userAgentDirectory)
+    os.makedirs(userAgentDirectory)
 
 if not os.path.exists(userAgentTestDirectory):
-    os.mkdir(userAgentTestDirectory)
+    os.makedirs(userAgentTestDirectory)
 
 if not os.path.exists(userAgentTestResourcesDirectory):
-    os.mkdir(userAgentTestResourcesDirectory)
+    os.makedirs(userAgentTestResourcesDirectory)
 
 # ---------------------
 # Move Fonts To Install

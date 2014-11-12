@@ -43,11 +43,11 @@ specificationURL = "http://dev.w3.org/webfonts/WOFF/spec/"
 # ------------------
 
 if not os.path.exists(authoringToolDirectory):
-    os.mkdir(authoringToolDirectory)
+    os.makedirs(authoringToolDirectory)
 if not os.path.exists(authoringToolTestDirectory):
-    os.mkdir(authoringToolTestDirectory)
+    os.makedirs(authoringToolTestDirectory)
 if not os.path.exists(authoringToolResourcesDirectory):
-    os.mkdir(authoringToolResourcesDirectory)
+    os.makedirs(authoringToolResourcesDirectory)
 
 # -------------------
 # Move HTML Resources

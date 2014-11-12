@@ -1,2 +1,5 @@
 *.pyc
 .*.sw[nop]
+/AuthoringTool/
+/Format/
+/UserAgent/
