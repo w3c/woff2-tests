@@ -17,6 +17,7 @@ woffHeaderFormat = """
     numTables:      H
     reserved:       H
     totalSfntSize:  L
+    totalCompressedSize: L
     majorVersion:   H
     minorVersion:   H
     metaOffset:     L
@@ -29,11 +30,10 @@ woffHeaderSize = sstruct.calcsize(woffHeaderFormat)
 
 woffDirectoryEntryFormat = """
     > # big endian
-    tag:            4s
-    offset:         L
-    compLength:     L
-    origLength:     L
-    origChecksum:   L
+    flags:           B
+    tag:             4s
+    origLength:      L # XXX
+    transformLength: L # XXX
 """
 woffDirectoryEntrySize = sstruct.calcsize(woffDirectoryEntryFormat)
 
@@ -50,17 +50,6 @@ def packTestDirectory(directory):
     for tag, table in sorted(directory):
         data += sstruct.pack(woffDirectoryEntryFormat, table)
     return data
-
-def packTestTableData(directory, tableData, calcCheckSum=True):
-    if calcCheckSum:
-        calcHeadCheckSumAdjustment(directory, tableData)
-    orderedData = []
-    for entry in directory:
-        tag = entry["tag"]
-        origData, compData = tableData[tag]
-        compData = padData(compData)
-        orderedData.append(compData)
-    return "".join(orderedData)
 
 def packTestMetadata((origMetadata, compMetadata), havePrivateData=False):
     if havePrivateData:

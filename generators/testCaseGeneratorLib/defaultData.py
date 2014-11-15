@@ -16,14 +16,14 @@ from utilities import calcPaddingLength, calcTableChecksum
 
 originalSFNTChecksums = {}
 
-sfntTTFTableData, sfntTTFTableOrder, sfntTTFTableChecksums = getSFNTData(sfntTTFSourcePath)
+sfntTTFTableData, sfntTTFCompressedData, sfntTTFTableOrder, sfntTTFTableChecksums = getSFNTData(sfntTTFSourcePath)
 for tag, checksum in sfntTTFTableChecksums.items():
     data = sfntTTFTableData[tag]
     if data in originalSFNTChecksums:
         assert originalSFNTChecksums[data] == checksum
     originalSFNTChecksums[data] = checksum
 
-sfntCFFTableData, sfntCFFTableOrder, sfntCFFTableChecksums = getSFNTData(sfntCFFSourcePath)
+sfntCFFTableData, sfntCFFCompressedData, sfntCFFTableOrder, sfntCFFTableChecksums = getSFNTData(sfntCFFSourcePath)
 for tag, checksum in sfntCFFTableChecksums.items():
     data = sfntCFFTableData[tag]
     if data in originalSFNTChecksums:
@@ -146,12 +146,13 @@ testDataWOFFPrivateData = "\0" * 100
 # WOFF
 
 testDataWOFFHeader = dict(
-    signature="wOFF",
+    signature="wOF2",
     flavor="OTTO",
     length=0,
     reserved=0,
     numTables=0,
     totalSfntSize=0,
+    totalCompressedSize=0,
     majorVersion=0,
     minorVersion=0,
     metaOffset=0,
@@ -164,22 +165,20 @@ testDataWOFFHeader = dict(
 testTTFDataWOFFDirectory = []
 for tag in sfntTTFTableOrder:
     d = dict(
+        flags=0,
         tag=tag,
-        offset=0,
-        compLength=0,
         origLength=0,
-        origChecksum=0
+        transformLength=0,
     )
     testTTFDataWOFFDirectory.append(d)
 
 testCFFDataWOFFDirectory = []
 for tag in sfntCFFTableOrder:
     d = dict(
+        flags=0,
         tag=tag,
-        offset=0,
-        compLength=0,
         origLength=0,
-        origChecksum=0
+        transformLength=0,
     )
     testCFFDataWOFFDirectory.append(d)
 
@@ -217,7 +216,7 @@ for tag in sfntCFFTableOrder:
 # Default Data Creator
 # --------------------
 
-def defaultTestData(header=None, directory=None, tableData=None, metadata=None, privateData=None, flavor="cff"):
+def defaultTestData(header=None, directory=None, tableData=None, compressedData=None, metadata=None, privateData=None, flavor="cff"):
     parts = []
     # setup the header
     if header is None:
@@ -236,41 +235,39 @@ def defaultTestData(header=None, directory=None, tableData=None, metadata=None, 
             tableData = deepcopy(sfntCFFTableData)
         else:
             tableData = deepcopy(sfntTTFTableData)
-    parts.append(tableData)
+    if compressedData is None:
+        if flavor == "cff":
+            compressedData = deepcopy(sfntCFFCompressedData)
+        else:
+            compressedData = deepcopy(sfntTTFCompressedData)
+    parts.append(compressedData)
     # sanity checks
     assert len(directory) == len(tableData)
     assert set(tableData.keys()) == set([entry["tag"] for entry in directory])
     # apply the directory data to the header
     header["numTables"] = len(directory)
     header["length"] = woffHeaderSize + (woffDirectoryEntrySize * len(directory))
+    header["length"] += len(compressedData)
     if "CFF " in tableData:
         header["flavor"] = "OTTO"
     else:
         header["flavor"] = "\000\001\000\000"
     # apply the table data to the directory and the header
     header["totalSfntSize"] = sfntDirectorySize + (len(directory) * sfntDirectoryEntrySize)
-    offset = header["length"]
+    header["totalCompressedSize"] = len(compressedData)
     for entry in directory:
         tag = entry["tag"]
-        origData, compData = tableData[tag]
+        origData = tableData[tag]
+        origData, transformData = tableData[tag]
         # measure
-        compLength = len(compData)
-        compPaddedLength = compLength + calcPaddingLength(compLength)
         origLength = len(origData)
+        transformLength = len(transformData)
         origPaddedLength = origLength + calcPaddingLength(origLength)
         # store
-        entry["offset"] = offset
-        entry["compLength"] = compLength
+        entry["flags"] = 63 # XXX
         entry["origLength"] = origLength
-        if origData in originalSFNTChecksums:
-            checksum = originalSFNTChecksums[origData]
-        else:
-            checksum = calcTableChecksum(tag, origData)
-        entry["origChecksum"] = checksum
-        header["length"] += compPaddedLength
+        entry["transformLength"] = transformLength
         header["totalSfntSize"] += origPaddedLength
-        # next
-        offset += compPaddedLength
     # setup the metadata
     if metadata is not None:
         if isinstance(metadata, tuple):
@@ -315,7 +312,7 @@ def defaultSFNTTestData(flavor="cff"):
         tableData = deepcopy(sfntCFFTableData)
     else:
         tableData = deepcopy(sfntTTFTableData)
-    for tag, (data, compData) in tableData.items():
+    for tag, (data, transformData) in tableData.items():
         tableData[tag] = data
     parts.append(tableData)
     # sanity checks

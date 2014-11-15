@@ -7,7 +7,7 @@ import zlib
 import codecs
 from copy import deepcopy
 from fontTools.ttLib.sfnt import sfntDirectoryEntrySize
-from testCaseGeneratorLib.woff import packTestHeader, packTestDirectory, packTestTableData, packTestMetadata, packTestPrivateData,\
+from testCaseGeneratorLib.woff import packTestHeader, packTestDirectory, packTestMetadata, packTestPrivateData,\
     woffHeaderSize, woffDirectoryEntrySize, woffDirectoryEntryFormat
 from testCaseGeneratorLib.defaultData import defaultTestData, testDataWOFFMetadata, testDataWOFFPrivateData,\
     sfntCFFTableData, testCFFDataWOFFDirectory
@@ -26,7 +26,7 @@ def makeMetadataTest(metadata):
     originalMetadata = metadata
     # pack
     header, directory, tableData, metadata = defaultTestData(metadata=metadata)
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData) + packTestMetadata(metadata)
+    data = packTestHeader(header) + packTestDirectory(directory) + tableData + packTestMetadata(metadata)
     # done
     return data, originalMetadata
 
@@ -39,7 +39,7 @@ def makeMetadataTest(metadata):
 
 def makeValidWOFF1():
     header, directory, tableData = defaultTestData()
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData)
+    data = packTestHeader(header) + packTestDirectory(directory) + tableData
     return data
 
 makeValidWOFF1Title = "Valid WOFF 1"
@@ -48,7 +48,7 @@ makeValidWOFF1Credits = [dict(title="Tal Leming", role="author", link="http://ty
 
 def makeValidWOFF2():
     header, directory, tableData, metadata = defaultTestData(metadata=testDataWOFFMetadata)
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData) + packTestMetadata(metadata)
+    data = packTestHeader(header) + packTestDirectory(directory) + tableData + packTestMetadata(metadata)
     return data
 
 makeValidWOFF2Title = "Valid WOFF 2"
@@ -57,7 +57,7 @@ makeValidWOFF2Credits = [dict(title="Tal Leming", role="author", link="http://ty
 
 def makeValidWOFF3():
     header, directory, tableData, privateData = defaultTestData(privateData=testDataWOFFPrivateData)
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData) + packTestPrivateData(privateData)
+    data = packTestHeader(header) + packTestDirectory(directory) + tableData + packTestPrivateData(privateData)
     return data
 
 makeValidWOFF3Title = "Valid WOFF 3"
@@ -66,7 +66,7 @@ makeValidWOFF3Credits = [dict(title="Tal Leming", role="author", link="http://ty
 
 def makeValidWOFF4():
     header, directory, tableData, metadata, privateData = defaultTestData(metadata=testDataWOFFMetadata, privateData=testDataWOFFPrivateData)
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData) + packTestMetadata(metadata, havePrivateData=True) + packTestPrivateData(privateData)
+    data = packTestHeader(header) + packTestDirectory(directory) + tableData + packTestMetadata(metadata, havePrivateData=True) + packTestPrivateData(privateData)
     return data
 
 makeValidWOFF4Title = "Valid WOFF 4"
@@ -77,7 +77,7 @@ makeValidWOFF4Credits = [dict(title="Tal Leming", role="author", link="http://ty
 
 def makeValidWOFF5():
     header, directory, tableData = defaultTestData(flavor="ttf")
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData)
+    data = packTestHeader(header) + packTestDirectory(directory) + tableData
     return data
 
 makeValidWOFF5Title = "Valid WOFF 5"
@@ -86,7 +86,7 @@ makeValidWOFF5Credits = [dict(title="Tal Leming", role="author", link="http://ty
 
 def makeValidWOFF6():
     header, directory, tableData, metadata = defaultTestData(metadata=testDataWOFFMetadata, flavor="ttf")
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData) + packTestMetadata(metadata)
+    data = packTestHeader(header) + packTestDirectory(directory) + tableData + packTestMetadata(metadata)
     return data
 
 makeValidWOFF6Title = "Valid WOFF 6"
@@ -95,7 +95,7 @@ makeValidWOFF6Credits = [dict(title="Tal Leming", role="author", link="http://ty
 
 def makeValidWOFF7():
     header, directory, tableData, privateData = defaultTestData(privateData=testDataWOFFPrivateData, flavor="ttf")
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData) + packTestPrivateData(privateData)
+    data = packTestHeader(header) + packTestDirectory(directory) + tableData + packTestPrivateData(privateData)
     return data
 
 makeValidWOFF7Title = "Valid WOFF 7"
@@ -104,7 +104,7 @@ makeValidWOFF7Credits = [dict(title="Tal Leming", role="author", link="http://ty
 
 def makeValidWOFF8():
     header, directory, tableData, metadata, privateData = defaultTestData(metadata=testDataWOFFMetadata, privateData=testDataWOFFPrivateData, flavor="ttf")
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData) + packTestMetadata(metadata, havePrivateData=True) + packTestPrivateData(privateData)
+    data = packTestHeader(header) + packTestDirectory(directory) + tableData + packTestMetadata(metadata, havePrivateData=True) + packTestPrivateData(privateData)
     return data
 
 makeValidWOFF8Title = "Valid WOFF 8"
@@ -118,7 +118,7 @@ makeValidWOFF8Credits = [dict(title="Tal Leming", role="author", link="http://ty
 def makeHeaderInvalidSignature1():
     header, directory, tableData = defaultTestData()
     header["signature"] = "XXXX"
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData)
+    data = packTestHeader(header) + packTestDirectory(directory) + tableData
     return data
 
 makeHeaderInvalidSignature1Title = "Header Signature Invalid Value"
@@ -132,7 +132,7 @@ makeHeaderInvalidSignature1Credits = [dict(title="Tal Leming", role="author", li
 def makeHeaderInvalidLength1():
     header, directory, tableData = defaultTestData()
     header["length"] -= 4
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData)
+    data = packTestHeader(header) + packTestDirectory(directory) + tableData
     return data
 
 makeHeaderInvalidLength1Title = "Header Length Too Short"
@@ -142,7 +142,7 @@ makeHeaderInvalidLength1Credits = [dict(title="Tal Leming", role="author", link=
 def makeHeaderInvalidLength2():
     header, directory, tableData = defaultTestData()
     header["length"] += 4
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData)
+    data = packTestHeader(header) + packTestDirectory(directory) + tableData
     return data
 
 makeHeaderInvalidLength2Title = "Header Length Too Long"
@@ -156,7 +156,7 @@ makeHeaderInvalidLength2Credits = [dict(title="Tal Leming", role="author", link=
 def makeHeaderInvalidNumTables1():
     header, directory, tableData = defaultTestData()
     header["numTables"] = 0
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData)
+    data = packTestHeader(header) + packTestDirectory(directory) + tableData
     return data
 
 makeHeaderInvalidNumTables1Title = "Header Number of Tables Set to Zero"
@@ -178,7 +178,7 @@ def makeHeaderInvalidTotalSfntSize1():
             break
     assert decreaseBy is not None
     header["totalSfntSize"] -= decreaseBy
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData)
+    data = packTestHeader(header) + packTestDirectory(directory) + tableData
     return data
 
 makeHeaderInvalidTotalSfntSize1Title = "Header Total SFNT Size Not a Multiple of 4"
@@ -188,7 +188,7 @@ makeHeaderInvalidTotalSfntSize1Credits = [dict(title="Tal Leming", role="author"
 def makeHeaderInvalidTotalSfntSize2():
     header, directory, tableData = defaultTestData()
     header["totalSfntSize"] += 4
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData)
+    data = packTestHeader(header) + packTestDirectory(directory) + tableData
     return data
 
 makeHeaderInvalidTotalSfntSize2Title = "Header Total SFNT Size Too Long"
@@ -198,7 +198,7 @@ makeHeaderInvalidTotalSfntSize2Credits = [dict(title="Tal Leming", role="author"
 def makeHeaderInvalidTotalSfntSize3():
     header, directory, tableData = defaultTestData()
     header["totalSfntSize"] -= 4
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData)
+    data = packTestHeader(header) + packTestDirectory(directory) + tableData
     return data
 
 makeHeaderInvalidTotalSfntSize3Title = "Header Total SFNT Size Too Short"
@@ -212,7 +212,7 @@ makeHeaderInvalidTotalSfntSize3Credits = [dict(title="Tal Leming", role="author"
 def makeHeaderInvalidReserved1():
     header, directory, tableData = defaultTestData()
     header["reserved"] = 1
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData)
+    data = packTestHeader(header) + packTestDirectory(directory) + tableData
     return data
 
 makeHeaderInvalidReserved1Title = "Header Reserved Invalid Value"
@@ -232,7 +232,7 @@ def makeExtraneousData1():
     for entry in directory:
         entry["offset"] += bogusByteLength
     header["length"] += bogusByteLength
-    data = packTestHeader(header) + packTestDirectory(directory) + bogusBytes + packTestTableData(directory, tableData)
+    data = packTestHeader(header) + packTestDirectory(directory) + bogusBytes + tableData
     return data
 
 makeExtraneousData1Title = "Extraneous Data Between Directory and Table Data"
@@ -246,7 +246,7 @@ def makeExtraneousData2():
     bogusByteLength = 4
     bogusBytes = "\0" * bogusByteLength
     header["length"] += bogusByteLength
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData) + bogusBytes
+    data = packTestHeader(header) + packTestDirectory(directory) + tableData + bogusBytes
     return data
 
 makeExtraneousData2Title = "Extraneous Data After Table Data"
@@ -261,7 +261,7 @@ def makeExtraneousData3():
     bogusBytes = "\0" * bogusByteLength
     header["length"] += bogusByteLength
     header["metaOffset"] += bogusByteLength
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData) + bogusBytes + packTestMetadata(metadata)
+    data = packTestHeader(header) + packTestDirectory(directory) + tableData + bogusBytes + packTestMetadata(metadata)
     return data
 
 makeExtraneousData3Title = "Extraneous Data Between Table Data and Metadata"
@@ -276,7 +276,7 @@ def makeExtraneousData4():
     bogusBytes = "\0" * bogusByteLength
     header["length"] += bogusByteLength
     header["privOffset"] += bogusByteLength
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData) + bogusBytes + packTestPrivateData(privateData)
+    data = packTestHeader(header) + packTestDirectory(directory) + tableData + bogusBytes + packTestPrivateData(privateData)
     return data
 
 makeExtraneousData4Title = "Extraneous Data Between Table Data and Private Data"
@@ -291,7 +291,7 @@ def makeExtraneousData5():
     bogusBytes = "\0" * bogusByteLength
     header["length"] += bogusByteLength
     header["privOffset"] += bogusByteLength
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData) + packTestMetadata(metadata, havePrivateData=True) + bogusBytes + packTestPrivateData(privateData)
+    data = packTestHeader(header) + packTestDirectory(directory) + tableData + packTestMetadata(metadata, havePrivateData=True) + bogusBytes + packTestPrivateData(privateData)
     return data
 
 makeExtraneousData5Title = "Extraneous Data Between Metdata and Private Data"
@@ -305,7 +305,7 @@ def makeExtraneousData6():
     bogusByteLength = 4
     bogusBytes = "\0" * bogusByteLength
     header["length"] += bogusByteLength
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData) + packTestMetadata(metadata) + bogusBytes
+    data = packTestHeader(header) + packTestDirectory(directory) + tableData + packTestMetadata(metadata) + bogusBytes
     return data
 
 makeExtraneousData6Title = "Extraneous Data After Metadata"
@@ -319,7 +319,7 @@ def makeExtraneousData7():
     bogusByteLength = 4
     bogusBytes = "\0" * bogusByteLength
     header["length"] += bogusByteLength
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData) + packTestPrivateData(privateData) + bogusBytes
+    data = packTestHeader(header) + packTestDirectory(directory) + tableData + packTestPrivateData(privateData) + bogusBytes
     return data
 
 makeExtraneousData7Title = "Extraneous Data After Private Data"
@@ -337,7 +337,7 @@ def makeOverlappingData1():
     overlapLength = 4
     header["metaOffset"] -= overlapLength
     header["length"] -= overlapLength
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData)[:-overlapLength] + packTestMetadata(metadata)
+    data = packTestHeader(header) + packTestDirectory(directory) + tableData[:-overlapLength] + packTestMetadata(metadata)
     return data
 
 makeOverlappingData1Title = "Metadata Overlaps Table Data"
@@ -351,7 +351,7 @@ def makeOverlappingData2():
     overlapLength = 4
     header["privOffset"] -= overlapLength
     header["length"] -= overlapLength
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData)[:-overlapLength] + packTestPrivateData(privateData)
+    data = packTestHeader(header) + packTestDirectory(directory) + tableData[:-overlapLength] + packTestPrivateData(privateData)
     return data
 
 makeOverlappingData2Title = "Private Data Overlaps Table Data"
@@ -365,7 +365,7 @@ def makeOverlappingData3():
     overlapLength = 4
     header["privOffset"] -= overlapLength
     header["length"] -= overlapLength
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData) + packTestMetadata(metadata, havePrivateData=True)[:-overlapLength] + packTestPrivateData(privateData)
+    data = packTestHeader(header) + packTestDirectory(directory) + tableData + packTestMetadata(metadata, havePrivateData=True)[:-overlapLength] + packTestPrivateData(privateData)
     return data
 
 makeOverlappingData3Title = "Private Data Overlaps Metadata"
@@ -443,7 +443,7 @@ def makeTableData4Byte2():
     # update the structures
     header, directory, tableData = defaultTestData(directory=directory, tableData=tableData)
     header["length"] -= paddingLength
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData)
+    data = packTestHeader(header) + packTestDirectory(directory) + tableData
     data = data[:-paddingLength]
     return data
 
@@ -460,7 +460,7 @@ makeTableData4Byte2Credits = [dict(title="Tal Leming", role="author", link="http
 def makeTableDataByteRange1():
     header, directory, tableData = defaultTestData()
     directory[-1]["offset"] = header["length"] + 4
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData)
+    data = packTestHeader(header) + packTestDirectory(directory) + tableData
     return data
 
 makeTableDataByteRange1Title = "Font Table Data Offset Past End of File"
@@ -474,7 +474,7 @@ def makeTableDataByteRange2():
     directory[-1]["compLength"] += 4
     directory[-1]["origLength"] += 4
     header["totalSfntSize"] += 4
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData)
+    data = packTestHeader(header) + packTestDirectory(directory) + tableData
     return data
 
 makeTableDataByteRange2Title = "Font Table Data Offset+Length Past End of File"
@@ -498,7 +498,7 @@ def makeTableDataByteRange3():
     # pack the header and directory
     data = packTestHeader(header) + packTestDirectory(directory)
     # pad and combine all tables
-    tableData = packTestTableData(directory, tableData)
+    tableData = tableData
     # slice the final table off of the table data
     tableData = tableData[:-entryLength]
     # pack the metadata
@@ -531,7 +531,7 @@ def makeTableDataByteRange4():
     # pack the header and directory
     data = packTestHeader(header) + packTestDirectory(directory)
     # pad and combine all tables
-    tableData = packTestTableData(directory, tableData)
+    tableData = tableData
     # slice the final table off of the table data
     tableData = tableData[:-entryLength]
     # pack the private data
@@ -563,7 +563,7 @@ def makeTableDataByteRange5():
     # adjust the total length
     header["length"] = entry["offset"] + entryLength
     # pack the header, directory and table data
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData)
+    data = packTestHeader(header) + packTestDirectory(directory) + tableData
     # slice off everything after the new offset
     data = data[:entry["offset"]]
     # add the table to the data
@@ -597,7 +597,7 @@ def makeTableDataExtraneousData1():
             origData, compData = tableData[tag]
             tableData[tag] = (origData, compData + bogusBytes)
             header["length"] += bogusByteLength
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData)
+    data = packTestHeader(header) + packTestDirectory(directory) + tableData
     return data
 
 makeTableDataExtraneousData1Title = "Extraneous Data Between Tables"
@@ -622,7 +622,7 @@ def makeTableDataCompressionLength1():
             tableData[tag] = (origData, compData)
     assert haveCompLargerThanOrig
     header, directory, tableData = defaultTestData(tableData=tableData)
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData)
+    data = packTestHeader(header) + packTestDirectory(directory) + tableData
     return data
 
 makeTableDataCompressionLength1Title = "Font Table Data Compressed Length Greater Than Original Length"
@@ -644,7 +644,7 @@ def makeTableDataOriginalLength1():
     assert cffEntry["origLength"] - shift > entry["compLength"]
     cffEntry["origLength"] -= shift
     header["totalSfntSize"] -= shift
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData)
+    data = packTestHeader(header) + packTestDirectory(directory) + tableData
     return data
 
 makeTableDataOriginalLength1Title = "Original Length Less Than Decompressed Length"
@@ -661,7 +661,7 @@ def makeTableDataOriginalLength2():
     assert cffEntry["compLength"] < cffEntry["origLength"]
     cffEntry["origLength"] += shift
     header["totalSfntSize"] += shift
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData)
+    data = packTestHeader(header) + packTestDirectory(directory) + tableData
     return data
 
 makeTableDataOriginalLength2Title = "Original Length Greater Than Decompressed Length"
@@ -679,7 +679,7 @@ def makeTableCompressionTest1():
     for tag, (origData, compData) in tableData.items():
         tableData[tag] = (origData, origData)
     header, directory, tableData = defaultTestData(tableData=tableData)
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData)
+    data = packTestHeader(header) + packTestDirectory(directory) + tableData
     return data
 
 makeTableCompressionTest1Title = "Font Table Data Not Compressed"
@@ -699,7 +699,7 @@ def makeTableCompressionTest2():
         if len(compData) == len(origData):
             compTest = zlib.compress(origData)
             assert len(compTest) > len(origData)
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData)
+    data = packTestHeader(header) + packTestDirectory(directory) + tableData
     return data
 
 makeTableCompressionTest2Title = "Font Table Data Is Compressed When Possible"
@@ -719,7 +719,7 @@ def makeTableCompressionTest3():
         tableData[tag] = (origData, compData)
     assert haveStoredCompressed
     header, directory, tableData = defaultTestData(tableData=tableData)
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData)
+    data = packTestHeader(header) + packTestDirectory(directory) + tableData
     return data
 
 makeTableCompressionTest3Title = "Not All Font Table Data Is Compressed When Possible"
@@ -747,7 +747,7 @@ def makeTableCompressionTest4():
         tableData[tag] = (origData, compData)
     assert len(compressionLevels) > 1
     header, directory, tableData = defaultTestData(tableData=tableData)
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData)
+    data = packTestHeader(header) + packTestDirectory(directory) + tableData
     return data
 
 makeTableCompressionTest4Title = "Font Table Data Is Compressed At Different Levels"
@@ -771,7 +771,7 @@ def makeTableZlibCompressionTest1():
         madeBogusTableData = True
         break
     assert madeBogusTableData
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData)
+    data = packTestHeader(header) + packTestDirectory(directory) + tableData
     return data
 
 makeTableZlibCompressionTest1Title = "Font Table Data Invalid Compressed Data"
@@ -788,7 +788,7 @@ def makeMetadataCompression1():
     diff = header["metaOrigLength"] - header["metaLength"]
     header["length"] += diff
     header["metaLength"] = header["metaOrigLength"]
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData) + packTestMetadata(metadata)
+    data = packTestHeader(header) + packTestDirectory(directory) + tableData + packTestMetadata(metadata)
     return data
 
 makeMetadataCompression1Title = "Metadata Invalid Compression"
@@ -804,7 +804,7 @@ makeMetadataCompression1Credits = [dict(title="Tal Leming", role="author", link=
 def makeMetaOrigLengthTest1():
     header, directory, tableData, metadata = defaultTestData(metadata=testDataWOFFMetadata)
     header["metaOrigLength"] += 1
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData) + packTestMetadata(metadata)
+    data = packTestHeader(header) + packTestDirectory(directory) + tableData + packTestMetadata(metadata)
     return data
 
 makeMetaOrigLengthTest1Title = "Decompressed Metadata Length Less Than metaOrigLength"
@@ -816,7 +816,7 @@ makeMetaOrigLengthTest1Credits = [dict(title="Tal Leming", role="author", link="
 def makeMetaOrigLengthTest2():
     header, directory, tableData, metadata = defaultTestData(metadata=testDataWOFFMetadata)
     header["metaOrigLength"] -= 1
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData) + packTestMetadata(metadata)
+    data = packTestHeader(header) + packTestDirectory(directory) + tableData + packTestMetadata(metadata)
     return data
 
 makeMetaOrigLengthTest2Title = "Decompressed Metadata Length Greater Than metaOrigLength"

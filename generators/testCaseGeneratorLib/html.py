@@ -16,7 +16,7 @@ refPassCharacter = testPassCharacter
 testCSS = """
 @font-face {
 	font-family: "WOFF Test";
-	src: url("resources/%s.woff") format("woff");
+	src: url("resources/%s.woff2") format("woff2");
 }
 body {
 	font-size: 20px;

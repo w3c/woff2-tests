@@ -13,7 +13,7 @@ That directory will have the structure:
             test-case-name-number-ref - reference that uses locally installed fonts for rendering comparison
             /resources
                 index.css - index CSS file
-                test-case-name-number.woff - individual WOFF test case
+                test-case-name-number.woff2 - individual WOFF test case
 
 The individual test cases follow the CSS Test Format
 (http://wiki.csswg.org/test/css2.1/format).
@@ -28,7 +28,7 @@ it will register the case in the suite index.
 import os
 import shutil
 import glob
-from testCaseGeneratorLib.woff import packTestHeader, packTestDirectory, packTestTableData, packTestMetadata, packTestPrivateData
+from testCaseGeneratorLib.woff import packTestHeader, packTestDirectory, packTestMetadata, packTestPrivateData
 from testCaseGeneratorLib.defaultData import defaultTestData, testDataWOFFMetadata, testDataWOFFPrivateData
 from testCaseGeneratorLib.html import generateSFNTDisplayTestHTML, generateSFNTDisplayRefHTML, generateSFNTDisplayIndexHTML
 from testCaseGeneratorLib.paths import resourcesDirectory, userAgentDirectory, userAgentTestDirectory, userAgentTestResourcesDirectory, userAgentFontsToInstallDirectory
@@ -207,7 +207,7 @@ def writeFileStructureTest(identifier, flavor="CFF",
     tag = identifier.split("-")[0]
 
     # generate the WOFF
-    woffPath = os.path.join(userAgentTestResourcesDirectory, identifier) + ".woff"
+    woffPath = os.path.join(userAgentTestResourcesDirectory, identifier) + ".woff2"
     f = open(woffPath, "wb")
     f.write(data)
     f.close()
@@ -865,7 +865,7 @@ writeFileStructureTest(
 
 def makeMetadataNoEffect1():
     header, directory, tableData = defaultTestData()
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData)
+    data = packTestHeader(header) + packTestDirectory(directory) + tableData
     return data
 
 writeFileStructureTest(
@@ -882,7 +882,7 @@ writeFileStructureTest(
 
 def makeMetadataNoEffect2():
     header, directory, tableData, metadata = defaultTestData(metadata=testDataWOFFMetadata)
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData) + packTestMetadata(metadata)
+    data = packTestHeader(header) + packTestDirectory(directory) + tableData + packTestMetadata(metadata)
     return data
 
 writeFileStructureTest(
@@ -905,7 +905,7 @@ writeFileStructureTest(
 
 def makePrivateDataNoEffect1():
     header, directory, tableData = defaultTestData()
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData)
+    data = packTestHeader(header) + packTestDirectory(directory) + tableData
     return data
 
 writeFileStructureTest(
@@ -922,7 +922,7 @@ writeFileStructureTest(
 
 def makePrivateDataNoEffect2():
     header, directory, tableData, privateData = defaultTestData(privateData=testDataWOFFPrivateData)
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData) + packTestPrivateData(privateData)
+    data = packTestHeader(header) + packTestDirectory(directory) + tableData + packTestPrivateData(privateData)
     return data
 
 writeFileStructureTest(
@@ -1023,7 +1023,7 @@ def makeMetadataAuthoritativeTest1():
     assert tableOrder == sfntCFFTableOrder
     # compile the WOFF
     header, directory, tableData, metadata = defaultTestData(tableData=tableData, metadata=metadataAuthoritativeXML)
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData) + packTestMetadata(metadata)
+    data = packTestHeader(header) + packTestDirectory(directory) + tableData + packTestMetadata(metadata)
     return data
 
 writeFileStructureTest(
@@ -2836,7 +2836,7 @@ available2 = """
 		<style type="text/css"><![CDATA[
 			@font-face {
 				font-family: "WOFF Test";
-				src: url("resources/valid-001.woff") format("woff");
+				src: url("resources/valid-001.woff2") format("woff2");
 			}
 			body {
 				font-size: 20px;
@@ -2990,7 +2990,7 @@ f.close()
 skip = "testcaseindex available-001a available-001b".split(" ")
 
 xhtPattern = os.path.join(userAgentTestDirectory, "*.xht")
-woffPattern = os.path.join(userAgentTestResourcesDirectory, "*.woff")
+woffPattern = os.path.join(userAgentTestResourcesDirectory, "*.woff2")
 
 filesOnDisk = glob.glob(xhtPattern)
 filesOnDisk += glob.glob(woffPattern)

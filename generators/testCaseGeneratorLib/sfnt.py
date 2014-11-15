@@ -2,7 +2,7 @@
 SFNT data extractor.
 """
 
-import zlib
+import brotli
 from fontTools.misc import sstruct
 from fontTools.ttLib import TTFont, getSearchRange
 from fontTools.ttLib.sfnt import \
@@ -21,19 +21,22 @@ def getSFNTData(pathOrFile):
         tableChecksums[tag] = entry.checkSum
     # data
     tableData = {}
+    totalData = ""
     for tag in font.keys():
         if len(tag) != 4:
             continue
         origData = font.getTableData(tag)
-        compData = zlib.compress(origData)
-        if len(compData) >= len(origData) or tag == "head":
-            compData = origData
-        tableData[tag] = (origData, compData)
+        transformData = origData # XXX
+        tableData[tag] = (origData, transformData)
+        totalData += transformData # XXX
+    compData = brotli.compress(totalData, "font", True)
+    if len(compData) >= len(totalData):
+        compData = totalData
     # order
     tableOrder = [i for i in font.keys() if len(i) == 4]
     font.close()
     del font
-    return tableData, tableOrder, tableChecksums
+    return tableData, compData, tableOrder, tableChecksums
 
 # -------
 # Packing
