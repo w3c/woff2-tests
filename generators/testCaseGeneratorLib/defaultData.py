@@ -6,7 +6,7 @@ import zlib
 from copy import deepcopy
 from fontTools.ttLib.sfnt import sfntDirectoryFormat, sfntDirectorySize, sfntDirectoryEntryFormat, sfntDirectoryEntrySize
 from sfnt import getSFNTData
-from woff import woffHeaderSize, woffDirectoryEntrySize
+from woff import packTestDirectory, woffHeaderSize
 from paths import sfntCFFSourcePath, sfntTTFSourcePath
 from utilities import calcPaddingLength, calcTableChecksum
 
@@ -165,7 +165,6 @@ testDataWOFFHeader = dict(
 testTTFDataWOFFDirectory = []
 for tag in sfntTTFTableOrder:
     d = dict(
-        flags=0,
         tag=tag,
         origLength=0,
         transformLength=0,
@@ -175,7 +174,6 @@ for tag in sfntTTFTableOrder:
 testCFFDataWOFFDirectory = []
 for tag in sfntCFFTableOrder:
     d = dict(
-        flags=0,
         tag=tag,
         origLength=0,
         transformLength=0,
@@ -246,8 +244,6 @@ def defaultTestData(header=None, directory=None, tableData=None, compressedData=
     assert set(tableData.keys()) == set([entry["tag"] for entry in directory])
     # apply the directory data to the header
     header["numTables"] = len(directory)
-    header["length"] = woffHeaderSize + (woffDirectoryEntrySize * len(directory))
-    header["length"] += len(compressedData)
     if "CFF " in tableData:
         header["flavor"] = "OTTO"
     else:
@@ -264,10 +260,10 @@ def defaultTestData(header=None, directory=None, tableData=None, compressedData=
         transformLength = len(transformData)
         origPaddedLength = origLength + calcPaddingLength(origLength)
         # store
-        entry["flags"] = 63 # XXX
         entry["origLength"] = origLength
         entry["transformLength"] = transformLength
         header["totalSfntSize"] += origPaddedLength
+    header["length"] = woffHeaderSize + len(packTestDirectory(directory)) + len(compressedData)
     # setup the metadata
     if metadata is not None:
         if isinstance(metadata, tuple):
