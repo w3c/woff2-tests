@@ -263,7 +263,9 @@ def defaultTestData(header=None, directory=None, tableData=None, compressedData=
         entry["origLength"] = origLength
         entry["transformLength"] = transformLength
         header["totalSfntSize"] += origPaddedLength
-    header["length"] = woffHeaderSize + len(packTestDirectory(directory)) + len(compressedData)
+    compLength = len(compressedData)
+    compPaddedLength = compLength + calcPaddingLength(compLength)
+    header["length"] = woffHeaderSize + len(packTestDirectory(directory)) + compPaddedLength
     # setup the metadata
     if metadata is not None:
         if isinstance(metadata, tuple):

@@ -88,6 +88,9 @@ def packTestDirectory(directory):
             data += packBase128(table["transformLength"])
     return data
 
+def packTestTableData(directory, tableData, calcCheckSum=True):
+    return padData(tableData)
+
 def packTestMetadata((origMetadata, compMetadata), havePrivateData=False):
     if havePrivateData:
         compMetadata = padData(compMetadata)

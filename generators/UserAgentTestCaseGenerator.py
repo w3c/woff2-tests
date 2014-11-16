@@ -28,7 +28,7 @@ it will register the case in the suite index.
 import os
 import shutil
 import glob
-from testCaseGeneratorLib.woff import packTestHeader, packTestDirectory, packTestMetadata, packTestPrivateData
+from testCaseGeneratorLib.woff import packTestHeader, packTestDirectory, packTestTableData, packTestMetadata, packTestPrivateData
 from testCaseGeneratorLib.defaultData import defaultTestData, testDataWOFFMetadata, testDataWOFFPrivateData
 from testCaseGeneratorLib.html import generateSFNTDisplayTestHTML, generateSFNTDisplayRefHTML, generateSFNTDisplayIndexHTML
 from testCaseGeneratorLib.paths import resourcesDirectory, userAgentDirectory, userAgentTestDirectory, userAgentTestResourcesDirectory, userAgentFontsToInstallDirectory
@@ -865,7 +865,7 @@ writeFileStructureTest(
 
 def makeMetadataNoEffect1():
     header, directory, tableData = defaultTestData()
-    data = packTestHeader(header) + packTestDirectory(directory) + tableData
+    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData)
     return data
 
 writeFileStructureTest(
@@ -882,7 +882,7 @@ writeFileStructureTest(
 
 def makeMetadataNoEffect2():
     header, directory, tableData, metadata = defaultTestData(metadata=testDataWOFFMetadata)
-    data = packTestHeader(header) + packTestDirectory(directory) + tableData + packTestMetadata(metadata)
+    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData) + packTestMetadata(metadata)
     return data
 
 writeFileStructureTest(
@@ -905,7 +905,7 @@ writeFileStructureTest(
 
 def makePrivateDataNoEffect1():
     header, directory, tableData = defaultTestData()
-    data = packTestHeader(header) + packTestDirectory(directory) + tableData
+    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData)
     return data
 
 writeFileStructureTest(
@@ -922,7 +922,7 @@ writeFileStructureTest(
 
 def makePrivateDataNoEffect2():
     header, directory, tableData, privateData = defaultTestData(privateData=testDataWOFFPrivateData)
-    data = packTestHeader(header) + packTestDirectory(directory) + tableData + packTestPrivateData(privateData)
+    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData) + packTestPrivateData(privateData)
     return data
 
 writeFileStructureTest(
@@ -1023,7 +1023,7 @@ def makeMetadataAuthoritativeTest1():
     assert tableOrder == sfntCFFTableOrder
     # compile the WOFF
     header, directory, tableData, metadata = defaultTestData(tableData=tableData, metadata=metadataAuthoritativeXML)
-    data = packTestHeader(header) + packTestDirectory(directory) + tableData + packTestMetadata(metadata)
+    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData) + packTestMetadata(metadata)
     return data
 
 writeFileStructureTest(
