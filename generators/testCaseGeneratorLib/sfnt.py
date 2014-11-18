@@ -22,9 +22,8 @@ def getSFNTData(pathOrFile):
     # data
     tableData = {}
     totalData = ""
-    for tag in font.keys():
-        if len(tag) != 4:
-            continue
+    tableOrder = [i for i in sorted(font.keys()) if len(i) == 4]
+    for tag in tableOrder:
         origData = font.getTableData(tag)
         transformData = origData # XXX
         tableData[tag] = (origData, transformData)
