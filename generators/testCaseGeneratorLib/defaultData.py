@@ -2,7 +2,7 @@
 Default data for the test cases.
 """
 
-import zlib
+import brotli
 from copy import deepcopy
 from fontTools.ttLib.sfnt import sfntDirectoryFormat, sfntDirectorySize, sfntDirectoryEntryFormat, sfntDirectoryEntrySize
 from sfnt import getSFNTData
@@ -272,7 +272,7 @@ def defaultTestData(header=None, directory=None, tableData=None, compressedData=
         else:
             compMetadata = None
         if compMetadata is None:
-            compMetadata = zlib.compress(metadata)
+            compMetadata = brotli.compress(metadata, "font", True)
         header["metaOffset"] = header["length"]
         header["metaLength"] = len(compMetadata)
         header["metaOrigLength"] = len(metadata)
