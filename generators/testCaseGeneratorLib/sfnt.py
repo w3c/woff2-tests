@@ -15,20 +15,15 @@ from utilities import padData, calcHeadCheckSumAdjustmentSFNT
 
 def getSFNTData(pathOrFile):
     font = TTFont(pathOrFile)
-    # checksums
     tableChecksums = {}
-    for tag, entry in font.reader.tables.items():
-        tableChecksums[tag] = entry.checkSum
-    # data
     tableData = {}
-    totalData = ""
-    # order
     tableOrder = [i for i in sorted(font.keys()) if len(i) == 4]
     for tag in tableOrder:
+        tableChecksums[tag] = font.reader.tables[tag].checkSum
         origData = font.getTableData(tag)
         transformData = origData # XXX
         tableData[tag] = (origData, transformData)
-        totalData += transformData # XXX
+    totalData = "".join([tableData[tag][1] for tag in tableOrder])
     compData = brotli.compress(totalData, "font", True)
     if len(compData) >= len(totalData):
         compData = totalData
