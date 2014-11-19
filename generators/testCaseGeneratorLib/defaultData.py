@@ -253,7 +253,6 @@ def defaultTestData(header=None, directory=None, tableData=None, compressedData=
     header["totalCompressedSize"] = len(compressedData)
     for entry in directory:
         tag = entry["tag"]
-        origData = tableData[tag]
         origData, transformData = tableData[tag]
         # measure
         origLength = len(origData)
