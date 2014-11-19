@@ -22,6 +22,7 @@ def getSFNTData(pathOrFile):
     # data
     tableData = {}
     totalData = ""
+    # order
     tableOrder = [i for i in sorted(font.keys()) if len(i) == 4]
     for tag in tableOrder:
         origData = font.getTableData(tag)
@@ -31,8 +32,6 @@ def getSFNTData(pathOrFile):
     compData = brotli.compress(totalData, "font", True)
     if len(compData) >= len(totalData):
         compData = totalData
-    # order
-    tableOrder = [i for i in font.keys() if len(i) == 4]
     font.close()
     del font
     return tableData, compData, tableOrder, tableChecksums
