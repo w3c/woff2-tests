@@ -24,7 +24,7 @@ def getSFNTData(pathOrFile):
         transformData = origData # XXX
         tableData[tag] = (origData, transformData)
     totalData = "".join([tableData[tag][1] for tag in tableOrder])
-    compData = brotli.compress(totalData, "font", True)
+    compData = brotli.compress(totalData, brotli.MODE_FONT, True)
     if len(compData) >= len(totalData):
         compData = totalData
     font.close()
