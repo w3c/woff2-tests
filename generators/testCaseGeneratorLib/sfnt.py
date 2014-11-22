@@ -8,6 +8,7 @@ from fontTools.ttLib import TTFont, getSearchRange
 from fontTools.ttLib.sfnt import \
     SFNTDirectoryEntry, sfntDirectoryFormat, sfntDirectorySize, sfntDirectoryEntryFormat, sfntDirectoryEntrySize
 from utilities import padData, calcHeadCheckSumAdjustmentSFNT
+from woff import transformTable
 
 # ---------
 # Unpacking
@@ -21,8 +22,7 @@ def getSFNTData(pathOrFile):
     for tag in tableOrder:
         tableChecksums[tag] = font.reader.tables[tag].checkSum
         origData = font.getTableData(tag)
-        transformData = origData # XXX
-        tableData[tag] = (origData, transformData)
+        tableData[tag] = transformTable(font, tag)
     totalData = "".join([tableData[tag][1] for tag in tableOrder])
     compData = brotli.compress(totalData, brotli.MODE_FONT, True)
     if len(compData) >= len(totalData):
