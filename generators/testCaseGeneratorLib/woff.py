@@ -51,7 +51,6 @@ woffTransformedGlyfHeaderFormat = """
     compositeStreamSize:   L
     bboxStreamSize:        L
     instructionStreamSize: L
-    bboxBitmap:            B
 """
 
 woffTransformedGlyfHeader = dict(
@@ -65,7 +64,6 @@ woffTransformedGlyfHeader = dict(
     compositeStreamSize=0,
     bboxStreamSize=0,
     instructionStreamSize=0,
-    bboxBitmap=0,
 )
 
 # ------------
@@ -110,6 +108,50 @@ def pack255UInt16(n):
 
     return ret
 
+def packTriplet(x, y, onCurve):
+    absX = abs(x)
+    absY = abs(y)
+    onCurveBit = 0
+    xSignBit = 0
+    ySignBit = 0
+    if onCurve:
+        onCurveBit = 128
+    if x > 0:
+        xSignBit = 1
+    if y > 0:
+        ySignBit = 1
+    xySignBits = xSignBit + 2 * ySignBit
+
+    fmt = ">B"
+    flags = ""
+    glyphs = ""
+    if x == 0 and absY < 1280:
+        flags += struct.pack(fmt, onCurveBit + ((absY & 0xf00) >> 7) + ySignBit)
+        glyphs += struct.pack(fmt, absY & 0xff)
+    elif y == 0 and absX < 1280:
+        flags += struct.pack(fmt, onCurveBit + 10 + ((absX & 0xf00) >> 7) + xSignBit)
+        glyphs += struct.pack(fmt, absX & 0xff)
+    elif absX < 65 and absY < 65:
+        flags += struct.pack(fmt, onCurveBit + 20 + ((absX - 1) & 0x30) + (((absY - 1) & 0x30) >> 2) + xySignBits)
+        glyphs += struct.pack(fmt, (((absX - 1) & 0xf) << 4) | ((absY - 1) & 0xf))
+    elif absX < 769 and absY < 769:
+        flags += struct.pack(fmt, onCurveBit + 84 + 12 * (((absX - 1) & 0x300) >> 8) + (((absY - 1) & 0x300) >> 6) + xySignBits)
+        glyphs += struct.pack(fmt, (absX - 1) & 0xff)
+        glyphs += struct.pack(fmt, (absY - 1) & 0xff)
+    elif absX < 4096 and absY < 4096:
+        flags += struct.pack(fmt, onCurveBit + 120 + xySignBits)
+        glyphs += struct.pack(fmt, absX >> 4)
+        glyphs += struct.pack(fmt, ((absX & 0xf) << 4) | (absY >> 8))
+        glyphs += struct.pack(fmt, absY & 0xff)
+    else:
+        flags += struct.pack(fmt, onCurveBit + 124 + xySignBits)
+        glyphs += struct.pack(fmt, absX >> 8)
+        glyphs += struct.pack(fmt, absX & 0xff)
+        glyphs += struct.pack(fmt, absY >> 8)
+        glyphs += struct.pack(fmt, absY & 0xff)
+
+    return (flags, glyphs)
+
 def tramsformGlyf(font):
     glyf = font["glyf"]
     head = font["head"]
@@ -123,8 +165,12 @@ def tramsformGlyf(font):
     instructionStream = ""
     bboxBitmap = []
 
+    for i in range(4 * ((len(glyf.keys()) + 31) / 32)):
+        bboxBitmap.append(0)
+
     for glyphName in glyf.keys():
         glyph = glyf[glyphName]
+        glyphId = glyf.getGlyphID(glyphName)
         if glyph.isComposite():
             assert False
         else:
@@ -137,11 +183,34 @@ def tramsformGlyf(font):
                 nPointsStream += pack255UInt16(glyph.endPtsOfContours[i] - lastPointIndex + (i == 0))
                 lastPointIndex = glyph.endPtsOfContours[i]
 
-            # flagStream
+            # flagStream & glyphStream
+            lastX = 0
+            lastY = 0
+            lastPointIndex = 0
+            for i in range(glyph.numberOfContours):
+                for j in range(lastPointIndex, glyph.endPtsOfContours[i] + 1):
+                    x, y = glyph.coordinates[j]
+                    onCurve = glyph.flags[j] & 0x01
+                    dx = x - lastX
+                    dy = y - lastY
+                    lastX = x
+                    lastY = y
+                    flags, data = packTriplet(x, y, onCurve)
+                    flagStream += flags
+                    glyphStream += data
+                lastPointIndex = glyph.endPtsOfContours[i] + 1
 
-            # glyphStream
+            # instructionLength
+            if glyph.numberOfContours and len(glyph.program.bytecode):
+                assert False
+            else:
+                glyphStream += pack255UInt16(0)
 
             # instructionStream
+
+        # bboxStream & bboxBitmap
+        bboxBitmap[glyphId >> 3] |= 0x80 >> (glyphId & 7)
+        bboxStream += "".join([struct.pack(">B", v) for v in bboxBitmap])
 
     header = deepcopy(woffTransformedGlyfHeader)
     header["numGlyphs"] = len(glyf.keys())
@@ -155,6 +224,7 @@ def tramsformGlyf(font):
     header["instructionStreamSize"] = len(instructionStream)
 
     data = sstruct.pack(woffTransformedGlyfHeaderFormat, header)
+    data += nContourStream + nPointsStream + flagStream + glyphStream + compositeStream + bboxStream + instructionStream
     return data
 
 def base128Size(n):
