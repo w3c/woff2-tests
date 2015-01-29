@@ -517,15 +517,15 @@ writeFileStructureTest(
 
 # between table directory and table data
 
-writeFileStructureTest(
-    identifier="blocks-extraneous-data-001",
-    title=makeExtraneousData1Title,
-    assertion=makeExtraneousData1Description,
-    credits=makeExtraneousData1Credits,
-    shouldDisplaySFNT=False,
-    sfntDisplaySpecLink="#conform-extraneous-reject",
-    data=makeExtraneousData1()
-)
+###writeFileStructureTest(
+###    identifier="blocks-extraneous-data-001",
+###    title=makeExtraneousData1Title,
+###    assertion=makeExtraneousData1Description,
+###    credits=makeExtraneousData1Credits,
+###    shouldDisplaySFNT=False,
+###    sfntDisplaySpecLink="#conform-extraneous-reject",
+###    data=makeExtraneousData1()
+###)
 
 # after table data with no metadata or private data
 
@@ -643,15 +643,15 @@ writeFileStructureTest(
 # File Structure: Table Directory: 4-Byte Boundary
 # ------------------------------------------------
 
-writeFileStructureTest(
-    identifier="directory-4-byte-001",
-    title=makeTableData4Byte1Title,
-    assertion=makeTableData4Byte1Description,
-    credits=makeTableData4Byte1Credits,
-    shouldDisplaySFNT=False,
-    sfntDisplaySpecLink="#conform-tablesize-longword",
-    data=makeTableData4Byte1()
-)
+###writeFileStructureTest(
+###    identifier="directory-4-byte-001",
+###    title=makeTableData4Byte1Title,
+###    assertion=makeTableData4Byte1Description,
+###    credits=makeTableData4Byte1Credits,
+###    shouldDisplaySFNT=False,
+###    sfntDisplaySpecLink="#conform-tablesize-longword",
+###    data=makeTableData4Byte1()
+###)
 
 # final table is not padded
 
@@ -683,51 +683,51 @@ writeFileStructureTest(
 
 # offset + length goes past the end of the file
 
-writeFileStructureTest(
-    identifier="directory-overlaps-002",
-    title=makeTableDataByteRange2Title,
-    assertion=makeTableDataByteRange2Description,
-    credits=makeTableDataByteRange2Credits,
-    shouldDisplaySFNT=False,
-    sfntDisplaySpecLink="#conform-diroverlap-reject",
-    data=makeTableDataByteRange2()
-)
+###writeFileStructureTest(
+###    identifier="directory-overlaps-002",
+###    title=makeTableDataByteRange2Title,
+###    assertion=makeTableDataByteRange2Description,
+###    credits=makeTableDataByteRange2Credits,
+###    shouldDisplaySFNT=False,
+###    sfntDisplaySpecLink="#conform-diroverlap-reject",
+###    data=makeTableDataByteRange2()
+###)
 
 # overlaps metadata
 
-writeFileStructureTest(
-    identifier="directory-overlaps-003",
-    title=makeTableDataByteRange3Title,
-    assertion=makeTableDataByteRange3Description,
-    credits=makeTableDataByteRange3Credits,
-    shouldDisplaySFNT=False,
-    sfntDisplaySpecLink="#conform-diroverlap-reject",
-    data=makeTableDataByteRange3()
-)
+###writeFileStructureTest(
+###    identifier="directory-overlaps-003",
+###    title=makeTableDataByteRange3Title,
+###    assertion=makeTableDataByteRange3Description,
+###    credits=makeTableDataByteRange3Credits,
+###    shouldDisplaySFNT=False,
+###    sfntDisplaySpecLink="#conform-diroverlap-reject",
+###    data=makeTableDataByteRange3()
+###)
 
 # overlaps private data
 
-writeFileStructureTest(
-    identifier="directory-overlaps-004",
-    title=makeTableDataByteRange4Title,
-    assertion=makeTableDataByteRange4Description,
-    credits=makeTableDataByteRange4Credits,
-    shouldDisplaySFNT=False,
-    sfntDisplaySpecLink="#conform-diroverlap-reject",
-    data=makeTableDataByteRange4()
-)
+###writeFileStructureTest(
+###    identifier="directory-overlaps-004",
+###    title=makeTableDataByteRange4Title,
+###    assertion=makeTableDataByteRange4Description,
+###    credits=makeTableDataByteRange4Credits,
+###    shouldDisplaySFNT=False,
+###    sfntDisplaySpecLink="#conform-diroverlap-reject",
+###    data=makeTableDataByteRange4()
+###)
 
 # two tables overlap
 
-writeFileStructureTest(
-    identifier="directory-overlaps-005",
-    title=makeTableDataByteRange5Title,
-    assertion=makeTableDataByteRange5Description,
-    credits=makeTableDataByteRange5Credits,
-    shouldDisplaySFNT=False,
-    sfntDisplaySpecLink="#conform-diroverlap-reject",
-    data=makeTableDataByteRange5()
-)
+###writeFileStructureTest(
+###    identifier="directory-overlaps-005",
+###    title=makeTableDataByteRange5Title,
+###    assertion=makeTableDataByteRange5Description,
+###    credits=makeTableDataByteRange5Credits,
+###    shouldDisplaySFNT=False,
+###    sfntDisplaySpecLink="#conform-diroverlap-reject",
+###    data=makeTableDataByteRange5()
+###)
 
 # ------------------------------------------------
 # File Structure: Table Directory: Extraneous Data
@@ -735,15 +735,15 @@ writeFileStructureTest(
 
 # between tables
 
-writeFileStructureTest(
-    identifier="directory-extraneous-data-001",
-    title=makeTableDataExtraneousData1Title,
-    assertion=makeTableDataExtraneousData1Description,
-    credits=makeTableDataExtraneousData1Credits,
-    shouldDisplaySFNT=False,
-    sfntDisplaySpecLink="#conform-extraneous-reject",
-    data=makeTableDataExtraneousData1()
-)
+###writeFileStructureTest(
+###    identifier="directory-extraneous-data-001",
+###    title=makeTableDataExtraneousData1Title,
+###    assertion=makeTableDataExtraneousData1Description,
+###    credits=makeTableDataExtraneousData1Credits,
+###    shouldDisplaySFNT=False,
+###    sfntDisplaySpecLink="#conform-extraneous-reject",
+###    data=makeTableDataExtraneousData1()
+###)
 
 # -------------------------------------------
 # File Structure: Table Directory: compLength
@@ -767,27 +767,27 @@ writeFileStructureTest(
 
 # one table has an origLength that is less than the decompressed length
 
-writeFileStructureTest(
-    identifier="directory-origLength-001",
-    title=makeTableDataOriginalLength1Title,
-    assertion=makeTableDataOriginalLength1Description,
-    credits=makeTableDataOriginalLength1Credits,
-    shouldDisplaySFNT=False,
-    sfntDisplaySpecLink="#conform-origLength",
-    data=makeTableDataOriginalLength1()
-)
+###writeFileStructureTest(
+###    identifier="directory-origLength-001",
+###    title=makeTableDataOriginalLength1Title,
+###    assertion=makeTableDataOriginalLength1Description,
+###    credits=makeTableDataOriginalLength1Credits,
+###    shouldDisplaySFNT=False,
+###    sfntDisplaySpecLink="#conform-origLength",
+###    data=makeTableDataOriginalLength1()
+###)
 
 # one table has an origLength that is greater than the decompressed length
 
-writeFileStructureTest(
-    identifier="directory-origLength-002",
-    title=makeTableDataOriginalLength2Title,
-    assertion=makeTableDataOriginalLength2Description,
-    credits=makeTableDataOriginalLength2Credits,
-    shouldDisplaySFNT=False,
-    sfntDisplaySpecLink="#conform-origLength",
-    data=makeTableDataOriginalLength2()
-)
+###writeFileStructureTest(
+###    identifier="directory-origLength-002",
+###    title=makeTableDataOriginalLength2Title,
+###    assertion=makeTableDataOriginalLength2Description,
+###    credits=makeTableDataOriginalLength2Credits,
+###    shouldDisplaySFNT=False,
+###    sfntDisplaySpecLink="#conform-origLength",
+###    data=makeTableDataOriginalLength2()
+###)
 
 # ---------------------------------------
 # File Structure: Table Data: Compression
@@ -807,27 +807,27 @@ writeFileStructureTest(
 
 # all possible tables are compressed
 
-writeFileStructureTest(
-    identifier="tabledata-compression-002",
-    title=makeTableCompressionTest2Title,
-    assertion=makeTableCompressionTest2Description,
-    credits=makeTableCompressionTest2Credits,
-    shouldDisplaySFNT=True,
-    sfntDisplaySpecLink="#conform-mustuncompress",
-    data=makeTableCompressionTest2()
-)
+###writeFileStructureTest(
+###    identifier="tabledata-compression-002",
+###    title=makeTableCompressionTest2Title,
+###    assertion=makeTableCompressionTest2Description,
+###    credits=makeTableCompressionTest2Credits,
+###    shouldDisplaySFNT=True,
+###    sfntDisplaySpecLink="#conform-mustuncompress",
+###    data=makeTableCompressionTest2()
+###)
 
 # not all possible tables are compressed
 
-writeFileStructureTest(
-    identifier="tabledata-compression-003",
-    title=makeTableCompressionTest3Title,
-    assertion=makeTableCompressionTest3Description,
-    credits=makeTableCompressionTest3Credits,
-    shouldDisplaySFNT=True,
-    sfntDisplaySpecLink="#conform-mustuncompress",
-    data=makeTableCompressionTest3()
-)
+###writeFileStructureTest(
+###    identifier="tabledata-compression-003",
+###    title=makeTableCompressionTest3Title,
+###    assertion=makeTableCompressionTest3Description,
+###    credits=makeTableCompressionTest3Credits,
+###    shouldDisplaySFNT=True,
+###    sfntDisplaySpecLink="#conform-mustuncompress",
+###    data=makeTableCompressionTest3()
+###)
 
 # varying compression levels
 
@@ -847,15 +847,15 @@ writeFileStructureTest(
 
 # compression incompatible with zlib
 
-writeFileStructureTest(
-    identifier="tabledata-zlib-001",
-    title=makeTableZlibCompressionTest1Title,
-    assertion=makeTableZlibCompressionTest1Description,
-    credits=makeTableZlibCompressionTest1Credits,
-    shouldDisplaySFNT=False,
-    sfntDisplaySpecLink="#conform-decompressfailure",
-    data=makeTableZlibCompressionTest1()
-)
+###writeFileStructureTest(
+###    identifier="tabledata-zlib-001",
+###    title=makeTableZlibCompressionTest1Title,
+###    assertion=makeTableZlibCompressionTest1Description,
+###    credits=makeTableZlibCompressionTest1Credits,
+###    shouldDisplaySFNT=False,
+###    sfntDisplaySpecLink="#conform-decompressfailure",
+###    data=makeTableZlibCompressionTest1()
+###)
 
 # -----------------------------------
 # File Structure: Metadata: No Effect
@@ -1026,18 +1026,18 @@ def makeMetadataAuthoritativeTest1():
     data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData) + packTestMetadata(metadata)
     return data
 
-writeFileStructureTest(
-    identifier="metadatadisplay-authoritative-001",
-    title="Metadata Out of Sync With name Table",
-    assertion="The name table and metadata fields are out of sync. The name table contains FAIL and the metadata contains PASS for unique id, vendor name, vendor url, credit name, credit url, description, license, license url, copyright and trademark.",
-    credits=[dict(title="Tal Leming", role="author", link="http://typesupply.com")],
-    shouldDisplaySFNT=True,
-    metadataIsValid=True,
-    metadataToDisplay=metadataAuthoritativeXML,
-    metadataDisplaySpecLink="#conform-metadata-authoritative",
-    data=makeMetadataAuthoritativeTest1(),
-    extraMetadataNotes=["The Extended Metadata Block test fails if the word FAIL appears in the metadata display."]
-)
+###writeFileStructureTest(
+###    identifier="metadatadisplay-authoritative-001",
+###    title="Metadata Out of Sync With name Table",
+###    assertion="The name table and metadata fields are out of sync. The name table contains FAIL and the metadata contains PASS for unique id, vendor name, vendor url, credit name, credit url, description, license, license url, copyright and trademark.",
+###    credits=[dict(title="Tal Leming", role="author", link="http://typesupply.com")],
+###    shouldDisplaySFNT=True,
+###    metadataIsValid=True,
+###    metadataToDisplay=metadataAuthoritativeXML,
+###    metadataDisplaySpecLink="#conform-metadata-authoritative",
+###    data=makeMetadataAuthoritativeTest1(),
+###    extraMetadataNotes=["The Extended Metadata Block test fails if the word FAIL appears in the metadata display."]
+###)
 
 # -----------------------------
 # Metadata Display: Compression
