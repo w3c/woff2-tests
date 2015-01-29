@@ -80,6 +80,8 @@ knownTableTags = (
     "opbd", "prop", "trak", "Zapf", "Silf", "Glat", "Gloc", "Feat", "Sill",
 )
 
+unknownTableTagFlag = 63
+
 transformedTables = ("glyf", "loca")
 
 def transformTable(font, tag):
@@ -114,7 +116,7 @@ def packTriplet(x, y, onCurve):
     onCurveBit = 0
     xSignBit = 0
     ySignBit = 0
-    if onCurve:
+    if not onCurve:
         onCurveBit = 128
     if x > 0:
         xSignBit = 1
@@ -164,15 +166,16 @@ def tramsformGlyf(font):
     bboxStream = ""
     instructionStream = ""
     bboxBitmap = []
+    bboxBitmapStream = ""
 
     for i in range(4 * ((len(glyf.keys()) + 31) / 32)):
         bboxBitmap.append(0)
 
-    for glyphName in glyf.keys():
+    for glyphName in glyf.glyphOrder:
         glyph = glyf[glyphName]
         glyphId = glyf.getGlyphID(glyphName)
         if glyph.isComposite():
-            assert False
+            assert False # XXX support composite glyphs
         else:
             # nContourStream
             nContourStream += struct.pack(">h", glyph.numberOfContours)
@@ -195,22 +198,31 @@ def tramsformGlyf(font):
                     dy = y - lastY
                     lastX = x
                     lastY = y
-                    flags, data = packTriplet(x, y, onCurve)
+                    flags, data = packTriplet(dx, dy, onCurve)
                     flagStream += flags
                     glyphStream += data
                 lastPointIndex = glyph.endPtsOfContours[i] + 1
 
             # instructionLength
             if glyph.numberOfContours and len(glyph.program.bytecode):
-                assert False
-            else:
+                assert False # XXX support writing instructions
+
+            # XXX the spec is not clear here, but the reference implementation
+            # seems to write the instructionLength only if there are any
+            # contours.
+            if glyph.numberOfContours:
                 glyphStream += pack255UInt16(0)
 
             # instructionStream
 
-        # bboxStream & bboxBitmap
-        bboxBitmap[glyphId >> 3] |= 0x80 >> (glyphId & 7)
-        bboxStream += "".join([struct.pack(">B", v) for v in bboxBitmap])
+        # bboxBitmap
+        # XXX we just tell the decoder to calculate the bounding boxes for now
+        #bboxBitmap[glyphId >> 3] |= 0x80 >> (glyphId & 7)
+
+        # bboxStream
+        #bboxStream += struct.pack(">hhhh", glyph.xMin, glyph.yMin, glyph.xMax, glyph.yMax)
+
+    bboxBitmapStream = "".join([struct.pack(">B", v) for v in bboxBitmap])
 
     header = deepcopy(woffTransformedGlyfHeader)
     header["numGlyphs"] = len(glyf.keys())
@@ -220,11 +232,11 @@ def tramsformGlyf(font):
     header["flagStreamSize"] = len(flagStream)
     header["glyphStreamSize"] = len(glyphStream)
     header["compositeStreamSize"] = len(compositeStream)
-    header["bboxStreamSize"] = len(bboxStream)
+    header["bboxStreamSize"] = len(bboxStream) + len(bboxBitmapStream)
     header["instructionStreamSize"] = len(instructionStream)
 
     data = sstruct.pack(woffTransformedGlyfHeaderFormat, header)
-    data += nContourStream + nPointsStream + flagStream + glyphStream + compositeStream + bboxStream + instructionStream
+    data += nContourStream + nPointsStream + flagStream + glyphStream + compositeStream + bboxBitmapStream + bboxStream + instructionStream
     return data
 
 def base128Size(n):
@@ -254,7 +266,7 @@ def packTestDirectory(directory):
         if tag in knownTableTags:
             data += struct.pack(">B", knownTableTags.index(tag))
         else:
-            data += struct.pack(">B", len(knownTableTags))
+            data += struct.pack(">B", unknownTableTagFlag)
             data += struct.pack(">4s", tag)
         data += packBase128(table["origLength"])
         if tag in transformedTables:
