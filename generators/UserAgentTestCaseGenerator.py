@@ -517,15 +517,15 @@ writeFileStructureTest(
 
 # between table directory and table data
 
-###writeFileStructureTest(
-###    identifier="blocks-extraneous-data-001",
-###    title=makeExtraneousData1Title,
-###    assertion=makeExtraneousData1Description,
-###    credits=makeExtraneousData1Credits,
-###    shouldDisplaySFNT=False,
-###    sfntDisplaySpecLink="#conform-extraneous-reject",
-###    data=makeExtraneousData1()
-###)
+writeFileStructureTest(
+    identifier="blocks-extraneous-data-001",
+    title=makeExtraneousData1Title,
+    assertion=makeExtraneousData1Description,
+    credits=makeExtraneousData1Credits,
+    shouldDisplaySFNT=False,
+    sfntDisplaySpecLink="#conform-extraneous-reject",
+    data=makeExtraneousData1()
+)
 
 # after table data with no metadata or private data
 

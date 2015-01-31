@@ -229,8 +229,6 @@ def makeExtraneousData1():
     header, directory, tableData = defaultTestData()
     bogusByteLength = 4
     bogusBytes = "\0" * bogusByteLength
-    for entry in directory:
-        entry["offset"] += bogusByteLength
     header["length"] += bogusByteLength
     data = packTestHeader(header) + packTestDirectory(directory) + bogusBytes + packTestTableData(directory, tableData)
     return data
