@@ -501,6 +501,7 @@ writeFileStructureTest(
 # File Structure: Header: reserved
 # --------------------------------
 
+# XXX: User agents mist actually accept such font, not reject it.
 writeFileStructureTest(
     identifier="header-reserved-001",
     title=makeHeaderInvalidReserved1Title,
