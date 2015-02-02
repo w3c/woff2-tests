@@ -21,7 +21,6 @@ def getSFNTData(pathOrFile):
     tableOrder = [i for i in sorted(font.keys()) if len(i) == 4]
     for tag in tableOrder:
         tableChecksums[tag] = font.reader.tables[tag].checkSum
-        origData = font.getTableData(tag)
         tableData[tag] = transformTable(font, tag)
     totalData = "".join([tableData[tag][1] for tag in tableOrder])
     compData = brotli.compress(totalData, brotli.MODE_FONT, True)
