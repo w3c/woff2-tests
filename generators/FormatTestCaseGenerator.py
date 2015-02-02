@@ -297,7 +297,7 @@ writeTest(
 def makeHeaderInvalidFlavor1():
     header, directory, tableData = defaultTestData()
     header["flavor"] = "\000\001\000\000"
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData)
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
     return data
 
 writeTest(
@@ -315,7 +315,7 @@ writeTest(
 def makeHeaderInvalidFlavor2():
     header, directory, tableData = defaultTestData(flavor="ttf")
     header["flavor"] = "OTTO"
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData)
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
     return data
 
 writeTest(
@@ -552,7 +552,7 @@ def makeMetadataZeroData1():
     header, directory, tableData = defaultTestData()
     header["metaOffset"] = 0
     header["metaLength"] = 1
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData)
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
     return data
 
 writeTest(
@@ -571,7 +571,7 @@ def makeMetadataZeroData2():
     header, directory, tableData = defaultTestData()
     header["metaLength"] = 0
     header["metaOffset"] = header["length"]
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData)
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
     return data
 
 writeTest(
@@ -594,7 +594,7 @@ def makePrivateDataZeroData1():
     header, directory, tableData = defaultTestData()
     header["privOffset"] = 0
     header["privLength"] = 1
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData)
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
     return data
 
 writeTest(
@@ -613,7 +613,7 @@ def makePrivateDataZeroData2():
     header, directory, tableData = defaultTestData()
     header["privLength"] = 0
     header["privOffset"] = header["length"]
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData)
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
     return data
 
 writeTest(
@@ -639,7 +639,7 @@ def makeMetadataPadding():
     assert paddingLength
     header["length"] += paddingLength
     metadata += "\0" * paddingLength
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData) + metadata
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData) + metadata
     return data
 
 writeTest(
@@ -675,7 +675,7 @@ def makeDataBlockOrdering1():
         entry["offset"] = offset
         offset += entry["compLength"] + calcPaddingLength(entry["compLength"])
     # pack
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestMetadata(metadata) + packTestTableData(directory, tableData)
+    data = packTestHeader(header) + packTestDirectory(directory) + packTestMetadata(metadata) + tableData
     # done
     return data
 
@@ -704,7 +704,7 @@ def makeDataBlockOrdering2():
         entry["offset"] = offset
         offset += entry["compLength"] + calcPaddingLength(entry["compLength"])
     # pack
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestPrivateData(privateData) + packTestTableData(directory, tableData)
+    data = packTestHeader(header) + packTestDirectory(directory) + packTestPrivateData(privateData) + tableData
     # done
     return data
 
@@ -730,7 +730,7 @@ def makeDataBlockOrdering3():
     assert calcPaddingLength(privateLength) == 0
     header["length"] -= calcPaddingLength(header["metaLength"])
     # pack
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData) + packTestPrivateData(privateData) + metadata[1]
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData) + packTestPrivateData(privateData) + metadata[1]
     # done
     return data
 
@@ -766,7 +766,7 @@ def makeDataBlockPrivateData1():
     assert paddingLength > 0
     header["length"] -= paddingLength
     header["privOffset"] -= paddingLength
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData) + packTestMetadata(metadata)
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData) + packTestMetadata(metadata)
     data += packTestPrivateData(privateData)
     return data
 
@@ -818,7 +818,7 @@ def makeTableData4Byte3():
         compData += "\x01" * paddingLength
         tableData[tag] = (origData, compData)
     assert paddedAtLeastOne
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData)
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
     return data
 
 writeTest(
@@ -971,7 +971,7 @@ def makeTableDirectoryCheckSum1():
         entry["origChecksum"] = 0
         modifiedTable = True
         break
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData)
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
     return data
 
 writeTest(
@@ -1019,7 +1019,7 @@ def makeTableDirectoryAscending1():
     for tag, table in reversed(sorted(directory)):
         directoryData += sstruct.pack(woffDirectoryEntryFormat, table)
     directory = [i[1] for i in directory]
-    data = packTestHeader(header) + directoryData + packTestTableData(directory, tableData)
+    data = packTestHeader(header) + directoryData + tableData
     return data
 
 writeTest(
@@ -1114,7 +1114,7 @@ def makeMetadataPadding1():
     metadata, compMetadata = metadata
     compMetadata += ("\x01" * paddingLength)
     metadata = (metadata, compMetadata)
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData) + packTestMetadata(metadata) + packTestPrivateData(privateData)
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData) + packTestMetadata(metadata) + packTestPrivateData(privateData)
     return data
 
 writeTest(

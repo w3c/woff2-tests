@@ -274,7 +274,7 @@ def packTestDirectory(directory):
     return data
 
 def packTestTableData(directory, tableData, calcCheckSum=True):
-    return padData(tableData)
+    return tableData
 
 def packTestMetadata((origMetadata, compMetadata), havePrivateData=False):
     if havePrivateData:
