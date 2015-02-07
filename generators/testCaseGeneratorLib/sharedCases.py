@@ -377,6 +377,7 @@ makeOverlappingData3Credits = [dict(title="Tal Leming", role="author", link="htt
 # one table is not padded and, therefore, the next table does not begin on four byte boundary
 # this test will trigger other failures. there doesn't seem to be a way around that.
 
+# XXX how to adapt this for WOFF2?
 def makeTableData4Byte1():
     header, directory, tableData = defaultTestData()
     data1 = "\x01" * 3
@@ -455,6 +456,7 @@ makeTableData4Byte2Credits = [dict(title="Tal Leming", role="author", link="http
 
 # offset after end of file
 
+# XXX WOFF2 directory entries does not have an offset
 def makeTableDataByteRange1():
     header, directory, tableData = defaultTestData()
     directory[-1]["offset"] = header["length"] + 4
@@ -467,6 +469,7 @@ makeTableDataByteRange1Credits = [dict(title="Tal Leming", role="author", link="
 
 # offset + length goes past the end of the file
 
+# XXX WOFF2 diroctory entries does not have a length
 def makeTableDataByteRange2():
     header, directory, tableData = defaultTestData()
     directory[-1]["compLength"] += 4
@@ -608,6 +611,7 @@ makeTableDataExtraneousData1Credits = [dict(title="Tal Leming", role="author", l
 
 # some tables have a compressed length that is longer than the original length
 
+# XXX WOFF2 compresses the whole font data as one stream
 def makeTableDataCompressionLength1():
     tableData = deepcopy(sfntCFFTableData)
     haveCompLargerThanOrig = False
