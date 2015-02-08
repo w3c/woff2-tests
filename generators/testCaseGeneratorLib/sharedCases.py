@@ -484,6 +484,7 @@ makeTableDataByteRange2Credits = [dict(title="Tal Leming", role="author", link="
 
 # overlaps metadata
 
+# XXX WOFF2 compresses the whole font data as one stream
 def makeTableDataByteRange3():
     header, directory, tableData, metadata = defaultTestData(metadata=testDataWOFFMetadata)
     # grab the last table entry
@@ -517,6 +518,7 @@ makeTableDataByteRange3Credits = [dict(title="Tal Leming", role="author", link="
 
 # overlaps private data
 
+# XXX WOFF2 compresses the whole font data as one stream
 def makeTableDataByteRange4():
     header, directory, tableData, privateData = defaultTestData(privateData=testDataWOFFPrivateData)
     # grab the last table entry
@@ -550,6 +552,7 @@ makeTableDataByteRange4Credits = [dict(title="Tal Leming", role="author", link="
 
 # two tables overlap
 
+# XXX WOFF2 compresses the whole font data as one stream
 def makeTableDataByteRange5():
     header, directory, tableData = defaultTestData()
     # grab the last table entry
@@ -583,6 +586,7 @@ makeTableDataByteRange5Credits = [dict(title="Tal Leming", role="author", link="
 
 # between tables
 
+# XXX WOFF2 compresses the whole font data as one stream
 def makeTableDataExtraneousData1():
     header, directory, tableData = defaultTestData()
     bogusByteLength = 4
@@ -637,6 +641,7 @@ makeTableDataCompressionLength1Credits = [dict(title="Tal Leming", role="author"
 
 # one table has an origLength that is less than the decompressed length
 
+# XXX WOFF2 compresses the whole font data as one stream
 def makeTableDataOriginalLength1():
     header, directory, tableData = defaultTestData()
     shift = 4
@@ -655,6 +660,7 @@ makeTableDataOriginalLength1Credits = [dict(title="Tal Leming", role="author", l
 
 # one table has an origLength that is greater than the decompressed length
 
+# XXX WOFF2 compresses the whole font data as one stream
 def makeTableDataOriginalLength2():
     header, directory, tableData = defaultTestData()
     shift = 4
@@ -676,6 +682,7 @@ makeTableDataOriginalLength2Credits = [dict(title="Tal Leming", role="author", l
 
 # no tables compressed
 
+# XXX WOFF2 must be compressed?
 def makeTableCompressionTest1():
     tableData = deepcopy(sfntCFFTableData)
     for tag, (origData, compData) in tableData.items():
@@ -690,6 +697,7 @@ makeTableCompressionTest1Credits = [dict(title="Tal Leming", role="author", link
 
 # all possible tables are compressed
 
+# XXX WOFF2 compresses the whole font data as one stream
 def makeTableCompressionTest2():
     header, directory, tableData = defaultTestData()
     for tag, (origData, compData) in tableData.items():
@@ -710,6 +718,7 @@ makeTableCompressionTest2Credits = [dict(title="Tal Leming", role="author", link
 
 # not all possible tables are compressed
 
+# XXX WOFF2 compresses the whole font data as one stream
 def makeTableCompressionTest3():
     tableData = deepcopy(sfntCFFTableData)
     haveStoredCompressed = False
@@ -730,6 +739,7 @@ makeTableCompressionTest3Credits = [dict(title="Tal Leming", role="author", link
 
 # varying compression levels
 
+# XXX WOFF2 compresses the whole font data as one stream
 def makeTableCompressionTest4():
     tableData = deepcopy(sfntCFFTableData)
     compressionLevels = set()
@@ -762,6 +772,7 @@ makeTableCompressionTest4Credits = [dict(title="Tal Leming", role="author", link
 
 # compression incompatible with zlib
 
+# XXX WOFF2 compresses the whole font data as one stream
 def makeTableZlibCompressionTest1():
     header, directory, tableData = defaultTestData()
     madeBogusTableData = False

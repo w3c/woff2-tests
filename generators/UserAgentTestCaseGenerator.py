@@ -672,15 +672,15 @@ writeFileStructureTest(
 
 # offset after end of file
 
-writeFileStructureTest(
-    identifier="directory-overlaps-001",
-    title=makeTableDataByteRange1Title,
-    assertion=makeTableDataByteRange1Description,
-    credits=makeTableDataByteRange1Credits,
-    shouldDisplaySFNT=False,
-    sfntDisplaySpecLink="#conform-diroverlap-reject",
-    data=makeTableDataByteRange1()
-)
+###writeFileStructureTest(
+###    identifier="directory-overlaps-001",
+###    title=makeTableDataByteRange1Title,
+###    assertion=makeTableDataByteRange1Description,
+###    credits=makeTableDataByteRange1Credits,
+###    shouldDisplaySFNT=False,
+###    sfntDisplaySpecLink="#conform-diroverlap-reject",
+###    data=makeTableDataByteRange1()
+###)
 
 # offset + length goes past the end of the file
 
@@ -752,15 +752,15 @@ writeFileStructureTest(
 
 # some tables have a compressed length that is longer than the original length
 
-writeFileStructureTest(
-    identifier="directory-compLength-001",
-    title=makeTableDataCompressionLength1Title,
-    assertion=makeTableDataCompressionLength1Description,
-    credits=makeTableDataCompressionLength1Credits,
-    shouldDisplaySFNT=False,
-    sfntDisplaySpecLink="#conform-compressedlarger",
-    data=makeTableDataCompressionLength1()
-)
+###writeFileStructureTest(
+###    identifier="directory-compLength-001",
+###    title=makeTableDataCompressionLength1Title,
+###    assertion=makeTableDataCompressionLength1Description,
+###    credits=makeTableDataCompressionLength1Credits,
+###    shouldDisplaySFNT=False,
+###    sfntDisplaySpecLink="#conform-compressedlarger",
+###    data=makeTableDataCompressionLength1()
+###)
 
 # -------------------------------------------
 # File Structure: Table Directory: origLength
@@ -796,15 +796,15 @@ writeFileStructureTest(
 
 # no tables compressed
 
-writeFileStructureTest(
-    identifier="tabledata-compression-001",
-    title=makeTableCompressionTest1Title,
-    assertion=makeTableCompressionTest1Description,
-    credits=makeTableCompressionTest1Credits,
-    shouldDisplaySFNT=True,
-    sfntDisplaySpecLink="#conform-mustuncompress",
-    data=makeTableCompressionTest1()
-)
+###writeFileStructureTest(
+###    identifier="tabledata-compression-001",
+###    title=makeTableCompressionTest1Title,
+###    assertion=makeTableCompressionTest1Description,
+###    credits=makeTableCompressionTest1Credits,
+###    shouldDisplaySFNT=True,
+###    sfntDisplaySpecLink="#conform-mustuncompress",
+###    data=makeTableCompressionTest1()
+###)
 
 # all possible tables are compressed
 
@@ -832,15 +832,15 @@ writeFileStructureTest(
 
 # varying compression levels
 
-writeFileStructureTest(
-    identifier="tabledata-compression-004",
-    title=makeTableCompressionTest4Title,
-    assertion=makeTableCompressionTest4Description,
-    credits=makeTableCompressionTest4Credits,
-    shouldDisplaySFNT=True,
-    sfntDisplaySpecLink="#conform-mustuncompress",
-    data=makeTableCompressionTest4()
-)
+###writeFileStructureTest(
+###    identifier="tabledata-compression-004",
+###    title=makeTableCompressionTest4Title,
+###    assertion=makeTableCompressionTest4Description,
+###    credits=makeTableCompressionTest4Credits,
+###    shouldDisplaySFNT=True,
+###    sfntDisplaySpecLink="#conform-mustuncompress",
+###    data=makeTableCompressionTest4()
+###)
 
 # ----------------------------------------------
 # File Structure: Table Data: Compression Format
