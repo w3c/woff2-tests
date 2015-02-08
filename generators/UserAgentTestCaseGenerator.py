@@ -1019,26 +1019,26 @@ def makeMetadataAuthoritativeTest1():
     font.save(f, reorderTables=False)
     f.seek(0)
     # load the table data
-    tableData, tableOrder, tableChecksums = getSFNTData(f)
+    tableData, compressedData, tableOrder, tableChecksums = getSFNTData(f)
     # make sure that the table order is the same as the original
     assert tableOrder == sfntCFFTableOrder
     # compile the WOFF
-    header, directory, tableData, metadata = defaultTestData(tableData=tableData, metadata=metadataAuthoritativeXML)
+    header, directory, tableData, metadata = defaultTestData(tableData=tableData, compressedData=compressedData, metadata=metadataAuthoritativeXML)
     data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData) + packTestMetadata(metadata)
     return data
 
-###writeFileStructureTest(
-###    identifier="metadatadisplay-authoritative-001",
-###    title="Metadata Out of Sync With name Table",
-###    assertion="The name table and metadata fields are out of sync. The name table contains FAIL and the metadata contains PASS for unique id, vendor name, vendor url, credit name, credit url, description, license, license url, copyright and trademark.",
-###    credits=[dict(title="Tal Leming", role="author", link="http://typesupply.com")],
-###    shouldDisplaySFNT=True,
-###    metadataIsValid=True,
-###    metadataToDisplay=metadataAuthoritativeXML,
-###    metadataDisplaySpecLink="#conform-metadata-authoritative",
-###    data=makeMetadataAuthoritativeTest1(),
-###    extraMetadataNotes=["The Extended Metadata Block test fails if the word FAIL appears in the metadata display."]
-###)
+writeFileStructureTest(
+    identifier="metadatadisplay-authoritative-001",
+    title="Metadata Out of Sync With name Table",
+    assertion="The name table and metadata fields are out of sync. The name table contains FAIL and the metadata contains PASS for unique id, vendor name, vendor url, credit name, credit url, description, license, license url, copyright and trademark.",
+    credits=[dict(title="Tal Leming", role="author", link="http://typesupply.com")],
+    shouldDisplaySFNT=True,
+    metadataIsValid=True,
+    metadataToDisplay=metadataAuthoritativeXML,
+    metadataDisplaySpecLink="#conform-metadata-authoritative",
+    data=makeMetadataAuthoritativeTest1(),
+    extraMetadataNotes=["The Extended Metadata Block test fails if the word FAIL appears in the metadata display."]
+)
 
 # -----------------------------
 # Metadata Display: Compression
