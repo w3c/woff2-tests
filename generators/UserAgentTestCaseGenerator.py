@@ -40,7 +40,7 @@ from testCaseGeneratorLib.sharedCases import *
 # This is used frequently.
 # ------------------------
 
-specificationURL = "http://dev.w3.org/webfonts/WOFF/spec/"
+specificationURL = "http://dev.w3.org/webfonts/WOFF2/spec/"
 
 # ------------------
 # Directory Creation

@@ -35,7 +35,7 @@ from testCaseGeneratorLib.utilities import padData, calcPaddingLength, calcTable
 # This is used frequently.
 # ------------------------
 
-specificationURL = "http://dev.w3.org/webfonts/WOFF/spec/"
+specificationURL = "http://dev.w3.org/webfonts/WOFF2/spec/"
 
 # ------------------
 # Directory Creation
