@@ -8,7 +8,7 @@ import codecs
 from copy import deepcopy
 from fontTools.ttLib.sfnt import sfntDirectoryEntrySize
 from testCaseGeneratorLib.woff import packTestHeader, packTestDirectory, packTestTableData, packTestMetadata, packTestPrivateData,\
-    woffHeaderSize, woffDirectoryEntrySize, woffDirectoryEntryFormat
+    woffHeaderSize
 from testCaseGeneratorLib.defaultData import defaultTestData, testDataWOFFMetadata, testDataWOFFPrivateData,\
     sfntCFFTableData, testCFFDataWOFFDirectory
 from testCaseGeneratorLib.utilities import calcPaddingLength, padData, calcTableChecksum, stripMetadata

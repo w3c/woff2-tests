@@ -30,15 +30,6 @@ woffHeaderFormat = """
 """
 woffHeaderSize = sstruct.calcsize(woffHeaderFormat)
 
-woffDirectoryEntryFormat = """
-    > # big endian
-    flags:           B
-    tag:             4s
-    origLength:      L # XXX
-    transformLength: L # XXX
-"""
-woffDirectoryEntrySize = sstruct.calcsize(woffDirectoryEntryFormat)
-
 woffTransformedGlyfHeaderFormat = """
     > # big endian
     version:               L
