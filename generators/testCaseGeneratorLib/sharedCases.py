@@ -7,7 +7,7 @@ import zlib
 import codecs
 from copy import deepcopy
 from fontTools.ttLib.sfnt import sfntDirectoryEntrySize
-from testCaseGeneratorLib.woff import packTestHeader, packTestDirectory, packTestTableData, packTestMetadata, packTestPrivateData,\
+from testCaseGeneratorLib.woff import packTestHeader, packTestDirectory, packTestMetadata, packTestPrivateData,\
     woffHeaderSize
 from testCaseGeneratorLib.defaultData import defaultTestData, testDataWOFFMetadata, testDataWOFFPrivateData,\
     sfntCFFTableData, testCFFDataWOFFDirectory
@@ -567,7 +567,7 @@ def makeTableDataByteRange5():
     # adjust the total length
     header["length"] = entry["offset"] + entryLength
     # pack the header, directory and table data
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData)
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
     # slice off everything after the new offset
     data = data[:entry["offset"]]
     # add the table to the data
@@ -602,7 +602,7 @@ def makeTableDataExtraneousData1():
             origData, compData = tableData[tag]
             tableData[tag] = (origData, compData + bogusBytes)
             header["length"] += bogusByteLength
-    data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData)
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
     return data
 
 makeTableDataExtraneousData1Title = "Extraneous Data Between Tables"
