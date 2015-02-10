@@ -4,7 +4,7 @@ This directory contains the resources needed for generating the various test cas
 Fonts
 -----
 
-The fonts are given in both .ttx and SFNT format. The .ttx files are the source and the SFNT are compiled from those using TTX. (TTX can be obtained at http://fonttools.sf.net).
+The fonts are given in both .ttx and SFNT format. The .ttx files are the source and the SFNT are compiled from those using TTX. (TTX can be obtained at https://github.com/behdad/fonttools).
 
 The fonts have the following glyph/unicode to visual representation mapping:
 
