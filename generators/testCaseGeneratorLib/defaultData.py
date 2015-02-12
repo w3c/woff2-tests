@@ -271,7 +271,7 @@ def defaultTestData(header=None, directory=None, tableData=None, compressedData=
         else:
             compMetadata = None
         if compMetadata is None:
-            compMetadata = brotli.compress(metadata, brotli.MODE_FONT)
+            compMetadata = brotli.compress(metadata, brotli.MODE_TEXT)
         header["metaOffset"] = header["length"]
         header["metaLength"] = len(compMetadata)
         header["metaOrigLength"] = len(metadata)
