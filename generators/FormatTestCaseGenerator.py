@@ -841,15 +841,15 @@ def makeTableData4Byte3():
 
 # offset after end of file
 
-writeTest(
-    identifier="directory-overlaps-001",
-    title=makeTableDataByteRange1Title,
-    description=makeTableDataByteRange1Description,
-    credits=makeTableDataByteRange1Credits,
-    valid=False,
-    specLink="#conform-diroverlap-reject",
-    data=makeTableDataByteRange1()
-)
+####writeTest(
+####    identifier="directory-overlaps-001",
+####    title=makeTableDataByteRange1Title,
+####    description=makeTableDataByteRange1Description,
+####    credits=makeTableDataByteRange1Credits,
+####    valid=False,
+####    specLink="#conform-diroverlap-reject",
+####    data=makeTableDataByteRange1()
+####)
 
 # offset + length goes past the end of the file
 
