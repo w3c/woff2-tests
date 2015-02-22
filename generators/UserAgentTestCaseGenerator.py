@@ -656,15 +656,15 @@ writeFileStructureTest(
 
 # final table is not padded
 
-writeFileStructureTest(
-    identifier="directory-4-byte-002",
-    title=makeTableData4Byte2Title,
-    assertion=makeTableData4Byte2Description,
-    credits=makeTableData4Byte2Credits,
-    shouldDisplaySFNT=False,
-    sfntDisplaySpecLink="#conform-tablesize-longword",
-    data=makeTableData4Byte2()
-)
+####writeFileStructureTest(
+####    identifier="directory-4-byte-002",
+####    title=makeTableData4Byte2Title,
+####    assertion=makeTableData4Byte2Description,
+####    credits=makeTableData4Byte2Credits,
+####    shouldDisplaySFNT=False,
+####    sfntDisplaySpecLink="#conform-tablesize-longword",
+####    data=makeTableData4Byte2()
+####)
 
 # -----------------------------------------
 # File Structure: Table Directory: Overlaps

@@ -422,6 +422,7 @@ makeTableData4Byte1Credits = [dict(title="Tal Leming", role="author", link="http
 
 # final table is not padded
 
+# XXX WOFF2 compresses the whole font data as one stream
 def makeTableData4Byte2():
     # table data
     tableData = deepcopy(sfntCFFTableData)

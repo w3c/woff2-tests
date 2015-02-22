@@ -800,15 +800,15 @@ writeTest(
 
 # final table is not padded
 
-writeTest(
-    identifier="directory-4-byte-002",
-    title=makeTableData4Byte2Title,
-    description=makeTableData4Byte2Description,
-    credits=makeTableData4Byte2Credits,
-    valid=False,
-    specLink="#conform-tablesize-longword",
-    data=makeTableData4Byte2()
-)
+####writeTest(
+####    identifier="directory-4-byte-002",
+####    title=makeTableData4Byte2Title,
+####    description=makeTableData4Byte2Description,
+####    credits=makeTableData4Byte2Credits,
+####    valid=False,
+####    specLink="#conform-tablesize-longword",
+####    data=makeTableData4Byte2()
+####)
 
 # table is padded with something other than null bytes
 
