@@ -658,6 +658,8 @@ writeTest(
 
 # font data after metadata
 
+# XXX: we can't really reorder the blocks given that there are no offsets to
+# tables in WOFF 2.0 table directory
 def makeDataBlockOrdering1():
     header, directory, tableData, metadata = defaultTestData(metadata=testDataWOFFMetadata)
     # move the metadata
@@ -691,6 +693,8 @@ def makeDataBlockOrdering1():
 
 # font data after private
 
+# XXX: we can't really reorder the blocks given that there are no offsets to
+# tables in WOFF 2.0 table directory
 def makeDataBlockOrdering2():
     header, directory, tableData, privateData = defaultTestData(privateData=testDataWOFFPrivateData)
     # move the private data
