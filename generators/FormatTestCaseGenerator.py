@@ -642,15 +642,15 @@ def makeMetadataPadding():
     data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData) + metadata
     return data
 
-writeTest(
-    identifier="blocks-metadata-padding-001",
-    title="Metadata Has Unnecessary Padding",
-    description="The metadata block is padded to a four-byte boundary but there is no private data.",
-    credits=[dict(title="Tal Leming", role="author", link="http://typesupply.com")],
-    valid=False,
-    specLink="#conform-metadata-noprivatepad",
-    data=makeMetadataPadding()
-)
+####writeTest(
+####    identifier="blocks-metadata-padding-001",
+####    title="Metadata Has Unnecessary Padding",
+####    description="The metadata block is padded to a four-byte boundary but there is no private data.",
+####    credits=[dict(title="Tal Leming", role="author", link="http://typesupply.com")],
+####    valid=False,
+####    specLink="#conform-metadata-noprivatepad",
+####    data=makeMetadataPadding()
+####)
 
 # -------------------------------------
 # File Structure: Data Blocks: Ordering
@@ -679,15 +679,15 @@ def makeDataBlockOrdering1():
     # done
     return data
 
-writeTest(
-    identifier="blocks-ordering-001",
-    title="Table Data After Metadata",
-    description="The table data block is stored after the metadata block.",
-    credits=[dict(title="Tal Leming", role="author", link="http://typesupply.com")],
-    valid=False,
-    specLink="#conform-afterdirectory",
-    data=makeDataBlockOrdering1()
-)
+####writeTest(
+####    identifier="blocks-ordering-001",
+####    title="Table Data After Metadata",
+####    description="The table data block is stored after the metadata block.",
+####    credits=[dict(title="Tal Leming", role="author", link="http://typesupply.com")],
+####    valid=False,
+####    specLink="#conform-afterdirectory",
+####    data=makeDataBlockOrdering1()
+####)
 
 # font data after private
 
@@ -708,15 +708,15 @@ def makeDataBlockOrdering2():
     # done
     return data
 
-writeTest(
-    identifier="blocks-ordering-002",
-    title="Table Data After Private Data",
-    description="The table data block is stored after the private data block.",
-    credits=[dict(title="Tal Leming", role="author", link="http://typesupply.com")],
-    valid=False,
-    specLink="#conform-afterdirectory",
-    data=makeDataBlockOrdering2()
-)
+####writeTest(
+####    identifier="blocks-ordering-002",
+####    title="Table Data After Private Data",
+####    description="The table data block is stored after the private data block.",
+####    credits=[dict(title="Tal Leming", role="author", link="http://typesupply.com")],
+####    valid=False,
+####    specLink="#conform-afterdirectory",
+####    data=makeDataBlockOrdering2()
+####)
 
 # metadata after private
 
@@ -770,29 +770,29 @@ def makeDataBlockPrivateData1():
     data += packTestPrivateData(privateData)
     return data
 
-writeTest(
-    identifier="blocks-private-001",
-    title="Private Data Does Not Begin of 4-Byte Boundary",
-    description="The private data does not begin on a four byte boundary because the metadata is not padded.",
-    credits=[dict(title="Tal Leming", role="author", link="http://typesupply.com")],
-    valid=False,
-    specLink="#conform-private-padalign",
-    data=makeDataBlockPrivateData1()
-)
+####writeTest(
+####    identifier="blocks-private-001",
+####    title="Private Data Does Not Begin of 4-Byte Boundary",
+####    description="The private data does not begin on a four byte boundary because the metadata is not padded.",
+####    credits=[dict(title="Tal Leming", role="author", link="http://typesupply.com")],
+####    valid=False,
+####    specLink="#conform-private-padalign",
+####    data=makeDataBlockPrivateData1()
+####)
 
 # ------------------------------------------------
 # File Structure: Table Directory: 4-Byte Boundary
 # ------------------------------------------------
 
-writeTest(
-    identifier="directory-4-byte-001",
-    title=makeTableData4Byte1Title,
-    description=makeTableData4Byte1Description,
-    credits=makeTableData4Byte1Credits,
-    valid=False,
-    specLink="#conform-tablesize-longword",
-    data=makeTableData4Byte1()
-)
+####writeTest(
+####    identifier="directory-4-byte-001",
+####    title=makeTableData4Byte1Title,
+####    description=makeTableData4Byte1Description,
+####    credits=makeTableData4Byte1Credits,
+####    valid=False,
+####    specLink="#conform-tablesize-longword",
+####    data=makeTableData4Byte1()
+####)
 
 # final table is not padded
 
@@ -821,15 +821,15 @@ def makeTableData4Byte3():
     data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
     return data
 
-writeTest(
-    identifier="directory-4-byte-003",
-    title="Font Table Data Padded With Non-Null",
-    description="Table data is padded with \\01 instead of \\00.",
-    credits=[dict(title="Tal Leming", role="author", link="http://typesupply.com")],
-    valid=False,
-    specLink="#conform-tablesize-longword",
-    data=makeTableData4Byte3()
-)
+####writeTest(
+####    identifier="directory-4-byte-003",
+####    title="Font Table Data Padded With Non-Null",
+####    description="Table data is padded with \\01 instead of \\00.",
+####    credits=[dict(title="Tal Leming", role="author", link="http://typesupply.com")],
+####    valid=False,
+####    specLink="#conform-tablesize-longword",
+####    data=makeTableData4Byte3()
+####)
 
 # -----------------------------------------
 # File Structure: Table Directory: Overlaps
@@ -849,51 +849,51 @@ writeTest(
 
 # offset + length goes past the end of the file
 
-writeTest(
-    identifier="directory-overlaps-002",
-    title=makeTableDataByteRange2Title,
-    description=makeTableDataByteRange2Description,
-    credits=makeTableDataByteRange2Credits,
-    valid=False,
-    specLink="#conform-diroverlap-reject",
-    data=makeTableDataByteRange2()
-)
+####writeTest(
+####    identifier="directory-overlaps-002",
+####    title=makeTableDataByteRange2Title,
+####    description=makeTableDataByteRange2Description,
+####    credits=makeTableDataByteRange2Credits,
+####    valid=False,
+####    specLink="#conform-diroverlap-reject",
+####    data=makeTableDataByteRange2()
+####)
 
 # overlaps metadata
 
-writeTest(
-    identifier="directory-overlaps-003",
-    title=makeTableDataByteRange3Title,
-    description=makeTableDataByteRange3Description,
-    credits=makeTableDataByteRange3Credits,
-    valid=False,
-    specLink="#conform-diroverlap-reject",
-    data=makeTableDataByteRange3()
-)
+####writeTest(
+####    identifier="directory-overlaps-003",
+####    title=makeTableDataByteRange3Title,
+####    description=makeTableDataByteRange3Description,
+####    credits=makeTableDataByteRange3Credits,
+####    valid=False,
+####    specLink="#conform-diroverlap-reject",
+####    data=makeTableDataByteRange3()
+####)
 
 # overlaps private data
 
-writeTest(
-    identifier="directory-overlaps-004",
-    title=makeTableDataByteRange4Title,
-    description=makeTableDataByteRange4Description,
-    credits=makeTableDataByteRange4Credits,
-    valid=False,
-    specLink="#conform-diroverlap-reject",
-    data=makeTableDataByteRange4()
-)
+####writeTest(
+####    identifier="directory-overlaps-004",
+####    title=makeTableDataByteRange4Title,
+####    description=makeTableDataByteRange4Description,
+####    credits=makeTableDataByteRange4Credits,
+####    valid=False,
+####    specLink="#conform-diroverlap-reject",
+####    data=makeTableDataByteRange4()
+####)
 
 # two tables overlap
 
-writeTest(
-    identifier="directory-overlaps-005",
-    title=makeTableDataByteRange5Title,
-    description=makeTableDataByteRange5Description,
-    credits=makeTableDataByteRange5Credits,
-    valid=False,
-    specLink="#conform-diroverlap-reject",
-    data=makeTableDataByteRange5()
-)
+####writeTest(
+####    identifier="directory-overlaps-005",
+####    title=makeTableDataByteRange5Title,
+####    description=makeTableDataByteRange5Description,
+####    credits=makeTableDataByteRange5Credits,
+####    valid=False,
+####    specLink="#conform-diroverlap-reject",
+####    data=makeTableDataByteRange5()
+####)
 
 # ------------------------------------------------
 # File Structure: Table Directory: Extraneous Data
@@ -901,15 +901,15 @@ writeTest(
 
 # between tables
 
-writeTest(
-    identifier="directory-extraneous-data-001",
-    title=makeTableDataExtraneousData1Title,
-    description=makeTableDataExtraneousData1Description,
-    credits=makeTableDataExtraneousData1Credits,
-    valid=False,
-    specLink="#conform-noextraneous",
-    data=makeTableDataExtraneousData1()
-)
+####writeTest(
+####    identifier="directory-extraneous-data-001",
+####    title=makeTableDataExtraneousData1Title,
+####    description=makeTableDataExtraneousData1Description,
+####    credits=makeTableDataExtraneousData1Credits,
+####    valid=False,
+####    specLink="#conform-noextraneous",
+####    data=makeTableDataExtraneousData1()
+####)
 
 # -------------------------------------------
 # File Structure: Table Directory: compLength
@@ -933,27 +933,27 @@ writeTest(
 
 # one table has an origLength that is less than the decompressed length
 
-writeTest(
-    identifier="directory-origLength-001",
-    title=makeTableDataOriginalLength1Title,
-    description=makeTableDataOriginalLength1Description,
-    credits=makeTableDataOriginalLength1Credits,
-    valid=False,
-    specLink="#conform-origLength",
-    data=makeTableDataOriginalLength1()
-)
+####writeTest(
+####    identifier="directory-origLength-001",
+####    title=makeTableDataOriginalLength1Title,
+####    description=makeTableDataOriginalLength1Description,
+####    credits=makeTableDataOriginalLength1Credits,
+####    valid=False,
+####    specLink="#conform-origLength",
+####    data=makeTableDataOriginalLength1()
+####)
 
 # one table has an origLength that is greater than the decompressed length
 
-writeTest(
-    identifier="directory-origLength-002",
-    title=makeTableDataOriginalLength2Title,
-    description=makeTableDataOriginalLength2Description,
-    credits=makeTableDataOriginalLength2Credits,
-    valid=False,
-    specLink="#conform-origLength",
-    data=makeTableDataOriginalLength2()
-)
+####writeTest(
+####    identifier="directory-origLength-002",
+####    title=makeTableDataOriginalLength2Title,
+####    description=makeTableDataOriginalLength2Description,
+####    credits=makeTableDataOriginalLength2Credits,
+####    valid=False,
+####    specLink="#conform-origLength",
+####    data=makeTableDataOriginalLength2()
+####)
 
 # ---------------------------------------------
 # File Structure: Table Directory: origCheckSum
@@ -974,15 +974,15 @@ def makeTableDirectoryCheckSum1():
     data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
     return data
 
-writeTest(
-    identifier="directory-origCheckSum-001",
-    title="Font Table Directory Contains Invalid Original CheckSum",
-    description="The checksum for the CFF table is set to 0.",
-    credits=[dict(title="Tal Leming", role="author", link="http://typesupply.com")],
-    valid=False,
-    specLink="#conform-checksumvalidate",
-    data=makeTableDirectoryCheckSum1()
-)
+####writeTest(
+####    identifier="directory-origCheckSum-001",
+####    title="Font Table Directory Contains Invalid Original CheckSum",
+####    description="The checksum for the CFF table is set to 0.",
+####    credits=[dict(title="Tal Leming", role="author", link="http://typesupply.com")],
+####    valid=False,
+####    specLink="#conform-checksumvalidate",
+####    data=makeTableDirectoryCheckSum1()
+####)
 
 # bad head checksum
 
@@ -998,15 +998,15 @@ def makeTableDirectoryCheckSum2():
     data = packTestHeader(header) + packTestDirectory(directory) + packTestTableData(directory, tableData, calcCheckSum=False)
     return data
 
-writeTest(
-    identifier="directory-origCheckSum-002",
-    title="Font head Table Incorrect CheckSum Adjustment",
-    description="The head table checksum adjustment is set to 0.",
-    credits=[dict(title="Tal Leming", role="author", link="http://typesupply.com")],
-    valid=False,
-    specLink="#conform-checksumvalidate",
-    data=makeTableDirectoryCheckSum2()
-)
+####writeTest(
+####    identifier="directory-origCheckSum-002",
+####    title="Font head Table Incorrect CheckSum Adjustment",
+####    description="The head table checksum adjustment is set to 0.",
+####    credits=[dict(title="Tal Leming", role="author", link="http://typesupply.com")],
+####    valid=False,
+####    specLink="#conform-checksumvalidate",
+####    data=makeTableDirectoryCheckSum2()
+####)
 
 # ------------------------------------------------
 # File Structure: Table Directory: Ascending Order
@@ -1022,15 +1022,15 @@ def makeTableDirectoryAscending1():
     data = packTestHeader(header) + directoryData + tableData
     return data
 
-writeTest(
-    identifier="directory-ascending-001",
-    title="Font Table Directory Not In Ascending Order",
-    description="The tables in the directory are in descending order.",
-    credits=[dict(title="Tal Leming", role="author", link="http://typesupply.com")],
-    valid=False,
-    specLink="#conform-ascending",
-    data=makeTableDirectoryAscending1()
-)
+####writeTest(
+####    identifier="directory-ascending-001",
+####    title="Font Table Directory Not In Ascending Order",
+####    description="The tables in the directory are in descending order.",
+####    credits=[dict(title="Tal Leming", role="author", link="http://typesupply.com")],
+####    valid=False,
+####    specLink="#conform-ascending",
+####    data=makeTableDirectoryAscending1()
+####)
 
 
 # ---------------------------------------
@@ -1039,51 +1039,51 @@ writeTest(
 
 # no tables compressed
 
-writeTest(
-    identifier="tabledata-compression-001",
-    title=makeTableCompressionTest1Title,
-    description=makeTableCompressionTest1Description,
-    credits=makeTableCompressionTest1Credits,
-    valid=True,
-    specLink="#conform-mustuncompress",
-    data=makeTableCompressionTest1()
-)
+####writeTest(
+####    identifier="tabledata-compression-001",
+####    title=makeTableCompressionTest1Title,
+####    description=makeTableCompressionTest1Description,
+####    credits=makeTableCompressionTest1Credits,
+####    valid=True,
+####    specLink="#conform-mustuncompress",
+####    data=makeTableCompressionTest1()
+####)
 
 # all possible tables are compressed
 
-writeTest(
-    identifier="tabledata-compression-002",
-    title=makeTableCompressionTest2Title,
-    description=makeTableCompressionTest2Description,
-    credits=makeTableCompressionTest2Credits,
-    valid=True,
-    specLink="#conform-mustuncompress",
-    data=makeTableCompressionTest2()
-)
+####writeTest(
+####    identifier="tabledata-compression-002",
+####    title=makeTableCompressionTest2Title,
+####    description=makeTableCompressionTest2Description,
+####    credits=makeTableCompressionTest2Credits,
+####    valid=True,
+####    specLink="#conform-mustuncompress",
+####    data=makeTableCompressionTest2()
+####)
 
 # not all possible tables are compressed
 
-writeTest(
-    identifier="tabledata-compression-003",
-    title=makeTableCompressionTest3Title,
-    description=makeTableCompressionTest3Description,
-    credits=makeTableCompressionTest3Credits,
-    valid=True,
-    specLink="#conform-mustuncompress",
-    data=makeTableCompressionTest3()
-)
+####writeTest(
+####    identifier="tabledata-compression-003",
+####    title=makeTableCompressionTest3Title,
+####    description=makeTableCompressionTest3Description,
+####    credits=makeTableCompressionTest3Credits,
+####    valid=True,
+####    specLink="#conform-mustuncompress",
+####    data=makeTableCompressionTest3()
+####)
 
 # varying compression levels
 
-writeTest(
-    identifier="tabledata-compression-004",
-    title=makeTableCompressionTest4Title,
-    description=makeTableCompressionTest4Description,
-    credits=makeTableCompressionTest4Credits,
-    valid=True,
-    specLink="#conform-mustuncompress",
-    data=makeTableCompressionTest4()
-)
+####writeTest(
+####    identifier="tabledata-compression-004",
+####    title=makeTableCompressionTest4Title,
+####    description=makeTableCompressionTest4Description,
+####    credits=makeTableCompressionTest4Credits,
+####    valid=True,
+####    specLink="#conform-mustuncompress",
+####    data=makeTableCompressionTest4()
+####)
 
 # ----------------------------------------------
 # File Structure: Table Data: Compression Format
@@ -1091,15 +1091,15 @@ writeTest(
 
 # compression incompatible with zlib
 
-writeTest(
-    identifier="tabledata-zlib-001",
-    title=makeTableZlibCompressionTest1Title,
-    description=makeTableZlibCompressionTest1Description,
-    credits=makeTableZlibCompressionTest1Credits,
-    valid=False,
-    specLink="#conform-mustzlib",
-    data=makeTableZlibCompressionTest1()
-)
+####writeTest(
+####    identifier="tabledata-zlib-001",
+####    title=makeTableZlibCompressionTest1Title,
+####    description=makeTableZlibCompressionTest1Description,
+####    credits=makeTableZlibCompressionTest1Credits,
+####    valid=False,
+####    specLink="#conform-mustzlib",
+####    data=makeTableZlibCompressionTest1()
+####)
 
 # -----------------
 # Metadata: Padding
@@ -1117,15 +1117,15 @@ def makeMetadataPadding1():
     data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData) + packTestMetadata(metadata) + packTestPrivateData(privateData)
     return data
 
-writeTest(
-    identifier="metadata-padding-001",
-    title="Padding Between Metadata and Private Data is Non-Null",
-    description="Metadata is padded with \\01 instead of \\00.",
-    credits=[dict(title="Tal Leming", role="author", link="http://typesupply.com")],
-    valid=False,
-    specLink="#conform-private-padalign",
-    data=makeMetadataPadding1()
-)
+####writeTest(
+####    identifier="metadata-padding-001",
+####    title="Padding Between Metadata and Private Data is Non-Null",
+####    description="Metadata is padded with \\01 instead of \\00.",
+####    credits=[dict(title="Tal Leming", role="author", link="http://typesupply.com")],
+####    valid=False,
+####    specLink="#conform-private-padalign",
+####    data=makeMetadataPadding1()
+####)
 
 # -----------------------------
 # Metadata Display: Compression
