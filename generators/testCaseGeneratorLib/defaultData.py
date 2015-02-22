@@ -129,6 +129,13 @@ testDataWOFFMetadata = """
 			<value lang="en">Extension 2 - Item 2 - Value With "en" Language</value>
 			<value lang="fr">Extension 2 - Item 2 - Value With "fr" Language</value>
 		</item>
+		<item id="Extension 2 - Item 3 ID">
+			<name>Extension 2 - Item 3 - Name Without Language</name>
+			<name lang="en">Extension 2 - Item 3 - Name With "en" Language</name>
+			<name lang="fr">Extension 2 - Item 3 - Name With "fr" Language</name>
+			<value>Extension 2 - Item 3 - Value Without Language</value>
+			<value lang="en">Extension 2 - Item 3 - Value With "en" Language</value>
+		</item>
 	</extension>
 </metadata>
 """.strip()

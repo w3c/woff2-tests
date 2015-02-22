@@ -642,15 +642,15 @@ def makeMetadataPadding():
     data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData) + metadata
     return data
 
-####writeTest(
-####    identifier="blocks-metadata-padding-001",
-####    title="Metadata Has Unnecessary Padding",
-####    description="The metadata block is padded to a four-byte boundary but there is no private data.",
-####    credits=[dict(title="Tal Leming", role="author", link="http://typesupply.com")],
-####    valid=False,
-####    specLink="#conform-metadata-noprivatepad",
-####    data=makeMetadataPadding()
-####)
+writeTest(
+    identifier="blocks-metadata-padding-001",
+    title="Metadata Has Unnecessary Padding",
+    description="The metadata block is padded to a four-byte boundary but there is no private data.",
+    credits=[dict(title="Tal Leming", role="author", link="http://typesupply.com")],
+    valid=False,
+    specLink="#conform-metadata-noprivatepad",
+    data=makeMetadataPadding()
+)
 
 # -------------------------------------
 # File Structure: Data Blocks: Ordering
@@ -770,15 +770,15 @@ def makeDataBlockPrivateData1():
     data += packTestPrivateData(privateData)
     return data
 
-####writeTest(
-####    identifier="blocks-private-001",
-####    title="Private Data Does Not Begin of 4-Byte Boundary",
-####    description="The private data does not begin on a four byte boundary because the metadata is not padded.",
-####    credits=[dict(title="Tal Leming", role="author", link="http://typesupply.com")],
-####    valid=False,
-####    specLink="#conform-private-padalign",
-####    data=makeDataBlockPrivateData1()
-####)
+writeTest(
+    identifier="blocks-private-001",
+    title="Private Data Does Not Begin of 4-Byte Boundary",
+    description="The private data does not begin on a four byte boundary because the metadata is not padded.",
+    credits=[dict(title="Tal Leming", role="author", link="http://typesupply.com")],
+    valid=False,
+    specLink="#conform-private-padalign",
+    data=makeDataBlockPrivateData1()
+)
 
 # ------------------------------------------------
 # File Structure: Table Directory: 4-Byte Boundary
@@ -1117,15 +1117,15 @@ def makeMetadataPadding1():
     data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData) + packTestMetadata(metadata) + packTestPrivateData(privateData)
     return data
 
-####writeTest(
-####    identifier="metadata-padding-001",
-####    title="Padding Between Metadata and Private Data is Non-Null",
-####    description="Metadata is padded with \\01 instead of \\00.",
-####    credits=[dict(title="Tal Leming", role="author", link="http://typesupply.com")],
-####    valid=False,
-####    specLink="#conform-private-padalign",
-####    data=makeMetadataPadding1()
-####)
+writeTest(
+    identifier="metadata-padding-001",
+    title="Padding Between Metadata and Private Data is Non-Null",
+    description="Metadata is padded with \\01 instead of \\00.",
+    credits=[dict(title="Tal Leming", role="author", link="http://typesupply.com")],
+    valid=False,
+    specLink="#conform-private-padalign",
+    data=makeMetadataPadding1()
+)
 
 # -----------------------------
 # Metadata Display: Compression
