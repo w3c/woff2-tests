@@ -104,10 +104,10 @@ shutil.copy(os.path.join(resourcesDirectory, "index.css"), destPath)
 
 groupDefinitions = [
     # identifier, title, spec section
-    ("valid", "Valid WOFFs", specificationURL+"#OverallStructure"),
-    ("header", "WOFF Header Tests", specificationURL+"#WOFFHeader"),
-    ("blocks", "WOFF Data Block Tests", specificationURL+"#OverallStructure"),
-    ("directory", "WOFF Table Directory Tests", specificationURL+"#TableDirectory"),
+    ("valid", "Valid WOFFs", specificationURL+"#FileStructure"),
+    ("header", "WOFF Header Tests", specificationURL+"#woff20Header"),
+    ("blocks", "WOFF Data Block Tests", specificationURL+"#FileStructure"),
+    ("directory", "WOFF Table Directory Tests", specificationURL+"#table_dir_format"),
     ("tabledata", "WOFF Table Data Tests", specificationURL+"#DataTables"),
     ("metadata", "WOFF Metadata Tests", specificationURL+"#Metadata"),
     ("privatedata", "WOFF Private Data Tests", specificationURL+"#Private"),
@@ -435,7 +435,7 @@ writeFileStructureTest(
     assertion=makeHeaderInvalidLength1Description,
     credits=makeHeaderInvalidLength1Credits,
     shouldDisplaySFNT=False,
-    sfntDisplaySpecLink="#WOFFHeader",
+    sfntDisplaySpecLink="#woff20Header",
     data=makeHeaderInvalidLength1()
 )
 
@@ -445,7 +445,7 @@ writeFileStructureTest(
     assertion=makeHeaderInvalidLength2Description,
     credits=makeHeaderInvalidLength2Credits,
     shouldDisplaySFNT=False,
-    sfntDisplaySpecLink="#WOFFHeader",
+    sfntDisplaySpecLink="#woff20Header",
     data=makeHeaderInvalidLength2()
 )
 
@@ -459,7 +459,7 @@ writeFileStructureTest(
     assertion=makeHeaderInvalidNumTables1Description,
     credits=makeHeaderInvalidNumTables1Credits,
     shouldDisplaySFNT=False,
-    sfntDisplaySpecLink="#WOFFHeader",
+    sfntDisplaySpecLink="#woff20Header",
     data=makeHeaderInvalidNumTables1()
 )
 
@@ -2801,10 +2801,10 @@ available1 = """
 			pre {
 				font-size: 12px;
 			}
-			iframe { 
-				width: 24em; 
-				height: 300px; 
-				border: thin solid green 
+			iframe {
+				width: 24em;
+				height: 300px;
+				border: thin solid green
 			}
 		]]></style>
 	</head>
