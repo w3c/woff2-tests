@@ -421,7 +421,7 @@ writeFileStructureTest(
     assertion=makeHeaderInvalidSignature1Description,
     credits=makeHeaderInvalidSignature1Credits,
     shouldDisplaySFNT=False,
-    sfntDisplaySpecLink="#conform-nomagicnumber-reject",
+    sfntDisplaySpecLink="#conform-noMagicNumber-reject",
     data=makeHeaderInvalidSignature1()
 )
 
@@ -508,7 +508,7 @@ writeFileStructureTest(
     assertion=makeHeaderInvalidReserved1Description,
     credits=makeHeaderInvalidReserved1Credits,
     shouldDisplaySFNT=False,
-    sfntDisplaySpecLink="#conform-reserved-reject",
+    sfntDisplaySpecLink="#conform-mustNotUseReservedValue",
     data=makeHeaderInvalidReserved1()
 )
 
