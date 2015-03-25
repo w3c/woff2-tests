@@ -284,7 +284,7 @@ writeTest(
     description=makeHeaderInvalidSignature1Description,
     credits=makeHeaderInvalidSignature1Credits,
     valid=False,
-    specLink="#conform-magicnumber",
+    specLink="#conform-magicNumber",
     data=makeHeaderInvalidSignature1()
 )
 
@@ -410,7 +410,7 @@ writeTest(
     description=makeHeaderInvalidReserved1Description,
     credits=makeHeaderInvalidReserved1Credits,
     valid=False,
-    specLink="#conform-reserved",
+    specLink="#conform-mustSetReserved2Zero",
     data=makeHeaderInvalidReserved1()
 )
 
@@ -744,7 +744,7 @@ writeTest(
     description="The metadata block is stored after the private data block.",
     credits=[dict(title="Tal Leming", role="author", link="http://typesupply.com")],
     valid=False,
-    specLink="#metadata-afterfonttable",
+    specLink="#conform-metadata-afterfonttable",
     data=makeDataBlockOrdering3()
 )
 
@@ -754,7 +754,7 @@ writeTest(
     description="The private data block is stored before the metadata block.",
     credits=[dict(title="Tal Leming", role="author", link="http://typesupply.com")],
     valid=False,
-    specLink="#private-last",
+    specLink="#conform-private-last",
     data=makeDataBlockOrdering3()
 )
 
