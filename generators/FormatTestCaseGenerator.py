@@ -71,9 +71,9 @@ shutil.copy(os.path.join(resourcesDirectory, "index.css"), destPath)
 groupDefinitions = [
     # identifier, title, spec section
     ("valid", "Valid WOFFs", None),
-    ("header", "WOFF Header Tests", specificationURL+"#WOFFHeader"),
-    ("blocks", "WOFF Data Block Tests", specificationURL+"#OverallStructure"),
-    ("directory", "WOFF Table Directory Tests", specificationURL+"#TableDirectory"),
+    ("header", "WOFF Header Tests", specificationURL+"#woff20Header"),
+    ("blocks", "WOFF Data Block Tests", specificationURL+"#FileStructure"),
+    ("directory", "WOFF Table Directory Tests", specificationURL+"#table_dir_format"),
     ("tabledata", "WOFF Table Data Tests", specificationURL+"#DataTables"),
     ("metadata", "WOFF Metadata Tests", specificationURL+"#Metadata"),
     ("privatedata", "WOFF Private Data Tests", specificationURL+"#Private")
@@ -306,7 +306,7 @@ writeTest(
     description="The header flavor is set to 0x00010000 but the table data contains CFF data, not TTF data.",
     credits=[dict(title="Tal Leming", role="author", link="http://typesupply.com")],
     valid=False,
-    specLink="#WOFFHeader",
+    specLink="#woff20Header",
     data=makeHeaderInvalidFlavor1()
 )
 
@@ -324,7 +324,7 @@ writeTest(
     description="The header flavor is set to OTTO but the table data contains TTF data, not CFF data.",
     credits=[dict(title="Tal Leming", role="author", link="http://typesupply.com")],
     valid=False,
-    specLink="#WOFFHeader",
+    specLink="#woff20Header",
     data=makeHeaderInvalidFlavor2()
 )
 
@@ -338,7 +338,7 @@ writeTest(
     description=makeHeaderInvalidLength1Description,
     credits=makeHeaderInvalidLength1Credits,
     valid=False,
-    specLink="#WOFFHeader",
+    specLink="#woff20Header",
     data=makeHeaderInvalidLength1()
 )
 
@@ -348,7 +348,7 @@ writeTest(
     description=makeHeaderInvalidLength2Description,
     credits=makeHeaderInvalidLength2Credits,
     valid=False,
-    specLink="#WOFFHeader",
+    specLink="#woff20Header",
     data=makeHeaderInvalidLength2()
 )
 
@@ -362,7 +362,7 @@ writeTest(
     description=makeHeaderInvalidNumTables1Description,
     credits=makeHeaderInvalidNumTables1Credits,
     valid=False,
-    specLink="#WOFFHeader",
+    specLink="#woff20Header",
     data=makeHeaderInvalidNumTables1()
 )
 
