@@ -916,22 +916,6 @@ def makeTableData4Byte3():
 ####)
 
 # -------------------------------------------
-# File Structure: Table Directory: compLength
-# -------------------------------------------
-
-# some tables have a compressed length that is longer than the original length
-
-writeTest(
-    identifier="directory-compLength-001",
-    title=makeTableDataCompressionLength1Title,
-    description=makeTableDataCompressionLength1Description,
-    credits=makeTableDataCompressionLength1Credits,
-    valid=False,
-    specLink="#conform-compressedlarger",
-    data=makeTableDataCompressionLength1()
-)
-
-# -------------------------------------------
 # File Structure: Table Directory: origLength
 # -------------------------------------------
 
