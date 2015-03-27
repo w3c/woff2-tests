@@ -655,6 +655,58 @@ writeFileStructureTest(
     data=makeTableBrotliCompressionTest1()
 )
 
+# -----------------------------------------------
+# File Structure: Table Data: Decompressed Length
+# -----------------------------------------------
+
+# decompressed length less than sum of origLength
+
+writeFileStructureTest(
+    identifier="tabledata-decompressed-length-001",
+    title=makeTableDecompressedLengthTest1Title,
+    assertion=makeTableDecompressedLengthTest1Description,
+    credits=makeTableDecompressedLengthTest1Credits,
+    shouldDisplaySFNT=False,
+    sfntDisplaySpecLink="conform-mustBeInvalidated-FailSize",
+    data=makeTableDecompressedLengthTest1()
+)
+
+# decompressed length greater than sum of origLength
+
+writeFileStructureTest(
+    identifier="tabledata-decompressed-length-002",
+    title=makeTableDecompressedLengthTest2Title,
+    assertion=makeTableDecompressedLengthTest2Description,
+    credits=makeTableDecompressedLengthTest2Credits,
+    shouldDisplaySFNT=False,
+    sfntDisplaySpecLink="conform-mustBeInvalidated-FailSize",
+    data=makeTableDecompressedLengthTest2()
+)
+
+# decompressed length less than sum of transformLength
+
+writeFileStructureTest(
+    identifier="tabledata-decompressed-length-003",
+    title=makeTableDecompressedLengthTest3Title,
+    assertion=makeTableDecompressedLengthTest3Description,
+    credits=makeTableDecompressedLengthTest3Credits,
+    shouldDisplaySFNT=False,
+    sfntDisplaySpecLink="conform-mustBeInvalidated-FailSize",
+    data=makeTableDecompressedLengthTest3()
+)
+
+# decompressed length greater than sum of transformLength
+
+writeFileStructureTest(
+    identifier="tabledata-decompressed-length-004",
+    title=makeTableDecompressedLengthTest4Title,
+    assertion=makeTableDecompressedLengthTest4Description,
+    credits=makeTableDecompressedLengthTest4Credits,
+    shouldDisplaySFNT=False,
+    sfntDisplaySpecLink="conform-mustBeInvalidated-FailSize",
+    data=makeTableDecompressedLengthTest4()
+)
+
 # -----------------------------------
 # File Structure: Metadata: No Effect
 # -----------------------------------

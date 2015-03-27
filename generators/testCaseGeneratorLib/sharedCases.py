@@ -391,6 +391,58 @@ makeTableBrotliCompressionTest1Title = "Font Table Data Invalid Compressed Data"
 makeTableBrotliCompressionTest1Description = "Font table data is compressed with zlib instead of Brotli."
 makeTableBrotliCompressionTest1Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
 
+# -----------------------------------------------
+# File Structure: Table Data: Decompressed Length
+# -----------------------------------------------
+
+# decompressed length less than sum of origLength
+
+def makeTableDecompressedLengthTest1():
+    header, directory, tableData = defaultTestData()
+    directory[0]["origLength"] += 1
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
+    return data
+
+makeTableDecompressedLengthTest1Title = "Font Table Data Decompressed Length Less Than Original Length"
+makeTableDecompressedLengthTest1Description = "The original length of the first table in the directory is increased by 1, making the decompressed length of the table data less than the sum of original table lengths."
+makeTableDecompressedLengthTest1Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
+
+# decompressed length greater than sum of origLength
+
+def makeTableDecompressedLengthTest2():
+    header, directory, tableData = defaultTestData()
+    directory[0]["origLength"] -= 1
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
+    return data
+
+makeTableDecompressedLengthTest2Title = "Font Table Data Decompressed Length Greater Than Original Length"
+makeTableDecompressedLengthTest2Description = "The original length of the first table in the directory is decreased by 1, making the decompressed length of the table data greater than the sum of original table lengths."
+makeTableDecompressedLengthTest2Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
+
+def makeTableDecompressedLengthTest3():
+    header, directory, tableData = defaultTestData(flavor="ttf")
+    for entry in directory:
+        if entry["tag"] == "glyf":
+            entry["transformLength"] += 1
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
+    return data
+
+makeTableDecompressedLengthTest3Title = "Font Table Data Decompressed Length Less Than Transformed Length"
+makeTableDecompressedLengthTest3Description = "The transformed length of the glyf table in the directory is increased by 1, making the decompressed length of the table data less than the sum of transformed table lengths."
+makeTableDecompressedLengthTest3Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
+
+def makeTableDecompressedLengthTest4():
+    header, directory, tableData = defaultTestData(flavor="ttf")
+    for entry in directory:
+        if entry["tag"] == "glyf":
+            entry["transformLength"] -= 1
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
+    return data
+
+makeTableDecompressedLengthTest4Title = "Font Table Data Decompressed Length Greater Than Transformed Length"
+makeTableDecompressedLengthTest4Description = "The transformed length of the glyf table in the directory is decreased by 1, making the decompressed length of the table data greater than the sum of transformed table lengths."
+makeTableDecompressedLengthTest4Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
+
 # -----------------------------
 # Metadata Display: Compression
 # -----------------------------

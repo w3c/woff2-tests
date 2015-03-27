@@ -734,6 +734,58 @@ writeTest(
     data=makeTableBrotliCompressionTest1()
 )
 
+# -----------------------------------------------
+# File Structure: Table Data: Decompressed Length
+# -----------------------------------------------
+
+# decompressed length less than sum of origLength
+
+writeTest(
+    identifier="tabledata-decompressed-length-001",
+    title=makeTableDecompressedLengthTest1Title,
+    description=makeTableDecompressedLengthTest1Description,
+    credits=makeTableDecompressedLengthTest1Credits,
+    valid=False,
+    specLink="#conform-mustMatchUncompressedSize",
+    data=makeTableDecompressedLengthTest1()
+)
+
+# decompressed length greater than sum of origLength
+
+writeTest(
+    identifier="tabledata-decompressed-length-002",
+    title=makeTableDecompressedLengthTest2Title,
+    description=makeTableDecompressedLengthTest2Description,
+    credits=makeTableDecompressedLengthTest2Credits,
+    valid=False,
+    specLink="#conform-mustMatchUncompressedSize",
+    data=makeTableDecompressedLengthTest2()
+)
+
+# decompressed length less than sum of transformLength
+
+writeTest(
+    identifier="tabledata-decompressed-length-003",
+    title=makeTableDecompressedLengthTest3Title,
+    description=makeTableDecompressedLengthTest3Description,
+    credits=makeTableDecompressedLengthTest3Credits,
+    valid=False,
+    specLink="#conform-mustMatchUncompressedSize",
+    data=makeTableDecompressedLengthTest3()
+)
+
+# decompressed length greater than sum of transformLength
+
+writeTest(
+    identifier="tabledata-decompressed-length-004",
+    title=makeTableDecompressedLengthTest4Title,
+    description=makeTableDecompressedLengthTest4Description,
+    credits=makeTableDecompressedLengthTest4Credits,
+    valid=False,
+    specLink="#conform-mustMatchUncompressedSize",
+    data=makeTableDecompressedLengthTest4()
+)
+
 # -----------------
 # Metadata: Padding
 # -----------------
