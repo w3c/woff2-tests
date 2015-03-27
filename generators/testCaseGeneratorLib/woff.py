@@ -171,6 +171,9 @@ def tramsformGlyf(font):
             # nContourStream
             nContourStream += struct.pack(">h", glyph.numberOfContours)
 
+            if glyph.numberOfContours < 1:
+                continue
+
             # nPointsStream
             lastPointIndex = 0
             for i in range(glyph.numberOfContours):
@@ -195,14 +198,10 @@ def tramsformGlyf(font):
                 lastPointIndex = glyph.endPtsOfContours[i] + 1
 
             # instructionLength
-            if glyph.numberOfContours and len(glyph.program.bytecode):
+            if len(glyph.program.bytecode):
                 assert False # XXX support writing instructions
 
-            # XXX the spec is not clear here, but the reference implementation
-            # seems to write the instructionLength only if there are any
-            # contours.
-            if glyph.numberOfContours:
-                glyphStream += pack255UInt16(0)
+            glyphStream += pack255UInt16(0)
 
             # instructionStream
 
