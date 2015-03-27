@@ -2,6 +2,7 @@
 Test cases that can be shared between two or more suites.
 """
 
+import brotli
 import os
 import zlib
 import codecs
@@ -369,6 +370,26 @@ def makeOverlappingData3():
 makeOverlappingData3Title = "Private Data Overlaps Metadata"
 makeOverlappingData3Description = "The private data offset is four bytes before the end of the metadata."
 makeOverlappingData3Credits = [dict(title="Tal Leming", role="author", link="http://typesupply.com")]
+
+# ----------------------------------------------
+# File Structure: Table Data: Compression Format
+# ----------------------------------------------
+
+# compression incompatible with Brotli
+
+def makeTableBrotliCompressionTest1():
+    header, directory, tableData = defaultTestData()
+    zlibData = zlib.compress(brotli.decompress(tableData))
+    length = woffHeaderSize + len(packTestDirectory(directory)) + len(zlibData)
+    length += calcPaddingLength(length)
+    header["totalCompressedSize"] = len(zlibData)
+    header["length"] = length
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + zlibData)
+    return data
+
+makeTableBrotliCompressionTest1Title = "Font Table Data Invalid Compressed Data"
+makeTableBrotliCompressionTest1Description = "Font table data is compressed with zlib instead of Brotli."
+makeTableBrotliCompressionTest1Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
 
 # -----------------------------
 # Metadata Display: Compression

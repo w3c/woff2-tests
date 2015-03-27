@@ -639,6 +639,22 @@ writeFileStructureTest(
     data=makeOverlappingData3()
 )
 
+# ----------------------------------------------
+# File Structure: Table Data: Compression Format
+# ----------------------------------------------
+
+# compression incompatible with Brotli
+
+writeFileStructureTest(
+    identifier="tabledata-brotli-001",
+    title=makeTableBrotliCompressionTest1Title,
+    assertion=makeTableBrotliCompressionTest1Description,
+    credits=makeTableBrotliCompressionTest1Credits,
+    shouldDisplaySFNT=False,
+    sfntDisplaySpecLink="#conform-mustBeInvalidated-FailDecompress",
+    data=makeTableBrotliCompressionTest1()
+)
+
 # -----------------------------------
 # File Structure: Metadata: No Effect
 # -----------------------------------

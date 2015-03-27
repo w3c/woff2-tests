@@ -718,6 +718,22 @@ writeTest(
     data=makeDataBlockPrivateData1()
 )
 
+# ----------------------------------------------
+# File Structure: Table Data: Compression Format
+# ----------------------------------------------
+
+# compression incompatible with Brotli
+
+writeTest(
+    identifier="tabledata-brotli-001",
+    title=makeTableBrotliCompressionTest1Title,
+    description=makeTableBrotliCompressionTest1Description,
+    credits=makeTableBrotliCompressionTest1Credits,
+    valid=False,
+    specLink="#conform-mustUseBrotli-FontData",
+    data=makeTableBrotliCompressionTest1()
+)
+
 # -----------------
 # Metadata: Padding
 # -----------------
