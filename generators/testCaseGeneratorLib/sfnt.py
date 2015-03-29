@@ -14,17 +14,14 @@ from woff import transformTable
 # Unpacking
 # ---------
 
-def getSFNTData(pathOrFile, transform=True):
+def getSFNTData(pathOrFile):
     font = TTFont(pathOrFile)
     tableChecksums = {}
     tableData = {}
     tableOrder = [i for i in sorted(font.keys()) if len(i) == 4]
     for tag in tableOrder:
         tableChecksums[tag] = font.reader.tables[tag].checkSum
-        if transform:
-            tableData[tag] = transformTable(font, tag)
-        else:
-            tableData[tag] = (font.getTableData(tag), font.getTableData(tag))
+        tableData[tag] = transformTable(font, tag)
     totalData = "".join([tableData[tag][1] for tag in tableOrder])
     compData = brotli.compress(totalData, brotli.MODE_FONT)
     if len(compData) >= len(totalData):
