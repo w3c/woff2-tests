@@ -26,7 +26,8 @@ import zipfile
 from fontTools.misc import sstruct
 from testCaseGeneratorLib.woff import packTestHeader, packTestDirectory, packTestMetadata, packTestPrivateData
 from testCaseGeneratorLib.defaultData import defaultTestData, testDataWOFFMetadata, testDataWOFFPrivateData
-from testCaseGeneratorLib.paths import resourcesDirectory, formatDirectory, formatTestDirectory, formatResourcesDirectory
+from testCaseGeneratorLib.paths import resourcesDirectory, formatDirectory, formatTestDirectory, formatResourcesDirectory, sfntTTFSourcePath
+from testCaseGeneratorLib.sfnt import getSFNTData
 from testCaseGeneratorLib.html import generateFormatIndexHTML
 from testCaseGeneratorLib import sharedCases
 from testCaseGeneratorLib.sharedCases import *
@@ -786,6 +787,29 @@ writeTest(
     data=makeTableDecompressedLengthTest4()
 )
 
+# -------------------------------------------
+# File Structure: Table Data: Transformations
+# -------------------------------------------
+
+# glyf and loca are not transformed
+
+def makeTableNotransformationTest1():
+    sfntData = getSFNTData(sfntTTFSourcePath, transform=False)
+    compressedData = sfntData[1]
+    uncompressedData = sfntData[0]
+    header, directory, tableData = defaultTestData(flavor="ttf", tableData=uncompressedData, compressedData=compressedData)
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
+    return data
+
+writeTest(
+    identifier="tabledata-no-transform-001",
+    title="Font Table Data Untransformed Tables",
+    description="The glyf and loca tables are not transformed.",
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    valid=False,
+    specLink="#conform-mustTransformTables",
+    data=makeTableNotransformationTest1()
+)
 # -----------------
 # Metadata: Padding
 # -----------------
