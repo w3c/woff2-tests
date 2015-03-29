@@ -279,39 +279,6 @@ writeTest(
     data=makeInvalidChecksum2()
 )
 
-# padding that does not result in a four byte boundary
-
-def makeInvalidPadding1():
-    header, directory, tableData = defaultSFNTTestData()
-    # grab the head table, calculate the padding length
-    # and shift the following tables
-    headEntry = [entry for entry in directory if entry["tag"] == "head"][0]
-    shift = calcPaddingLength(headEntry["length"])
-    assert shift
-    entries = [(entry["offset"], entry) for entry in directory]
-    assert sorted(entries)[0][1]["tag"] == "head"
-    for o, entry in sorted(entries)[1:]:
-        if entry["tag"] == "head":
-            continue
-        entry["offset"] -= shift
-    # pad the tables
-    for tag, data in tableData.items():
-        if tag == "head":
-            continue
-        tableData[tag] = padData(data)
-    # compile
-    data = packSFNT(header, directory, tableData, applyPadding=False)
-    return data
-
-writeTest(
-    identifier="invalidsfnt-padding-001",
-    title="Table Data Missing Padding",
-    description="There is no padding between two tables. The head check sum adjustment is also incorrect as a result.",
-    credits=[dict(title="Tal Leming", role="author", link="http://typesupply.com")],
-    specLink="#conform-incorrect-reject",
-    data=makeInvalidPadding1()
-)
-
 # final table is not padded
 
 def makeInvalidPadding2():
@@ -347,36 +314,6 @@ writeTest(
     credits=[dict(title="Tal Leming", role="author", link="http://typesupply.com")],
     specLink="#conform-incorrect-reject",
     data=makeInvalidPadding2()
-)
-
-# padding that exceeds three bytes
-
-def makeInvalidPadding3():
-    header, directory, tableData = defaultSFNTTestData()
-    # shift the offsets for every table after head
-    entries = [(entry["offset"], entry) for entry in directory]
-    assert sorted(entries)[0][1]["tag"] == "head"
-    for o, entry in sorted(entries)[1:]:
-        if entry["tag"] == "head":
-            continue
-        entry["offset"] += 4
-    # pad the tables
-    for tag, data in tableData.items():
-        if tag == "head":
-            tableData[tag] = padData(data) + ("\0" * 4)
-        else:
-            tableData[tag] = padData(data)
-    # compile
-    data = packSFNT(header, directory, tableData, applyPadding=False)
-    return data
-
-writeTest(
-    identifier="invalidsfnt-padding-003",
-    title="Unnecessary Padding Between Tables",
-    description="There are four extra bytes after the head table. The head check sum adjustment is also incorrect as a result.",
-    credits=[dict(title="Tal Leming", role="author", link="http://typesupply.com")],
-    specLink="#conform-incorrect-reject",
-    data=makeInvalidPadding3()
 )
 
 # unnecessary padding after final table
@@ -428,30 +365,6 @@ writeTest(
     credits=[dict(title="Tal Leming", role="author", link="http://typesupply.com")],
     specLink="#conform-incorrect-reject",
     data=makeInvalidPadding5()
-)
-
-# two table data blocks overlap
-
-def makeInvalidBlocks1():
-    header, directory, tableData = defaultSFNTTestData()
-    # slice four bytes off of the head table
-    tableData["head"] = tableData["head"][:-4]
-    # move the other tables up by four bytes
-    entries = [(entry["offset"], entry) for entry in directory]
-    assert sorted(entries)[0][1]["tag"] == "head"
-    for o, entry in sorted(entries[1:]):
-        entry["offset"] -= 4
-    # compile
-    data = packSFNT(header, directory, tableData)
-    return data
-
-writeTest(
-    identifier="invalidsfnt-blocks-001",
-    title="Table Data Blocks Overlap",
-    description="Two table blocks overlap.",
-    credits=[dict(title="Tal Leming", role="author", link="http://typesupply.com")],
-    specLink="#conform-incorrect-reject",
-    data=makeInvalidBlocks1()
 )
 
 # offset to table is before start of the data block
