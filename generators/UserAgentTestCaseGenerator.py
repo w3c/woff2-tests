@@ -723,6 +723,23 @@ writeFileStructureTest(
     data=makeTableNonZeroLocaTest1()
 )
 
+def makeGlyfNoBBox1():
+    header, directory, tableData = defaultTestData()
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
+    return data
+
+# glyph without explicit bbox
+writeFileStructureTest(
+    identifier="tabledata-glyf-no-bbox-001",
+    flavor="TTF",
+    title="Glyph Without Explicit Bounding Box",
+    assertion="Valid TTF flavored WOFF with a glyph with no explicit bounding box",
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    sfntDisplaySpecLink="#conform-mustCalculateBBox",
+    shouldDisplaySFNT=True,
+    data=makeGlyfNoBBox1()
+)
+
 # -----------------------------------
 # File Structure: Metadata: No Effect
 # -----------------------------------
