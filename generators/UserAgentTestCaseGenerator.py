@@ -667,7 +667,7 @@ writeFileStructureTest(
     assertion=makeTableDecompressedLengthTest1Description,
     credits=makeTableDecompressedLengthTest1Credits,
     shouldDisplaySFNT=False,
-    sfntDisplaySpecLink="conform-mustBeInvalidated-FailSize",
+    sfntDisplaySpecLink="#conform-mustBeInvalidated-FailSize",
     data=makeTableDecompressedLengthTest1()
 )
 
@@ -679,7 +679,7 @@ writeFileStructureTest(
     assertion=makeTableDecompressedLengthTest2Description,
     credits=makeTableDecompressedLengthTest2Credits,
     shouldDisplaySFNT=False,
-    sfntDisplaySpecLink="conform-mustBeInvalidated-FailSize",
+    sfntDisplaySpecLink="#conform-mustBeInvalidated-FailSize",
     data=makeTableDecompressedLengthTest2()
 )
 
@@ -691,7 +691,7 @@ writeFileStructureTest(
     assertion=makeTableDecompressedLengthTest3Description,
     credits=makeTableDecompressedLengthTest3Credits,
     shouldDisplaySFNT=False,
-    sfntDisplaySpecLink="conform-mustBeInvalidated-FailSize",
+    sfntDisplaySpecLink="#conform-mustBeInvalidated-FailSize",
     data=makeTableDecompressedLengthTest3()
 )
 
@@ -703,7 +703,7 @@ writeFileStructureTest(
     assertion=makeTableDecompressedLengthTest4Description,
     credits=makeTableDecompressedLengthTest4Credits,
     shouldDisplaySFNT=False,
-    sfntDisplaySpecLink="conform-mustBeInvalidated-FailSize",
+    sfntDisplaySpecLink="#conform-mustBeInvalidated-FailSize",
     data=makeTableDecompressedLengthTest4()
 )
 
