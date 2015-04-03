@@ -7,13 +7,14 @@ import os
 import zlib
 import codecs
 from copy import deepcopy
+from fontTools.ttLib import TTFont
 from fontTools.ttLib.sfnt import sfntDirectoryEntrySize
 from testCaseGeneratorLib.woff import packTestHeader, packTestDirectory, packTestMetadata, packTestPrivateData,\
-    woffHeaderSize
+    woffHeaderSize, transformTable
 from testCaseGeneratorLib.defaultData import defaultTestData, testDataWOFFMetadata, testDataWOFFPrivateData,\
     sfntCFFTableData, testCFFDataWOFFDirectory
+from testCaseGeneratorLib.paths import sfntTTFSourcePath
 from testCaseGeneratorLib.utilities import calcPaddingLength, padData, calcTableChecksum, stripMetadata
-
 
 def makeMetadataTest(metadata):
     """
@@ -442,6 +443,44 @@ def makeTableDecompressedLengthTest4():
 makeTableDecompressedLengthTest4Title = "Font Table Data Decompressed Length Greater Than Transformed Length"
 makeTableDecompressedLengthTest4Description = "The transformed length of the glyf table in the directory is decreased by 1, making the decompressed length of the table data greater than the sum of transformed table lengths."
 makeTableDecompressedLengthTest4Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
+
+# -------------------------------------------
+# File Structure: Table Data: Transformations
+# -------------------------------------------
+
+def getTransformSFNTData(locaTest=False):
+    font = TTFont(sfntTTFSourcePath)
+    tableChecksums = {}
+    tableData = {}
+    tableOrder = [i for i in sorted(font.keys()) if len(i) == 4]
+    for tag in tableOrder:
+        tableChecksums[tag] = font.reader.tables[tag].checkSum
+        if locaTest:
+            if tag == "loca":
+                tableData[tag] = (font.getTableData(tag), "\0" * 4)
+            else:
+                tableData[tag] = transformTable(font, tag)
+        else:
+            tableData[tag] = (font.getTableData(tag), font.getTableData(tag))
+    totalData = "".join([tableData[tag][1] for tag in tableOrder])
+    compData = brotli.compress(totalData, brotli.MODE_FONT)
+    if len(compData) >= len(totalData):
+        compData = totalData
+    font.close()
+    del font
+    return tableData, compData, tableOrder, tableChecksums
+
+def makeTableNonZeroLocaTest1():
+    sfntData = getTransformSFNTData(locaTest=True)
+    compressedData = sfntData[1]
+    uncompressedData = sfntData[0]
+    header, directory, tableData = defaultTestData(flavor="ttf", tableData=uncompressedData, compressedData=compressedData)
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
+    return data
+
+makeTableNonZeroLocaTest1Title = "Font Table Data Loca Is Not Zero"
+makeTableNonZeroLocaTest1Description = "The transormed loca table contains 4 zero bytes and its transformLength is 4."
+makeTableNonZeroLocaTest1Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
 
 # -----------------------------
 # Metadata Display: Compression

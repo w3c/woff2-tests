@@ -707,6 +707,22 @@ writeFileStructureTest(
     data=makeTableDecompressedLengthTest4()
 )
 
+# -------------------------------------------
+# File Structure: Table Data: Transformations
+# -------------------------------------------
+
+# loca's transformLength is not zero
+
+writeFileStructureTest(
+    identifier="tabledata-non-zero-loca-001",
+    title=makeTableNonZeroLocaTest1Title,
+    assertion=makeTableNonZeroLocaTest1Description,
+    credits=makeTableNonZeroLocaTest1Credits,
+    shouldDisplaySFNT=False,
+    sfntDisplaySpecLink="#conform-mustRejectLoca",
+    data=makeTableNonZeroLocaTest1()
+)
+
 # -----------------------------------
 # File Structure: Metadata: No Effect
 # -----------------------------------

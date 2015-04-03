@@ -24,10 +24,9 @@ import glob
 import struct
 import zipfile
 from fontTools.misc import sstruct
-from fontTools.ttLib import TTFont
-from testCaseGeneratorLib.woff import packTestHeader, packTestDirectory, packTestMetadata, packTestPrivateData, transformTable
+from testCaseGeneratorLib.woff import packTestHeader, packTestDirectory, packTestMetadata, packTestPrivateData
 from testCaseGeneratorLib.defaultData import defaultTestData, testDataWOFFMetadata, testDataWOFFPrivateData
-from testCaseGeneratorLib.paths import resourcesDirectory, formatDirectory, formatTestDirectory, formatResourcesDirectory, sfntTTFSourcePath
+from testCaseGeneratorLib.paths import resourcesDirectory, formatDirectory, formatTestDirectory, formatResourcesDirectory
 from testCaseGeneratorLib.html import generateFormatIndexHTML
 from testCaseGeneratorLib import sharedCases
 from testCaseGeneratorLib.sharedCases import *
@@ -791,28 +790,6 @@ writeTest(
 # File Structure: Table Data: Transformations
 # -------------------------------------------
 
-def getTransformSFNTData(locaTest=False):
-    font = TTFont(sfntTTFSourcePath)
-    tableChecksums = {}
-    tableData = {}
-    tableOrder = [i for i in sorted(font.keys()) if len(i) == 4]
-    for tag in tableOrder:
-        tableChecksums[tag] = font.reader.tables[tag].checkSum
-        if locaTest:
-            if tag == "loca":
-                tableData[tag] = (font.getTableData(tag), "\0" * 4)
-            else:
-                tableData[tag] = transformTable(font, tag)
-        else:
-            tableData[tag] = (font.getTableData(tag), font.getTableData(tag))
-    totalData = "".join([tableData[tag][1] for tag in tableOrder])
-    compData = brotli.compress(totalData, brotli.MODE_FONT)
-    if len(compData) >= len(totalData):
-        compData = totalData
-    font.close()
-    del font
-    return tableData, compData, tableOrder, tableChecksums
-
 # glyf and loca are not transformed
 
 def makeTableNotransformationTest1():
@@ -835,19 +812,11 @@ writeTest(
 
 # loca's transformLength is not zero
 
-def makeTableNonZeroLocaTest1():
-    sfntData = getTransformSFNTData(locaTest=True)
-    compressedData = sfntData[1]
-    uncompressedData = sfntData[0]
-    header, directory, tableData = defaultTestData(flavor="ttf", tableData=uncompressedData, compressedData=compressedData)
-    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
-    return data
-
 writeTest(
     identifier="tabledata-non-zero-loca-001",
-    title="Font Table Data Loca Is Not Zero",
-    description="The transormed loca table contains 4 zero bytes and its transformLength is 4.",
-    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    title=makeTableNonZeroLocaTest1Title,
+    description=makeTableNonZeroLocaTest1Description,
+    credits=makeTableNonZeroLocaTest1Credits,
     valid=False,
     specLink="#conform-transformedLocaMustBeZero",
     data=makeTableNonZeroLocaTest1()
