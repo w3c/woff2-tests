@@ -229,13 +229,13 @@ def generateSFNTDisplayIndexHTML(directory=None, testCases=[]):
         "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">",
         "<html xmlns=\"http://www.w3.org/1999/xhtml\">",
         "\t<head>",
-        "\t\t<title>WOFF: User Agent Test Suite</title>",
+        "\t\t<title>WOFF 2.0: User Agent Test Suite</title>",
         "\t\t<style type=\"text/css\">",
         "\t\t\t@import \"resources/index.css\";",
         "\t\t</style>",
         "\t</head>",
         "\t<body>",
-        "\t\t<h1>WOFF: User Agent Test Suite (%d tests)</h1>" % testCount,
+        "\t\t<h1>WOFF 2.0: User Agent Test Suite (%d tests)</h1>" % testCount,
         "\t\t<p class=\"installFontsNote\">All of these tests require special fonts to be installed. The fonts can be obtained <a href=\"../../FontsToInstall\">here</a>.</p>"
     ]
     # add the test groups
@@ -336,13 +336,13 @@ def generateFormatIndexHTML(directory=None, testCases=[]):
         "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">",
         "<html xmlns=\"http://www.w3.org/1999/xhtml\">",
         "\t<head>",
-        "\t\t<title>WOFF: Format Test Suite</title>",
+        "\t\t<title>WOFF 2.0: Format Test Suite</title>",
         "\t\t<style type=\"text/css\">",
         "\t\t\t@import \"resources/index.css\";",
         "\t\t</style>",
         "\t</head>",
         "\t<body>",
-        "\t\t<h1>WOFF: Format Test Suite (%d tests)</h1>" % testCount,
+        "\t\t<h1>WOFF 2.0: Format Test Suite (%d tests)</h1>" % testCount,
     ]
     # add a download note
     html.append("\t\t<div class=\"mainNote\">")
@@ -409,13 +409,13 @@ def generateAuthoringToolIndexHTML(directory=None, testCases=[], note=None):
         "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">",
         "<html xmlns=\"http://www.w3.org/1999/xhtml\">",
         "\t<head>",
-        "\t\t<title>WOFF: Authoring Tool Test Suite</title>",
+        "\t\t<title>WOFF 2.0: Authoring Tool Test Suite</title>",
         "\t\t<style type=\"text/css\">",
         "\t\t\t@import \"resources/index.css\";",
         "\t\t</style>",
         "\t</head>",
         "\t<body>",
-        "\t\t<h1>WOFF: Authoring Tool Test Suite (%d tests)</h1>" % testCount,
+        "\t\t<h1>WOFF 2.0: Authoring Tool Test Suite (%d tests)</h1>" % testCount,
     ]
     # add a download note
     html.append("\t\t<div class=\"mainNote\">")
