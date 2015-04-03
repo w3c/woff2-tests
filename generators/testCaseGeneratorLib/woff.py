@@ -5,6 +5,7 @@ WOFF data packers.
 import struct
 from copy import deepcopy
 from fontTools.misc import sstruct
+from fontTools.misc.arrayTools import calcIntBounds
 from utilities import padData, calcHeadCheckSumAdjustment
 
 # ------------------
@@ -205,12 +206,13 @@ def tramsformGlyf(font):
 
             # instructionStream
 
-        # bboxBitmap
-        # XXX we just tell the decoder to calculate the bounding boxes for now
-        #bboxBitmap[glyphId >> 3] |= 0x80 >> (glyphId & 7)
+        coords = glyph.getCoordinates(glyf)[0]
+        if calcIntBounds(coords) != (glyph.xMin, glyph.yMin, glyph.xMax, glyph.yMax):
+            # bboxBitmap
+            bboxBitmap[glyphId >> 3] |= 0x80 >> (glyphId & 7)
 
-        # bboxStream
-        #bboxStream += struct.pack(">hhhh", glyph.xMin, glyph.yMin, glyph.xMax, glyph.yMax)
+            # bboxStream
+            bboxStream += struct.pack(">hhhh", glyph.xMin, glyph.yMin, glyph.xMax, glyph.yMax)
 
     bboxBitmapStream = "".join([struct.pack(">B", v) for v in bboxBitmap])
 
