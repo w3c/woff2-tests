@@ -28,6 +28,7 @@ resourcesDirectory = os.path.join(mainDirectory, "generators", "resources")
 # paths to specific resources
 sfntCFFSourcePath = os.path.join(resourcesDirectory, "SFNT-CFF.otf")
 sfntTTFSourcePath = os.path.join(resourcesDirectory, "SFNT-TTF.ttf")
+sfntTTFCompositeSourcePath = os.path.join(resourcesDirectory, "SFNT-TTF-Composite.ttf")
 
 # directories for test output
 userAgentDirectory = os.path.join(mainDirectory, "UserAgent")
