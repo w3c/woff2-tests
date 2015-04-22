@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<ttFont sfntVersion="\x00\x01\x00\x00" ttLibVersion="2.2">
+<?xml version="1.0" encoding="UTF-8"?>
+<ttFont sfntVersion="\x00\x01\x00\x00" ttLibVersion="2.5">
 
   <GlyphOrder>
     <!-- The 'id' attribute is only for humans; it is ignored when parsed. -->
@@ -11,14 +11,14 @@
 
   <head>
     <!-- Most of this table will be recalculated by the compiler -->
-    <tableVersion value="1.0"/>
-    <fontRevision value="1.0"/>
-    <checkSumAdjustment value="0x968f2cb2"/>
+    <tableVersion value="1"/>
+    <fontRevision value="1"/>
+    <checkSumAdjustment value="0x929488e5"/>
     <magicNumber value="0x5f0f3cf5"/>
-    <flags value="00000000 00001001"/>
+    <flags value="00000000 00001011"/>
     <unitsPerEm value="2048"/>
     <created value="Thu Nov  4 19:38:34 2010"/>
-    <modified value="Thu Dec  2 19:32:46 2010"/>
+    <modified value="Sun Dec  5 18:07:15 2010"/>
     <xMin value="205"/>
     <yMin value="-20"/>
     <xMax value="4514"/>
@@ -31,13 +31,13 @@
   </head>
 
   <hhea>
-    <tableVersion value="1.0"/>
+    <tableVersion value="1"/>
     <ascent value="1454"/>
     <descent value="-20"/>
     <lineGap value="0"/>
     <advanceWidthMax value="4719"/>
     <minLeftSideBearing value="205"/>
-    <minRightSideBearing value="204"/>
+    <minRightSideBearing value="194"/>
     <xMaxExtent value="4514"/>
     <caretSlopeRise value="1"/>
     <caretSlopeRun value="0"/>
@@ -128,102 +128,263 @@
   </hmtx>
 
   <VDMX>
-    <hexdata>
-      00000001 00010101 0101000c 00f808ff
-      00080006 ffff0009 0007ffff 000a0008
-      ffff000b 0008ffff 000c0009 ffff000d
-      000affff 000e000a ffff000f 000bffff
-      0010000c ffff0011 000dffff 0012000d
-      ffff0013 000effff 0014000f ffff0015
-      000fffff 00160010 ffff0017 0011ffff
-      00180012 ffff0019 0012ffff 001a0013
-      ffff001b 0014ffff 001c0014 ffff001d
-      0015ffff 001e0016 ffff001f 0017ffff
-      00200017 ffff0021 0018ffff 00220019
-      ffff0023 0019ffff 0024001a ffff0025
-      001bffff 0026001b ffff0027 001cffff
-      0028001d ffff0029 001effff 002a001e
-      ffff002b 001fffff 002c0020 ffff002d
-      0020ffff 002e0021 ffff002f 0022ffff
-      00300023 ffff0031 0023ffff 00320024
-      ffff0033 0025ffff 00340025 ffff0035
-      0026ffff 00360027 ffff0037 0028ffff
-      00380028 ffff0039 0029ffff 003a002a
-      ffff003b 002affff 003c002b ffff003d
-      002cffff 003e002d ffff003f 002dffff
-      0040002e ffff0041 002fffff 0042002f
-      ffff0043 0030ffff 00440031 ffff0045
-      0031ffff 00460032 ffff0047 0033ffff
-      00480034 ffff0049 0034ffff 004a0035
-      ffff004b 0036ffff 004c0036 ffff004d
-      0037ffff 004e0038 ffff004f 0039ffff
-      00500039 ffff0051 003affff 0052003b
-      ffff0053 003bffff 0054003c ffff0055
-      003dffff 0056003e ffff0057 003effff
-      0058003f ffff0059 0040ffff 005a0040
-      ffff005b 0041ffff 005c0042 ffff005d
-      0043ffff 005e0043 ffff005f 0044ffff
-      00600045 ffff0061 0045ffff 00620046
-      ffff0063 0047ffff 00640047 ffff0065
-      0048ffff 00660049 ffff0067 004afffe
-      0068004a fffe0069 004bfffe 006a004c
-      fffe006b 004cfffe 006c004d fffe006d
-      004efffe 006e004f fffe006f 004ffffe
-      00700050 fffe0071 0051fffe 00720051
-      fffe0073 0052fffe 00740053 fffe0075
-      0054fffe 00760054 fffe0077 0055fffe
-      00780056 fffe0079 0056fffe 007a0057
-      fffe007b 0058fffe 007c0059 fffe007d
-      0059fffe 007e005a fffe007f 005bfffe
-      0080005b fffe0081 005cfffe 0082005d
-      fffe0083 005efffe 0084005e fffe0085
-      005ffffe 00860060 fffe0087 0060fffe
-      00880061 fffe0089 0062fffe 008a0062
-      fffe008b 0063fffe 008c0064 fffe008d
-      0065fffe 008e0065 fffe008f 0066fffe
-      00900067 fffe0091 0067fffe 00920068
-      fffe0093 0069fffe 0094006a fffe0095
-      006afffe 0096006b fffe0097 006cfffe
-      0098006c fffe0099 006dfffe 009a006e
-      fffe009b 006ffffe 009c006f fffe009d
-      0070fffe 009e0071 fffe009f 0071fffe
-      00a00072 fffe00a1 0073fffe 00a20074
-      fffe00a3 0074fffe 00a40075 fffe00a5
-      0076fffe 00a60076 fffe00a7 0077fffe
-      00a80078 fffe00a9 0078fffe 00aa0079
-      fffe00ab 007afffe 00ac007b fffe00ad
-      007bfffe 00ae007c fffe00af 007dfffe
-      00b0007d fffe00b1 007efffe 00b2007f
-      fffe00b3 0080fffe 00b40080 fffe00b5
-      0081fffe 00b60082 fffe00b7 0082fffe
-      00b80083 fffe00b9 0084fffe 00ba0085
-      fffe00bb 0085fffe 00bc0086 fffe00bd
-      0087fffe 00be0087 fffe00bf 0088fffe
-      00c00089 fffe00c1 008afffe 00c2008a
-      fffe00c3 008bfffe 00c4008c fffe00c5
-      008cfffe 00c6008d fffe00c7 008efffe
-      00c8008e fffe00c9 008ffffe 00ca0090
-      fffe00cb 0091fffe 00cc0091 fffe00cd
-      0092fffd 00ce0093 fffd00cf 0093fffd
-      00d00094 fffd00d1 0095fffd 00d20096
-      fffd00d3 0096fffd 00d40097 fffd00d5
-      0098fffd 00d60098 fffd00d7 0099fffd
-      00d8009a fffd00d9 009bfffd 00da009b
-      fffd00db 009cfffd 00dc009d fffd00dd
-      009dfffd 00de009e fffd00df 009ffffd
-      00e000a0 fffd00e1 00a0fffd 00e200a1
-      fffd00e3 00a2fffd 00e400a2 fffd00e5
-      00a3fffd 00e600a4 fffd00e7 00a5fffd
-      00e800a5 fffd00e9 00a6fffd 00ea00a7
-      fffd00eb 00a7fffd 00ec00a8 fffd00ed
-      00a9fffd 00ee00a9 fffd00ef 00aafffd
-      00f000ab fffd00f1 00acfffd 00f200ac
-      fffd00f3 00adfffd 00f400ae fffd00f5
-      00aefffd 00f600af fffd00f7 00b0fffd
-      00f800b1 fffd00f9 00b1fffd 00fa00b2
-      fffd00fb 00b3fffd 00fc00b3 fffd00fd
-      00b4fffd 00fe00b5 fffd00ff 00b6fffd
-    </hexdata>
+    <version value="0"/>
+    <ratRanges>
+      <ratRange bCharSet="1" groupIndex="0" xRatio="1" yEndRatio="1" yStartRatio="1"/>
+    </ratRanges>
+    <groups>
+      <group index="0">
+        <!-- recs=248, startsz=8, endsz=255 -->
+        <record yMax="6" yMin="-1" yPelHeight="8"/>
+        <record yMax="7" yMin="-1" yPelHeight="9"/>
+        <record yMax="8" yMin="-1" yPelHeight="10"/>
+        <record yMax="8" yMin="-1" yPelHeight="11"/>
+        <record yMax="9" yMin="-1" yPelHeight="12"/>
+        <record yMax="10" yMin="-1" yPelHeight="13"/>
+        <record yMax="10" yMin="-1" yPelHeight="14"/>
+        <record yMax="11" yMin="-1" yPelHeight="15"/>
+        <record yMax="12" yMin="-1" yPelHeight="16"/>
+        <record yMax="13" yMin="-1" yPelHeight="17"/>
+        <record yMax="13" yMin="-1" yPelHeight="18"/>
+        <record yMax="14" yMin="-1" yPelHeight="19"/>
+        <record yMax="15" yMin="-1" yPelHeight="20"/>
+        <record yMax="15" yMin="-1" yPelHeight="21"/>
+        <record yMax="16" yMin="-1" yPelHeight="22"/>
+        <record yMax="17" yMin="-1" yPelHeight="23"/>
+        <record yMax="18" yMin="-1" yPelHeight="24"/>
+        <record yMax="18" yMin="-1" yPelHeight="25"/>
+        <record yMax="19" yMin="-1" yPelHeight="26"/>
+        <record yMax="20" yMin="-1" yPelHeight="27"/>
+        <record yMax="20" yMin="-1" yPelHeight="28"/>
+        <record yMax="21" yMin="-1" yPelHeight="29"/>
+        <record yMax="22" yMin="-1" yPelHeight="30"/>
+        <record yMax="23" yMin="-1" yPelHeight="31"/>
+        <record yMax="23" yMin="-1" yPelHeight="32"/>
+        <record yMax="24" yMin="-1" yPelHeight="33"/>
+        <record yMax="25" yMin="-1" yPelHeight="34"/>
+        <record yMax="25" yMin="-1" yPelHeight="35"/>
+        <record yMax="26" yMin="-1" yPelHeight="36"/>
+        <record yMax="27" yMin="-1" yPelHeight="37"/>
+        <record yMax="27" yMin="-1" yPelHeight="38"/>
+        <record yMax="28" yMin="-1" yPelHeight="39"/>
+        <record yMax="29" yMin="-1" yPelHeight="40"/>
+        <record yMax="30" yMin="-1" yPelHeight="41"/>
+        <record yMax="30" yMin="-1" yPelHeight="42"/>
+        <record yMax="31" yMin="-1" yPelHeight="43"/>
+        <record yMax="32" yMin="-1" yPelHeight="44"/>
+        <record yMax="32" yMin="-1" yPelHeight="45"/>
+        <record yMax="33" yMin="-1" yPelHeight="46"/>
+        <record yMax="34" yMin="-1" yPelHeight="47"/>
+        <record yMax="35" yMin="-1" yPelHeight="48"/>
+        <record yMax="35" yMin="-1" yPelHeight="49"/>
+        <record yMax="36" yMin="-1" yPelHeight="50"/>
+        <record yMax="37" yMin="-1" yPelHeight="51"/>
+        <record yMax="37" yMin="-1" yPelHeight="52"/>
+        <record yMax="38" yMin="-1" yPelHeight="53"/>
+        <record yMax="39" yMin="-1" yPelHeight="54"/>
+        <record yMax="40" yMin="-1" yPelHeight="55"/>
+        <record yMax="40" yMin="-1" yPelHeight="56"/>
+        <record yMax="41" yMin="-1" yPelHeight="57"/>
+        <record yMax="42" yMin="-1" yPelHeight="58"/>
+        <record yMax="42" yMin="-1" yPelHeight="59"/>
+        <record yMax="43" yMin="-1" yPelHeight="60"/>
+        <record yMax="44" yMin="-1" yPelHeight="61"/>
+        <record yMax="45" yMin="-1" yPelHeight="62"/>
+        <record yMax="45" yMin="-1" yPelHeight="63"/>
+        <record yMax="46" yMin="-1" yPelHeight="64"/>
+        <record yMax="47" yMin="-1" yPelHeight="65"/>
+        <record yMax="47" yMin="-1" yPelHeight="66"/>
+        <record yMax="48" yMin="-1" yPelHeight="67"/>
+        <record yMax="49" yMin="-1" yPelHeight="68"/>
+        <record yMax="49" yMin="-1" yPelHeight="69"/>
+        <record yMax="50" yMin="-1" yPelHeight="70"/>
+        <record yMax="51" yMin="-1" yPelHeight="71"/>
+        <record yMax="52" yMin="-1" yPelHeight="72"/>
+        <record yMax="52" yMin="-1" yPelHeight="73"/>
+        <record yMax="53" yMin="-1" yPelHeight="74"/>
+        <record yMax="54" yMin="-1" yPelHeight="75"/>
+        <record yMax="54" yMin="-1" yPelHeight="76"/>
+        <record yMax="55" yMin="-1" yPelHeight="77"/>
+        <record yMax="56" yMin="-1" yPelHeight="78"/>
+        <record yMax="57" yMin="-1" yPelHeight="79"/>
+        <record yMax="57" yMin="-1" yPelHeight="80"/>
+        <record yMax="58" yMin="-1" yPelHeight="81"/>
+        <record yMax="59" yMin="-1" yPelHeight="82"/>
+        <record yMax="59" yMin="-1" yPelHeight="83"/>
+        <record yMax="60" yMin="-1" yPelHeight="84"/>
+        <record yMax="61" yMin="-1" yPelHeight="85"/>
+        <record yMax="62" yMin="-1" yPelHeight="86"/>
+        <record yMax="62" yMin="-1" yPelHeight="87"/>
+        <record yMax="63" yMin="-1" yPelHeight="88"/>
+        <record yMax="64" yMin="-1" yPelHeight="89"/>
+        <record yMax="64" yMin="-1" yPelHeight="90"/>
+        <record yMax="65" yMin="-1" yPelHeight="91"/>
+        <record yMax="66" yMin="-1" yPelHeight="92"/>
+        <record yMax="67" yMin="-1" yPelHeight="93"/>
+        <record yMax="67" yMin="-1" yPelHeight="94"/>
+        <record yMax="68" yMin="-1" yPelHeight="95"/>
+        <record yMax="69" yMin="-1" yPelHeight="96"/>
+        <record yMax="69" yMin="-1" yPelHeight="97"/>
+        <record yMax="70" yMin="-1" yPelHeight="98"/>
+        <record yMax="71" yMin="-1" yPelHeight="99"/>
+        <record yMax="71" yMin="-1" yPelHeight="100"/>
+        <record yMax="72" yMin="-1" yPelHeight="101"/>
+        <record yMax="73" yMin="-1" yPelHeight="102"/>
+        <record yMax="74" yMin="-2" yPelHeight="103"/>
+        <record yMax="74" yMin="-2" yPelHeight="104"/>
+        <record yMax="75" yMin="-2" yPelHeight="105"/>
+        <record yMax="76" yMin="-2" yPelHeight="106"/>
+        <record yMax="76" yMin="-2" yPelHeight="107"/>
+        <record yMax="77" yMin="-2" yPelHeight="108"/>
+        <record yMax="78" yMin="-2" yPelHeight="109"/>
+        <record yMax="79" yMin="-2" yPelHeight="110"/>
+        <record yMax="79" yMin="-2" yPelHeight="111"/>
+        <record yMax="80" yMin="-2" yPelHeight="112"/>
+        <record yMax="81" yMin="-2" yPelHeight="113"/>
+        <record yMax="81" yMin="-2" yPelHeight="114"/>
+        <record yMax="82" yMin="-2" yPelHeight="115"/>
+        <record yMax="83" yMin="-2" yPelHeight="116"/>
+        <record yMax="84" yMin="-2" yPelHeight="117"/>
+        <record yMax="84" yMin="-2" yPelHeight="118"/>
+        <record yMax="85" yMin="-2" yPelHeight="119"/>
+        <record yMax="86" yMin="-2" yPelHeight="120"/>
+        <record yMax="86" yMin="-2" yPelHeight="121"/>
+        <record yMax="87" yMin="-2" yPelHeight="122"/>
+        <record yMax="88" yMin="-2" yPelHeight="123"/>
+        <record yMax="89" yMin="-2" yPelHeight="124"/>
+        <record yMax="89" yMin="-2" yPelHeight="125"/>
+        <record yMax="90" yMin="-2" yPelHeight="126"/>
+        <record yMax="91" yMin="-2" yPelHeight="127"/>
+        <record yMax="91" yMin="-2" yPelHeight="128"/>
+        <record yMax="92" yMin="-2" yPelHeight="129"/>
+        <record yMax="93" yMin="-2" yPelHeight="130"/>
+        <record yMax="94" yMin="-2" yPelHeight="131"/>
+        <record yMax="94" yMin="-2" yPelHeight="132"/>
+        <record yMax="95" yMin="-2" yPelHeight="133"/>
+        <record yMax="96" yMin="-2" yPelHeight="134"/>
+        <record yMax="96" yMin="-2" yPelHeight="135"/>
+        <record yMax="97" yMin="-2" yPelHeight="136"/>
+        <record yMax="98" yMin="-2" yPelHeight="137"/>
+        <record yMax="98" yMin="-2" yPelHeight="138"/>
+        <record yMax="99" yMin="-2" yPelHeight="139"/>
+        <record yMax="100" yMin="-2" yPelHeight="140"/>
+        <record yMax="101" yMin="-2" yPelHeight="141"/>
+        <record yMax="101" yMin="-2" yPelHeight="142"/>
+        <record yMax="102" yMin="-2" yPelHeight="143"/>
+        <record yMax="103" yMin="-2" yPelHeight="144"/>
+        <record yMax="103" yMin="-2" yPelHeight="145"/>
+        <record yMax="104" yMin="-2" yPelHeight="146"/>
+        <record yMax="105" yMin="-2" yPelHeight="147"/>
+        <record yMax="106" yMin="-2" yPelHeight="148"/>
+        <record yMax="106" yMin="-2" yPelHeight="149"/>
+        <record yMax="107" yMin="-2" yPelHeight="150"/>
+        <record yMax="108" yMin="-2" yPelHeight="151"/>
+        <record yMax="108" yMin="-2" yPelHeight="152"/>
+        <record yMax="109" yMin="-2" yPelHeight="153"/>
+        <record yMax="110" yMin="-2" yPelHeight="154"/>
+        <record yMax="111" yMin="-2" yPelHeight="155"/>
+        <record yMax="111" yMin="-2" yPelHeight="156"/>
+        <record yMax="112" yMin="-2" yPelHeight="157"/>
+        <record yMax="113" yMin="-2" yPelHeight="158"/>
+        <record yMax="113" yMin="-2" yPelHeight="159"/>
+        <record yMax="114" yMin="-2" yPelHeight="160"/>
+        <record yMax="115" yMin="-2" yPelHeight="161"/>
+        <record yMax="116" yMin="-2" yPelHeight="162"/>
+        <record yMax="116" yMin="-2" yPelHeight="163"/>
+        <record yMax="117" yMin="-2" yPelHeight="164"/>
+        <record yMax="118" yMin="-2" yPelHeight="165"/>
+        <record yMax="118" yMin="-2" yPelHeight="166"/>
+        <record yMax="119" yMin="-2" yPelHeight="167"/>
+        <record yMax="120" yMin="-2" yPelHeight="168"/>
+        <record yMax="120" yMin="-2" yPelHeight="169"/>
+        <record yMax="121" yMin="-2" yPelHeight="170"/>
+        <record yMax="122" yMin="-2" yPelHeight="171"/>
+        <record yMax="123" yMin="-2" yPelHeight="172"/>
+        <record yMax="123" yMin="-2" yPelHeight="173"/>
+        <record yMax="124" yMin="-2" yPelHeight="174"/>
+        <record yMax="125" yMin="-2" yPelHeight="175"/>
+        <record yMax="125" yMin="-2" yPelHeight="176"/>
+        <record yMax="126" yMin="-2" yPelHeight="177"/>
+        <record yMax="127" yMin="-2" yPelHeight="178"/>
+        <record yMax="128" yMin="-2" yPelHeight="179"/>
+        <record yMax="128" yMin="-2" yPelHeight="180"/>
+        <record yMax="129" yMin="-2" yPelHeight="181"/>
+        <record yMax="130" yMin="-2" yPelHeight="182"/>
+        <record yMax="130" yMin="-2" yPelHeight="183"/>
+        <record yMax="131" yMin="-2" yPelHeight="184"/>
+        <record yMax="132" yMin="-2" yPelHeight="185"/>
+        <record yMax="133" yMin="-2" yPelHeight="186"/>
+        <record yMax="133" yMin="-2" yPelHeight="187"/>
+        <record yMax="134" yMin="-2" yPelHeight="188"/>
+        <record yMax="135" yMin="-2" yPelHeight="189"/>
+        <record yMax="135" yMin="-2" yPelHeight="190"/>
+        <record yMax="136" yMin="-2" yPelHeight="191"/>
+        <record yMax="137" yMin="-2" yPelHeight="192"/>
+        <record yMax="138" yMin="-2" yPelHeight="193"/>
+        <record yMax="138" yMin="-2" yPelHeight="194"/>
+        <record yMax="139" yMin="-2" yPelHeight="195"/>
+        <record yMax="140" yMin="-2" yPelHeight="196"/>
+        <record yMax="140" yMin="-2" yPelHeight="197"/>
+        <record yMax="141" yMin="-2" yPelHeight="198"/>
+        <record yMax="142" yMin="-2" yPelHeight="199"/>
+        <record yMax="142" yMin="-2" yPelHeight="200"/>
+        <record yMax="143" yMin="-2" yPelHeight="201"/>
+        <record yMax="144" yMin="-2" yPelHeight="202"/>
+        <record yMax="145" yMin="-2" yPelHeight="203"/>
+        <record yMax="145" yMin="-2" yPelHeight="204"/>
+        <record yMax="146" yMin="-3" yPelHeight="205"/>
+        <record yMax="147" yMin="-3" yPelHeight="206"/>
+        <record yMax="147" yMin="-3" yPelHeight="207"/>
+        <record yMax="148" yMin="-3" yPelHeight="208"/>
+        <record yMax="149" yMin="-3" yPelHeight="209"/>
+        <record yMax="150" yMin="-3" yPelHeight="210"/>
+        <record yMax="150" yMin="-3" yPelHeight="211"/>
+        <record yMax="151" yMin="-3" yPelHeight="212"/>
+        <record yMax="152" yMin="-3" yPelHeight="213"/>
+        <record yMax="152" yMin="-3" yPelHeight="214"/>
+        <record yMax="153" yMin="-3" yPelHeight="215"/>
+        <record yMax="154" yMin="-3" yPelHeight="216"/>
+        <record yMax="155" yMin="-3" yPelHeight="217"/>
+        <record yMax="155" yMin="-3" yPelHeight="218"/>
+        <record yMax="156" yMin="-3" yPelHeight="219"/>
+        <record yMax="157" yMin="-3" yPelHeight="220"/>
+        <record yMax="157" yMin="-3" yPelHeight="221"/>
+        <record yMax="158" yMin="-3" yPelHeight="222"/>
+        <record yMax="159" yMin="-3" yPelHeight="223"/>
+        <record yMax="160" yMin="-3" yPelHeight="224"/>
+        <record yMax="160" yMin="-3" yPelHeight="225"/>
+        <record yMax="161" yMin="-3" yPelHeight="226"/>
+        <record yMax="162" yMin="-3" yPelHeight="227"/>
+        <record yMax="162" yMin="-3" yPelHeight="228"/>
+        <record yMax="163" yMin="-3" yPelHeight="229"/>
+        <record yMax="164" yMin="-3" yPelHeight="230"/>
+        <record yMax="165" yMin="-3" yPelHeight="231"/>
+        <record yMax="165" yMin="-3" yPelHeight="232"/>
+        <record yMax="166" yMin="-3" yPelHeight="233"/>
+        <record yMax="167" yMin="-3" yPelHeight="234"/>
+        <record yMax="167" yMin="-3" yPelHeight="235"/>
+        <record yMax="168" yMin="-3" yPelHeight="236"/>
+        <record yMax="169" yMin="-3" yPelHeight="237"/>
+        <record yMax="169" yMin="-3" yPelHeight="238"/>
+        <record yMax="170" yMin="-3" yPelHeight="239"/>
+        <record yMax="171" yMin="-3" yPelHeight="240"/>
+        <record yMax="172" yMin="-3" yPelHeight="241"/>
+        <record yMax="172" yMin="-3" yPelHeight="242"/>
+        <record yMax="173" yMin="-3" yPelHeight="243"/>
+        <record yMax="174" yMin="-3" yPelHeight="244"/>
+        <record yMax="174" yMin="-3" yPelHeight="245"/>
+        <record yMax="175" yMin="-3" yPelHeight="246"/>
+        <record yMax="176" yMin="-3" yPelHeight="247"/>
+        <record yMax="177" yMin="-3" yPelHeight="248"/>
+        <record yMax="177" yMin="-3" yPelHeight="249"/>
+        <record yMax="178" yMin="-3" yPelHeight="250"/>
+        <record yMax="179" yMin="-3" yPelHeight="251"/>
+        <record yMax="179" yMin="-3" yPelHeight="252"/>
+        <record yMax="180" yMin="-3" yPelHeight="253"/>
+        <record yMax="181" yMin="-3" yPelHeight="254"/>
+        <record yMax="182" yMin="-3" yPelHeight="255"/>
+      </group>
+    </groups>
   </VDMX>
 
   <cmap>
@@ -782,25 +943,25 @@
   </glyf>
 
   <name>
-    <namerecord nameID="1" platformID="1" platEncID="0" langID="0x0">
+    <namerecord nameID="1" platformID="1" platEncID="0" langID="0x0" unicode="True">
       WOFF Test TTF Fallback
     </namerecord>
-    <namerecord nameID="2" platformID="1" platEncID="0" langID="0x0">
+    <namerecord nameID="2" platformID="1" platEncID="0" langID="0x0" unicode="True">
       Regular
     </namerecord>
-    <namerecord nameID="3" platformID="1" platEncID="0" langID="0x0">
+    <namerecord nameID="3" platformID="1" platEncID="0" langID="0x0" unicode="True">
       WebFontsWorkingGroup:WOFF Test TTF Fallback Regular:2010
     </namerecord>
-    <namerecord nameID="4" platformID="1" platEncID="0" langID="0x0">
+    <namerecord nameID="4" platformID="1" platEncID="0" langID="0x0" unicode="True">
       WOFF Test TTF Fallback Regular
     </namerecord>
-    <namerecord nameID="5" platformID="1" platEncID="0" langID="0x0">
+    <namerecord nameID="5" platformID="1" platEncID="0" langID="0x0" unicode="True">
       Version 001.000 2010
     </namerecord>
-    <namerecord nameID="6" platformID="1" platEncID="0" langID="0x0">
+    <namerecord nameID="6" platformID="1" platEncID="0" langID="0x0" unicode="True">
       WOFFTestTTFFallback-Regular
     </namerecord>
-    <namerecord nameID="8" platformID="1" platEncID="0" langID="0x0">
+    <namerecord nameID="8" platformID="1" platEncID="0" langID="0x0" unicode="True">
       WebFonts Working Group
     </namerecord>
     <namerecord nameID="1" platformID="3" platEncID="1" langID="0x409">
@@ -827,7 +988,7 @@
   </name>
 
   <post>
-    <formatType value="3.0"/>
+    <formatType value="3"/>
     <italicAngle value="0.0"/>
     <underlinePosition value="-154"/>
     <underlineThickness value="102"/>

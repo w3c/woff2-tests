@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<ttFont sfntVersion="OTTO" ttLibVersion="2.2">
+<?xml version="1.0" encoding="UTF-8"?>
+<ttFont sfntVersion="OTTO" ttLibVersion="2.5">
 
   <GlyphOrder>
     <!-- The 'id' attribute is only for humans; it is ignored when parsed. -->
@@ -11,14 +11,14 @@
 
   <head>
     <!-- Most of this table will be recalculated by the compiler -->
-    <tableVersion value="1.0"/>
-    <fontRevision value="1.0"/>
-    <checkSumAdjustment value="0x4d4b555c"/>
+    <tableVersion value="1"/>
+    <fontRevision value="1"/>
+    <checkSumAdjustment value="0x1afa7f39"/>
     <magicNumber value="0x5f0f3cf5"/>
     <flags value="00000000 00000011"/>
     <unitsPerEm value="1000"/>
     <created value="Thu Dec  2 09:34:28 2010"/>
-    <modified value="Thu Dec  2 09:34:28 2010"/>
+    <modified value="Sun Dec  5 18:07:15 2010"/>
     <xMin value="100"/>
     <yMin value="-10"/>
     <xMax value="2204"/>
@@ -31,7 +31,7 @@
   </head>
 
   <hhea>
-    <tableVersion value="1.0"/>
+    <tableVersion value="1"/>
     <ascent value="750"/>
     <descent value="-250"/>
     <lineGap value="9"/>
@@ -107,25 +107,25 @@
   </OS_2>
 
   <name>
-    <namerecord nameID="1" platformID="1" platEncID="0" langID="0x0">
+    <namerecord nameID="1" platformID="1" platEncID="0" langID="0x0" unicode="True">
       WOFF Test CFF Reference
     </namerecord>
-    <namerecord nameID="2" platformID="1" platEncID="0" langID="0x0">
+    <namerecord nameID="2" platformID="1" platEncID="0" langID="0x0" unicode="True">
       Regular
     </namerecord>
-    <namerecord nameID="3" platformID="1" platEncID="0" langID="0x0">
+    <namerecord nameID="3" platformID="1" platEncID="0" langID="0x0" unicode="True">
       1.000;None;WOFFTestCFFReference-Regular
     </namerecord>
-    <namerecord nameID="4" platformID="1" platEncID="0" langID="0x0">
+    <namerecord nameID="4" platformID="1" platEncID="0" langID="0x0" unicode="True">
       WOFF Test CFF Reference
     </namerecord>
-    <namerecord nameID="5" platformID="1" platEncID="0" langID="0x0">
+    <namerecord nameID="5" platformID="1" platEncID="0" langID="0x0" unicode="True">
       Version 1.000;PS 001.000;hotconv 1.0.57;makeotf.lib2.0.21895 DEVELOPMENT
     </namerecord>
-    <namerecord nameID="6" platformID="1" platEncID="0" langID="0x0">
+    <namerecord nameID="6" platformID="1" platEncID="0" langID="0x0" unicode="True">
       WOFFTestCFFReference-Regular
     </namerecord>
-    <namerecord nameID="8" platformID="1" platEncID="0" langID="0x0">
+    <namerecord nameID="8" platformID="1" platEncID="0" langID="0x0" unicode="True">
       WebFonts Working Group
     </namerecord>
     <namerecord nameID="1" platformID="3" platEncID="1" langID="0x409">
@@ -240,7 +240,7 @@
   </cmap>
 
   <post>
-    <formatType value="3.0"/>
+    <formatType value="3"/>
     <italicAngle value="0.0"/>
     <underlinePosition value="-75"/>
     <underlineThickness value="50"/>
@@ -252,7 +252,6 @@
   </post>
 
   <CFF>
-
     <CFFFont name="WOFFTestCFFReference-Regular">
       <version value="001.000"/>
       <FullName value="WOFF Test CFF Reference Regular"/>
@@ -359,7 +358,6 @@
     <GlobalSubrs>
       <!-- The 'index' attribute is only for humans; it is ignored when parsed. -->
     </GlobalSubrs>
-
   </CFF>
 
   <hmtx>
