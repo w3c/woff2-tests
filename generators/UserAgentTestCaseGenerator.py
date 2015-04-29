@@ -31,7 +31,7 @@ import glob
 from testCaseGeneratorLib.woff import packTestHeader, packTestDirectory, packTestMetadata, packTestPrivateData
 from testCaseGeneratorLib.defaultData import defaultTestData, testDataWOFFMetadata, testDataWOFFPrivateData
 from testCaseGeneratorLib.html import generateSFNTDisplayTestHTML, generateSFNTDisplayRefHTML, generateSFNTDisplayIndexHTML
-from testCaseGeneratorLib.paths import resourcesDirectory, userAgentDirectory, userAgentTestDirectory, userAgentTestResourcesDirectory, userAgentFontsToInstallDirectory
+from testCaseGeneratorLib.paths import resourcesDirectory, userAgentDirectory, userAgentTestDirectory, userAgentTestResourcesDirectory, userAgentFontsToInstallDirectory, sfntTTFCompositeSourcePath
 from testCaseGeneratorLib import sharedCases
 from testCaseGeneratorLib.sharedCases import *
 
@@ -738,6 +738,25 @@ writeFileStructureTest(
     sfntDisplaySpecLink="#conform-mustCalculateBBox",
     shouldDisplaySFNT=True,
     data=makeGlyfNoBBox1()
+)
+
+def makeGlyfNoBBox2():
+    from testCaseGeneratorLib.sfnt import getSFNTData
+    tableData, compressedData, tableOrder, tableChecksums = getSFNTData(sfntTTFCompositeSourcePath, True)
+    header, directory, tableData = defaultTestData(tableData=tableData, compressedData=compressedData, flavor="ttf")
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
+    return data
+
+# glyph without explicit bbox
+writeFileStructureTest(
+    identifier="tabledata-glyf-no-bbox-002",
+    flavor="TTF",
+    title="Composite Glyph Without Bounding Box",
+    assertion="Valid TTF flavored WOFF due to composite glyphs without bounding box",
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    sfntDisplaySpecLink="#conform-mustRejectNoCompositeBBox",
+    shouldDisplaySFNT=True,
+    data=makeGlyfNoBBox2()
 )
 
 # -----------------------------------

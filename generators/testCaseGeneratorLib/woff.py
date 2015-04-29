@@ -76,12 +76,12 @@ unknownTableTagFlag = 63
 
 transformedTables = ("glyf", "loca")
 
-def transformTable(font, tag):
+def transformTable(font, tag, noCompositeBBox=False):
     origData = font.getTableData(tag)
     transformedData = origData
     if tag in transformedTables:
         if tag == "glyf":
-            transformedData = tramsformGlyf(font)
+            transformedData = transformGlyf(font, noCompositeBBox)
         elif tag == "loca":
             transformedData = ""
         else:
@@ -146,7 +146,7 @@ def packTriplet(x, y, onCurve):
 
     return (flags, glyphs)
 
-def tramsformGlyf(font):
+def transformGlyf(font, noCompositeBBox=False):
     glyf = font["glyf"]
     head = font["head"]
 
@@ -215,8 +215,17 @@ def tramsformGlyf(font):
             # instructionStream
             instructionStream += instructions
 
-        coords = glyph.getCoordinates(glyf)[0]
-        if glyph.isComposite() or calcIntBounds(coords) != (glyph.xMin, glyph.yMin, glyph.xMax, glyph.yMax):
+        writeBBox = False
+        if glyph.isComposite():
+            writeBBox = not noCompositeBBox
+        else:
+            coords = glyph.getCoordinates(glyf)[0]
+            oldBounds = (glyph.xMin, glyph.yMin, glyph.xMax, glyph.yMax)
+            newBounds = calcIntBounds(coords)
+            writeBBox = oldBounds != newBounds
+
+        if writeBBox:
+            print noCompositeBBox
             # bboxBitmap
             bboxBitmap[glyphId >> 3] |= 0x80 >> (glyphId & 7)
 

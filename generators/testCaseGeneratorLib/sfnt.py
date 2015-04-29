@@ -14,14 +14,14 @@ from woff import transformTable
 # Unpacking
 # ---------
 
-def getSFNTData(pathOrFile):
+def getSFNTData(pathOrFile, noCompositeBBox=False):
     font = TTFont(pathOrFile)
     tableChecksums = {}
     tableData = {}
     tableOrder = [i for i in sorted(font.keys()) if len(i) == 4]
     for tag in tableOrder:
         tableChecksums[tag] = font.reader.tables[tag].checkSum
-        tableData[tag] = transformTable(font, tag)
+        tableData[tag] = transformTable(font, tag, noCompositeBBox)
     totalData = "".join([tableData[tag][1] for tag in tableOrder])
     compData = brotli.compress(totalData, brotli.MODE_FONT)
     if len(compData) >= len(totalData):
