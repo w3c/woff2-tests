@@ -26,7 +26,7 @@ import zipfile
 from fontTools.misc import sstruct
 from testCaseGeneratorLib.woff import packTestHeader, packTestDirectory, packTestMetadata, packTestPrivateData
 from testCaseGeneratorLib.defaultData import defaultTestData, testDataWOFFMetadata, testDataWOFFPrivateData
-from testCaseGeneratorLib.paths import resourcesDirectory, formatDirectory, formatTestDirectory, formatResourcesDirectory
+from testCaseGeneratorLib.paths import resourcesDirectory, formatDirectory, formatTestDirectory, formatResourcesDirectory, sfntTTFCompositeSourcePath
 from testCaseGeneratorLib.html import generateFormatIndexHTML
 from testCaseGeneratorLib import sharedCases
 from testCaseGeneratorLib.sharedCases import *
@@ -820,6 +820,24 @@ writeTest(
     valid=False,
     specLink="#conform-transformedLocaMustBeZero",
     data=makeTableNonZeroLocaTest1()
+)
+
+def makeGlyfBBox1():
+    from testCaseGeneratorLib.sfnt import getSFNTData
+    tableData, compressedData, tableOrder, tableChecksums = getSFNTData(sfntTTFCompositeSourcePath)
+    header, directory, tableData = defaultTestData(tableData=tableData, compressedData=compressedData, flavor="ttf")
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
+    return data
+
+# composite glyph with bbox
+writeTest(
+    identifier="tabledata-glyf-composite-bbox-001",
+    title="Composite Glyph Without Bounding Box",
+    description="Valid TTF flavored WOFF with composite glyphs",
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    valid=True,
+    specLink="#conform-mustHaveCompositeBBox",
+    data=makeGlyfBBox1()
 )
 
 # -----------------
