@@ -166,15 +166,23 @@ def tramsformGlyf(font):
     for glyphName in glyf.glyphOrder:
         glyph = glyf[glyphName]
         glyphId = glyf.getGlyphID(glyphName)
-        if glyph.isComposite():
-            assert False # XXX support composite glyphs
+
+        # nContourStream
+        nContourStream += struct.pack(">h", glyph.numberOfContours)
+
+        haveInstructions = False
+
+        if glyph.numberOfContours == 0:
+            continue
+        elif glyph.isComposite():
+            # compositeStream
+            more = True
+            for i in range(len(glyph.components)):
+                if i == len(glyph.components) - 1:
+                    haveInstructions = hasattr(glyph, "program")
+                    more = False
+                compositeStream += glyph.components[i].compile(more, haveInstructions, glyf)
         else:
-            # nContourStream
-            nContourStream += struct.pack(">h", glyph.numberOfContours)
-
-            if glyph.numberOfContours < 1:
-                continue
-
             # nPointsStream
             lastPointIndex = 0
             for i in range(glyph.numberOfContours):
@@ -197,17 +205,18 @@ def tramsformGlyf(font):
                     flagStream += flags
                     glyphStream += data
                 lastPointIndex = glyph.endPtsOfContours[i] + 1
+            haveInstructions = True
 
+        if haveInstructions:
+            instructions = glyph.program.getBytecode()
             # instructionLength
-            if len(glyph.program.bytecode):
-                assert False # XXX support writing instructions
-
-            glyphStream += pack255UInt16(0)
+            glyphStream += pack255UInt16(len(instructions))
 
             # instructionStream
+            instructionStream += instructions
 
         coords = glyph.getCoordinates(glyf)[0]
-        if calcIntBounds(coords) != (glyph.xMin, glyph.yMin, glyph.xMax, glyph.yMax):
+        if glyph.isComposite() or calcIntBounds(coords) != (glyph.xMin, glyph.yMin, glyph.xMax, glyph.yMax):
             # bboxBitmap
             bboxBitmap[glyphId >> 3] |= 0x80 >> (glyphId & 7)
 
@@ -228,7 +237,11 @@ def tramsformGlyf(font):
     header["instructionStreamSize"] = len(instructionStream)
 
     data = sstruct.pack(woffTransformedGlyfHeaderFormat, header)
-    data += nContourStream + nPointsStream + flagStream + glyphStream + compositeStream + bboxBitmapStream + bboxStream + instructionStream
+    data += nContourStream + nPointsStream + flagStream
+    data += glyphStream + compositeStream
+    data += bboxBitmapStream + bboxStream
+    data += instructionStream
+
     return data
 
 def base128Size(n):
