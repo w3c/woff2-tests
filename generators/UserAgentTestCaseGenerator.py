@@ -788,10 +788,10 @@ writeFileStructureTest(
     identifier="tabledata-glyf-no-bbox-002",
     flavor="TTF",
     title="Composite Glyph Without Bounding Box",
-    assertion="Valid TTF flavored WOFF due to composite glyphs without bounding box",
+    assertion="Invalid TTF flavored WOFF due to composite glyphs without bounding box",
     credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
     sfntDisplaySpecLink="#conform-mustRejectNoCompositeBBox",
-    shouldDisplaySFNT=True,
+    shouldDisplaySFNT=False,
     data=makeGlyfNoBBox2()
 )
 
