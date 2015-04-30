@@ -723,6 +723,42 @@ writeFileStructureTest(
     data=makeTableNonZeroLocaTest1()
 )
 
+def makeTableBadOrigLengthLocaTest1():
+    header, directory, tableData = defaultTestData(flavor="ttf")
+    for entry in directory:
+        if entry["tag"] == "loca":
+            entry["origLength"] -= 4
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
+    return data
+
+writeFileStructureTest(
+    identifier="tabledata-bad-origlength-loca-001",
+    title="Font Table Data Small Loca Original Length",
+    assertion="The origLength of the loca table is 4 bytes less than the calculated size",
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    shouldDisplaySFNT=False,
+    sfntDisplaySpecLink="#conform-mustRejectLoca",
+    data=makeTableBadOrigLengthLocaTest1()
+)
+
+def makeTableBadOrigLengthLocaTest2():
+    header, directory, tableData = defaultTestData(flavor="ttf")
+    for entry in directory:
+        if entry["tag"] == "loca":
+            entry["origLength"] += 4
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
+    return data
+
+writeFileStructureTest(
+    identifier="tabledata-bad-origlength-loca-002",
+    title="Font Table Data Large Loca Original Length",
+    assertion="The origLength of the loca table is 4 bytes more than the calculated size",
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    shouldDisplaySFNT=False,
+    sfntDisplaySpecLink="#conform-mustRejectLoca",
+    data=makeTableBadOrigLengthLocaTest2()
+)
+
 def makeGlyfNoBBox1():
     header, directory, tableData = defaultTestData()
     data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
