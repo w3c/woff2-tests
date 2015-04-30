@@ -225,7 +225,6 @@ def transformGlyf(font, noCompositeBBox=False):
             writeBBox = oldBounds != newBounds
 
         if writeBBox:
-            print noCompositeBBox
             # bboxBitmap
             bboxBitmap[glyphId >> 3] |= 0x80 >> (glyphId & 7)
 
