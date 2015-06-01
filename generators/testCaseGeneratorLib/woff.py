@@ -98,7 +98,7 @@ def pack255UInt16(n):
     elif n < 762:
         ret += struct.pack(">BB", 254, n - 506)
     else:
-        ret += struct.pack(">H", n)
+        ret += struct.pack(">BH", 253, n)
 
     return ret
 
