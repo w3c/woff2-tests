@@ -81,7 +81,7 @@ def transformTable(font, tag, noCompositeBBox=False):
     transformedData = origData
     if tag in transformedTables:
         if tag == "glyf":
-            transformedData = transformGlyf(font, noCompositeBBox)
+            transformedData = transformGlyf(font, noCompositeBBox=noCompositeBBox)
         elif tag == "loca":
             transformedData = ""
         else:

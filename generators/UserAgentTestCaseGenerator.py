@@ -778,7 +778,7 @@ writeFileStructureTest(
 
 def makeGlyfNoBBox2():
     from testCaseGeneratorLib.sfnt import getSFNTData
-    tableData, compressedData, tableOrder, tableChecksums = getSFNTData(sfntTTFCompositeSourcePath, True)
+    tableData, compressedData, tableOrder, tableChecksums = getSFNTData(sfntTTFCompositeSourcePath, noCompositeBBox=True)
     header, directory, tableData = defaultTestData(tableData=tableData, compressedData=compressedData, flavor="ttf")
     data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
     return data
