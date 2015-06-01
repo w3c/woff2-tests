@@ -90,15 +90,14 @@ def transformTable(font, tag, noCompositeBBox=False):
     return (origData, transformedData)
 
 def pack255UInt16(n):
-    ret = ""
     if n < 253:
-        ret += struct.pack(">B", n)
+        ret = struct.pack(">B", n)
     elif n < 506:
-        ret += struct.pack(">BB", 255, n - 253)
+        ret = struct.pack(">BB", 255, n - 253)
     elif n < 762:
-        ret += struct.pack(">BB", 254, n - 506)
+        ret = struct.pack(">BB", 254, n - 506)
     else:
-        ret += struct.pack(">BH", 253, n)
+        ret = struct.pack(">BH", 253, n)
 
     return ret
 
