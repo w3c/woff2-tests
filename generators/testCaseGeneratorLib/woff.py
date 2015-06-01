@@ -76,12 +76,12 @@ unknownTableTagFlag = 63
 
 transformedTables = ("glyf", "loca")
 
-def transformTable(font, tag, noCompositeBBox=False):
+def transformTable(font, tag, noCompositeBBox=False, alt255UInt16=0):
     origData = font.getTableData(tag)
     transformedData = origData
     if tag in transformedTables:
         if tag == "glyf":
-            transformedData = transformGlyf(font, noCompositeBBox=noCompositeBBox)
+            transformedData = transformGlyf(font, noCompositeBBox=noCompositeBBox, alt255UInt16=alt255UInt16)
         elif tag == "loca":
             transformedData = ""
         else:
@@ -89,15 +89,28 @@ def transformTable(font, tag, noCompositeBBox=False):
 
     return (origData, transformedData)
 
-def pack255UInt16(n):
-    if n < 253:
-        ret = struct.pack(">B", n)
-    elif n < 506:
-        ret = struct.pack(">BB", 255, n - 253)
-    elif n < 762:
-        ret = struct.pack(">BB", 254, n - 506)
+def pack255UInt16(n, alternate=0):
+    if not alternate:
+        if n < 253:
+            ret = struct.pack(">B", n)
+        elif n < 506:
+            ret = struct.pack(">BB", 255, n - 253)
+        elif n < 762:
+            ret = struct.pack(">BB", 254, n - 506)
+        else:
+            ret = struct.pack(">BH", 253, n)
     else:
-        ret = struct.pack(">BH", 253, n)
+        if n < 253:
+            ret = struct.pack(">BH", 253, n)
+        elif n < 506:
+            ret = struct.pack(">BB", 255, n - 253)
+        elif n < 762:
+            if alternate == 1 and n < 508:
+                ret = struct.pack(">BB", 255, n - 253)
+            else:
+                ret = struct.pack(">BH", 253, n)
+        else:
+            ret = struct.pack(">BH", 253, n)
 
     return ret
 
@@ -145,7 +158,7 @@ def packTriplet(x, y, onCurve):
 
     return (flags, glyphs)
 
-def transformGlyf(font, noCompositeBBox=False):
+def transformGlyf(font, noCompositeBBox=False, alt255UInt16=0):
     glyf = font["glyf"]
     head = font["head"]
 
@@ -185,7 +198,7 @@ def transformGlyf(font, noCompositeBBox=False):
             # nPointsStream
             lastPointIndex = 0
             for i in range(glyph.numberOfContours):
-                nPointsStream += pack255UInt16(glyph.endPtsOfContours[i] - lastPointIndex + (i == 0))
+                nPointsStream += pack255UInt16(glyph.endPtsOfContours[i] - lastPointIndex + (i == 0), alternate=alt255UInt16)
                 lastPointIndex = glyph.endPtsOfContours[i]
 
             # flagStream & glyphStream
@@ -209,7 +222,7 @@ def transformGlyf(font, noCompositeBBox=False):
         if haveInstructions:
             instructions = glyph.program.getBytecode()
             # instructionLength
-            glyphStream += pack255UInt16(len(instructions))
+            glyphStream += pack255UInt16(len(instructions), alternate=alt255UInt16)
 
             # instructionStream
             instructionStream += instructions

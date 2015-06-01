@@ -105,6 +105,7 @@ shutil.copy(os.path.join(resourcesDirectory, "index.css"), destPath)
 groupDefinitions = [
     # identifier, title, spec section
     ("valid", "Valid WOFFs", specificationURL+"#FileStructure"),
+    ("datatypes", "Data types", specificationURL+"#DataTypes"),
     ("header", "WOFF Header Tests", specificationURL+"#woff20Header"),
     ("blocks", "WOFF Data Block Tests", specificationURL+"#FileStructure"),
     ("directory", "WOFF Table Directory Tests", specificationURL+"#table_dir_format"),
@@ -812,6 +813,52 @@ writeFileStructureTest(
     sfntDisplaySpecLink="#conform-mustRecordLocaOffsets",
     shouldDisplaySFNT=True,
     data=makeCompositeData()
+)
+
+# --------------------------
+# File Structure: Data Types
+# --------------------------
+def make255UInt16Alt1(alt):
+    from testCaseGeneratorLib.sfnt import getSFNTData
+    tableData, compressedData, tableOrder, tableChecksums = getSFNTData(sfntTTFSourcePath, alt255UInt16=alt)
+    header, directory, tableData = defaultTestData(tableData=tableData, compressedData=compressedData, flavor="ttf")
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
+    return data
+
+# default 255UInt16 representation
+writeFileStructureTest(
+    identifier="datatypes-alt-255uint16-001",
+    flavor="TTF",
+    title="Default Representation of 255UInt16",
+    assertion="Valid TTF flavored WOFF using default representation of 255UInt16",
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    sfntDisplaySpecLink="#conform-mustAccept255UInt16",
+    shouldDisplaySFNT=True,
+    data=make255UInt16Alt1(0)
+)
+
+# 506 as [253, 1, 250]
+writeFileStructureTest(
+    identifier="datatypes-alt-255uint16-002",
+    flavor="TTF",
+    title="Alternate Representation of 255UInt16 1",
+    assertion="Valid TTF flavored WOFF using alternate representation of 255UInt16",
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    sfntDisplaySpecLink="#conform-mustAccept255UInt16",
+    shouldDisplaySFNT=True,
+    data=make255UInt16Alt1(1)
+)
+
+# 506 as [255, 253]
+writeFileStructureTest(
+    identifier="datatypes-alt-255uint16-003",
+    flavor="TTF",
+    title="Alternate Representation of 255UInt16 2",
+    assertion="Valid TTF flavored WOFF using another alternate representation of 255UInt16",
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    sfntDisplaySpecLink="#conform-mustAccept255UInt16",
+    shouldDisplaySFNT=True,
+    data=make255UInt16Alt1(2)
 )
 
 # -----------------------------------
