@@ -464,40 +464,6 @@ writeFileStructureTest(
     data=makeHeaderInvalidNumTables1()
 )
 
-# -------------------------------------
-# File Structure: Header: totalSfntSize
-# -------------------------------------
-
-writeFileStructureTest(
-    identifier="header-totalSfntSize-001",
-    title=makeHeaderInvalidTotalSfntSize1Title,
-    assertion=makeHeaderInvalidTotalSfntSize1Description,
-    credits=makeHeaderInvalidTotalSfntSize1Credits,
-    shouldDisplaySFNT=False,
-    sfntDisplaySpecLink="#conform-totalsize-longword-reject",
-    data=makeHeaderInvalidTotalSfntSize1()
-)
-
-writeFileStructureTest(
-    identifier="header-totalSfntSize-002",
-    title=makeHeaderInvalidTotalSfntSize2Title,
-    assertion=makeHeaderInvalidTotalSfntSize2Description,
-    credits=makeHeaderInvalidTotalSfntSize2Credits,
-    shouldDisplaySFNT=False,
-    sfntDisplaySpecLink="#conform-totalsize-longword-reject",
-    data=makeHeaderInvalidTotalSfntSize2()
-)
-
-writeFileStructureTest(
-    identifier="header-totalSfntSize-003",
-    title=makeHeaderInvalidTotalSfntSize3Title,
-    assertion=makeHeaderInvalidTotalSfntSize3Description,
-    credits=makeHeaderInvalidTotalSfntSize3Credits,
-    shouldDisplaySFNT=False,
-    sfntDisplaySpecLink="#conform-totalsize-longword-reject",
-    data=makeHeaderInvalidTotalSfntSize3()
-)
-
 # --------------------------------
 # File Structure: Header: reserved
 # --------------------------------
