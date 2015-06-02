@@ -37,6 +37,7 @@ from testCaseGeneratorLib.sharedCases import *
 # ------------------------
 
 specificationURL = "http://dev.w3.org/webfonts/WOFF2/spec/"
+woff1SpecificationURL = "http://www.w3.org/TR/WOFF/"
 
 # ------------------
 # Directory Creation
@@ -131,6 +132,8 @@ def writeTest(identifier, title, description, data, specLink=None, credits=[], v
 
     if specLink is None:
         specLink = specificationURL
+    elif specLink.startswith('woff1:'):
+        specLink = woff1SpecificationURL + specLink[6:]
     else:
         specLink = specificationURL + specLink
 
@@ -976,25 +979,30 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-encoding-001",
+    specLink="woff1:#conform-metadata-encoding",
     valid=True,
 )
 
-# Invalid
+# Invalid encoding: UTF-16
 
 writeMetadataTest(
     identifier="metadata-encoding-002",
+    specLink="woff1:#conform-metadata-encoding",
     valid=False,
 )
 
+# Invalid encoding: ISO-8859-1
 writeMetadataTest(
     identifier="metadata-encoding-003",
+    specLink="woff1:#conform-metadata-encoding",
     valid=False,
 )
 
-# no encoding
+# no encoding; implicit UTF-8
 
 writeMetadataTest(
     identifier="metadata-encoding-004",
+    specLink="woff1:#conform-metadata-encoding",
     valid=True,
 )
 
@@ -1002,6 +1010,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-encoding-005",
+    specLink="woff1:#conform-metadata-encoding",
     valid=True,
 )
 
@@ -1009,6 +1018,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-encoding-006",
+    specLink="woff1:#conform-metadata-encoding",
     valid=False,
 )
 
@@ -1020,6 +1030,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-metadata-001",
+    specLink="woff1:#conform-metadata-wellformed",
     valid=True,
 )
 
@@ -1027,6 +1038,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-metadata-002",
+    specLink="woff1:#conform-metadataelement-required",
     valid=False,
 )
 
@@ -1034,7 +1046,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-metadata-003",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadataversion-required",
     valid=False,
 )
 
@@ -1042,7 +1054,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-metadata-004",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -1050,7 +1062,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-metadata-005",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -1058,7 +1070,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-metadata-006",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -1070,6 +1082,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-uniqueid-001",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
@@ -1077,6 +1090,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-uniqueid-002",
+    #TODO: link
     valid=True,
 )
 
@@ -1084,7 +1098,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-uniqueid-003",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -1092,7 +1106,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-uniqueid-004",
-    specLink="#conform-metadata-id-required",
+    specLink="woff1:#conform-metadata-id-required",
     valid=False,
 )
 
@@ -1100,7 +1114,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-uniqueid-005",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -1108,7 +1122,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-uniqueid-006",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -1116,7 +1130,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-uniqueid-007",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
