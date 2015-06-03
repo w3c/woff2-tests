@@ -5,6 +5,14 @@ Test case HTML generator.
 import os
 import cgi
 
+# ------------------------
+# Specification URLs
+# This is used frequently.
+# ------------------------
+
+specificationURL = "http://dev.w3.org/webfonts/WOFF2/spec/"
+woff1SpecificationURL = "http://www.w3.org/TR/WOFF/"
+
 # ------------------
 # SFNT Display Tests
 # ------------------
@@ -497,3 +505,26 @@ def generateAuthoringToolIndexHTML(directory=None, testCases=[], note=None):
     f = open(path, "wb")
     f.write(html)
     f.close()
+
+
+def expandSpecLinks(links):
+    """
+    This function expands anchor-only references to fully qualified spec links.
+    #name expands to <woff2specurl>#name. woff1:#name expands to
+    <woff1specurl>#name.
+
+    links: 0..N space-separated #anchor references
+    """
+    if links is None or len(links) == 0:
+        links = ""
+
+    specLinks = []
+    for link in links.split(" "):
+        if link.startswith("woff1:"):
+            link = woff1SpecificationURL + link[6:]
+        else:
+            link = specificationURL + link
+
+        specLinks.append(link)
+
+    return " ".join(specLinks)

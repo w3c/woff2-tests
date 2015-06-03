@@ -30,17 +30,10 @@ import shutil
 import glob
 from testCaseGeneratorLib.woff import packTestHeader, packTestDirectory, packTestMetadata, packTestPrivateData
 from testCaseGeneratorLib.defaultData import defaultTestData, testDataWOFFMetadata, testDataWOFFPrivateData
-from testCaseGeneratorLib.html import generateSFNTDisplayTestHTML, generateSFNTDisplayRefHTML, generateSFNTDisplayIndexHTML
+from testCaseGeneratorLib.html import generateSFNTDisplayTestHTML, generateSFNTDisplayRefHTML, generateSFNTDisplayIndexHTML, expandSpecLinks
 from testCaseGeneratorLib.paths import resourcesDirectory, userAgentDirectory, userAgentTestDirectory, userAgentTestResourcesDirectory, userAgentFontsToInstallDirectory, sfntTTFCompositeSourcePath
 from testCaseGeneratorLib import sharedCases
 from testCaseGeneratorLib.sharedCases import *
-
-# ------------------------
-# Specification URL
-# This is used frequently.
-# ------------------------
-
-specificationURL = "http://dev.w3.org/webfonts/WOFF2/spec/"
 
 # ------------------
 # Directory Creation
@@ -104,16 +97,16 @@ shutil.copy(os.path.join(resourcesDirectory, "index.css"), destPath)
 
 groupDefinitions = [
     # identifier, title, spec section
-    ("valid", "Valid WOFFs", specificationURL+"#FileStructure"),
-    ("datatypes", "Data types", specificationURL+"#DataTypes"),
-    ("header", "WOFF Header Tests", specificationURL+"#woff20Header"),
-    ("blocks", "WOFF Data Block Tests", specificationURL+"#FileStructure"),
-    ("directory", "WOFF Table Directory Tests", specificationURL+"#table_dir_format"),
-    ("tabledata", "WOFF Table Data Tests", specificationURL+"#DataTables"),
-    ("metadata", "WOFF Metadata Tests", specificationURL+"#Metadata"),
-    ("privatedata", "WOFF Private Data Tests", specificationURL+"#Private"),
-    ("metadatadisplay", "WOFF Metadata Display Tests", specificationURL+"#Metadata"),
-    ("available", "Availability", specificationURL+"#conform-css3font-available"),
+    ("valid", "Valid WOFFs", expandSpecLinks("#FileStructure")),
+    ("datatypes", "Data types", expandSpecLinks("#DataTypes")),
+    ("header", "WOFF Header Tests", expandSpecLinks("#woff20Header")),
+    ("blocks", "WOFF Data Block Tests", expandSpecLinks("#FileStructure")),
+    ("directory", "WOFF Table Directory Tests", expandSpecLinks("#table_dir_format")),
+    ("tabledata", "WOFF Table Data Tests", expandSpecLinks("#DataTables")),
+    ("metadata", "WOFF Metadata Tests", expandSpecLinks("#Metadata")),
+    ("privatedata", "WOFF Private Data Tests", expandSpecLinks("#Private")),
+    ("metadatadisplay", "WOFF Metadata Display Tests", expandSpecLinks("#Metadata")),
+    ("available", "Availability", expandSpecLinks("#conform-css3font-available")),
 ]
 
 testRegistry = {}
@@ -197,11 +190,9 @@ def writeFileStructureTest(identifier, flavor="CFF",
     registeredTitles.add(title)
     registeredAssertions.add(assertion)
 
-    if sfntDisplaySpecLink is None:
-        sfntDisplaySpecLink = ""
-    sfntDisplaySpecLink = [specificationURL + i for i in sfntDisplaySpecLink.split(" ")]
+    sfntDisplaySpecLink = expandSpecLinks(sfntDisplaySpecLink).split(" ")
     if metadataDisplaySpecLink is not None:
-        metadataDisplaySpecLink = specificationURL + metadataDisplaySpecLink
+        metadataDisplaySpecLink = expandSpecLinks(metadataDisplaySpecLink)
     flags = list(flags)
     flags += ["font"] # fonts must be installed for all of these tests
 
@@ -286,11 +277,11 @@ def writeMetadataSchemaValidityTest(identifier,
     # pass to the more verbose function
     if metadataDisplaySpecLink is None:
         if not metadataIsValid:
-            metadataDisplaySpecLink = "#conform-invalid-mustignore"
+            metadataDisplaySpecLink = "woff1:#conform-invalid-mustignore"
         else:
             metadataDisplaySpecLink = "#Metadata"
     if sfntDisplaySpecLink is None:
-        sfntDisplaySpecLink = "#conform-metadata-noeffect"
+        sfntDisplaySpecLink = "woff1:#conform-metadata-noeffect"
     kwargs = dict(
         title=title,
         assertion=assertion,
@@ -2878,7 +2869,7 @@ testRegistry[tag].append(
         title=title,
         assertion=assertion,
         sfntExpectation=True,
-        sfntURL=[specificationURL+"#General", specificationURL+"#conform-css3font-available"],
+        sfntURL=[expandSpecLinks("#General"), expandSpecLinks("#conform-css3font-available")],
         metadataExpectation=None,
         metadataURL=None,
         credits=[dict(title="Chris Lilley", role="author", link="http://www.w3.org/People")],

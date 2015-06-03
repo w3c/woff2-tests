@@ -27,17 +27,9 @@ from fontTools.misc import sstruct
 from testCaseGeneratorLib.woff import packTestHeader, packTestDirectory, packTestMetadata, packTestPrivateData
 from testCaseGeneratorLib.defaultData import defaultTestData, testDataWOFFMetadata, testDataWOFFPrivateData
 from testCaseGeneratorLib.paths import resourcesDirectory, formatDirectory, formatTestDirectory, formatResourcesDirectory, sfntTTFCompositeSourcePath
-from testCaseGeneratorLib.html import generateFormatIndexHTML
+from testCaseGeneratorLib.html import generateFormatIndexHTML, expandSpecLinks
 from testCaseGeneratorLib import sharedCases
 from testCaseGeneratorLib.sharedCases import *
-
-# ------------------------
-# Specification URL
-# This is used frequently.
-# ------------------------
-
-specificationURL = "http://dev.w3.org/webfonts/WOFF2/spec/"
-woff1SpecificationURL = "http://www.w3.org/TR/WOFF/"
 
 # ------------------
 # Directory Creation
@@ -72,12 +64,12 @@ shutil.copy(os.path.join(resourcesDirectory, "index.css"), destPath)
 groupDefinitions = [
     # identifier, title, spec section
     ("valid", "Valid WOFFs", None),
-    ("header", "WOFF Header Tests", specificationURL+"#woff20Header"),
-    ("blocks", "WOFF Data Block Tests", specificationURL+"#FileStructure"),
-    ("directory", "WOFF Table Directory Tests", specificationURL+"#table_dir_format"),
-    ("tabledata", "WOFF Table Data Tests", specificationURL+"#DataTables"),
-    ("metadata", "WOFF Metadata Tests", specificationURL+"#Metadata"),
-    ("privatedata", "WOFF Private Data Tests", specificationURL+"#Private")
+    ("header", "WOFF Header Tests", expandSpecLinks("#woff20Header")),
+    ("blocks", "WOFF Data Block Tests", expandSpecLinks("#FileStructure")),
+    ("directory", "WOFF Table Directory Tests", expandSpecLinks("#table_dir_format")),
+    ("tabledata", "WOFF Table Data Tests", expandSpecLinks("#DataTables")),
+    ("metadata", "WOFF Metadata Tests", expandSpecLinks("#Metadata")),
+    ("privatedata", "WOFF Private Data Tests", expandSpecLinks("#Private"))
 ]
 
 testRegistry = {}
@@ -131,16 +123,7 @@ def writeTest(identifier, title, description, data, specLink=None, credits=[], v
     registeredTitles.add(title)
     registeredDescriptions.add(description)
 
-    if specLink is None:
-        specLink = ""
-    links = []
-    for link in specLink.split(" "):
-        if link.startswith("woff1:"):
-            link = woff1SpecificationURL + link[6:]
-        else:
-            link = specificationURL + link
-        links.append(link)
-    specLink = " ".join(links)
+    specLink = expandSpecLinks(specLink)
 
     # generate the WOFF
     woffPath = os.path.join(formatTestDirectory, identifier) + ".woff2"
