@@ -108,9 +108,10 @@ def writeTest(identifier, title, description, data, specLink=None, credits=[], v
 
     description: A detailed statement about what the test case is proving.
 
-    data: The complete binary data for the WOFF.
+    data: The complete binary data for the WOFF2.
 
-    specLink: The anchor in the WOFF spec that the test case is testing.
+    specLink: A space separated list of anchors that the test case is testing. Assumed to
+    refer to the WOFF2 spec unless prefixed "woff1:".
 
     credits: A list of dictionaries defining the credits for the test case. The
     dictionaries must have this form:
@@ -119,7 +120,7 @@ def writeTest(identifier, title, description, data, specLink=None, credits=[], v
         role="author or reviewer",
         link="mailto:email or http://contactpage"
 
-    valid: A boolean indicating if the WOFF is valid.
+    valid: A boolean indicating if the WOFF2 is valid.
     """
 
     print "Compiling %s..." % identifier
@@ -131,11 +132,15 @@ def writeTest(identifier, title, description, data, specLink=None, credits=[], v
     registeredDescriptions.add(description)
 
     if specLink is None:
-        specLink = specificationURL
-    elif specLink.startswith('woff1:'):
-        specLink = woff1SpecificationURL + specLink[6:]
-    else:
-        specLink = specificationURL + specLink
+        specLink = ""
+    links = []
+    for link in specLink.split(" "):
+        if link.startswith("woff1:"):
+            link = woff1SpecificationURL + link[6:]
+        else:
+            link = specificationURL + link
+        links.append(link)
+    specLink = " ".join(links)
 
     # generate the WOFF
     woffPath = os.path.join(formatTestDirectory, identifier) + ".woff2"
@@ -209,6 +214,7 @@ writeTest(
     description=makeValidWOFF1Description,
     credits=makeValidWOFF1Credits,
     valid=True,
+    specLink="#conform-metadata-optional #conform-private",
     data=makeValidWOFF1()
 )
 
@@ -247,6 +253,7 @@ writeTest(
     description=makeValidWOFF5Description,
     credits=makeValidWOFF5Credits,
     valid=True,
+    specLink="#conform-metadata-optional #conform-private",
     data=makeValidWOFF5()
 )
 
@@ -564,7 +571,7 @@ writeTest(
     description="The metadata length is set to one but the offset is zero.",
     credits=[dict(title="Tal Leming", role="author", link="http://typesupply.com")],
     valid=False,
-    specLink="#conform-zerometaprivate",
+    specLink="#conform-overlap-reject",
     data=makeMetadataZeroData1()
 )
 
@@ -583,7 +590,7 @@ writeTest(
     description="The metadata length is set to zero but the offset is set to the end of the file.",
     credits=[dict(title="Tal Leming", role="author", link="http://typesupply.com")],
     valid=False,
-    specLink="#conform-zerometaprivate",
+    specLink="#conform-metadata-afterfonttable",
     data=makeMetadataZeroData2()
 )
 
@@ -606,7 +613,7 @@ writeTest(
     description="The private data length is set to one but the offset is zero.",
     credits=[dict(title="Tal Leming", role="author", link="http://typesupply.com")],
     valid=False,
-    specLink="#conform-zerometaprivate",
+    specLink="#conform-overlap-reject",
     data=makePrivateDataZeroData1()
 )
 
@@ -625,7 +632,7 @@ writeTest(
     description="The private data length is set to zero but the offset is set to the end of the file.",
     credits=[dict(title="Tal Leming", role="author", link="http://typesupply.com")],
     valid=False,
-    specLink="#conform-zerometaprivate",
+    specLink="#conform-overlap-reject",
     data=makePrivateDataZeroData2()
 )
 
@@ -1161,7 +1168,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-vendor-004",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -1201,7 +1208,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-vendor-010",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -1209,7 +1216,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-vendor-011",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -1217,7 +1224,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-vendor-012",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -1229,6 +1236,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-credits-001",
+    specLink="woff1:#conform-metadata-schemavalid woff1:#conform-textlang",
     valid=True,
 )
 
@@ -1243,7 +1251,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-credits-003",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -1251,7 +1259,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-credits-004",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -1259,7 +1267,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-credits-005",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -1267,7 +1275,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-credits-006",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -1275,7 +1283,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-credits-007",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -1308,7 +1316,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-credit-004",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-creditnamerequired",
     valid=False,
 )
 
@@ -1340,7 +1348,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-credit-009",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -1348,7 +1356,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-credit-010",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -1356,7 +1364,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-credit-011",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -1417,7 +1425,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-description-008",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -1425,7 +1433,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-description-009",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-localizable-text-required",
     valid=False,
 )
 
@@ -1433,7 +1441,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-description-010",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -1441,7 +1449,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-description-011",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -1449,7 +1457,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-description-012",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -1457,19 +1465,19 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-description-013",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
 writeMetadataTest(
     identifier="metadata-schema-description-014",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
 writeMetadataTest(
     identifier="metadata-schema-description-015",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -1477,7 +1485,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-description-016",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
@@ -1485,7 +1493,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-description-017",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -1493,7 +1501,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-description-018",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -1501,7 +1509,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-description-019",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
@@ -1509,7 +1517,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-description-020",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
@@ -1517,7 +1525,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-description-021",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
@@ -1525,19 +1533,19 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-description-022",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
 writeMetadataTest(
     identifier="metadata-schema-description-023",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
 writeMetadataTest(
     identifier="metadata-schema-description-024",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -1545,7 +1553,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-description-025",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
@@ -1553,7 +1561,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-description-026",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
@@ -1561,7 +1569,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-description-027",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
@@ -1569,7 +1577,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-description-028",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
@@ -1577,19 +1585,19 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-description-029",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
 writeMetadataTest(
     identifier="metadata-schema-description-030",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
 writeMetadataTest(
     identifier="metadata-schema-description-031",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -1597,7 +1605,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-description-032",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
@@ -1665,7 +1673,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-license-009",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -1673,7 +1681,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-license-010",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-localizable-text-required",
     valid=True,
 )
 
@@ -1681,7 +1689,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-license-011",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -1689,7 +1697,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-license-012",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -1697,7 +1705,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-license-013",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -1705,19 +1713,19 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-license-014",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
 writeMetadataTest(
     identifier="metadata-schema-license-015",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
 writeMetadataTest(
     identifier="metadata-schema-license-016",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -1725,7 +1733,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-license-017",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
@@ -1733,7 +1741,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-license-018",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -1741,7 +1749,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-license-019",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -1749,7 +1757,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-license-020",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
@@ -1757,7 +1765,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-license-021",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
@@ -1765,7 +1773,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-license-022",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
@@ -1773,19 +1781,19 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-license-023",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
 writeMetadataTest(
     identifier="metadata-schema-license-024",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
 writeMetadataTest(
     identifier="metadata-schema-license-025",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -1793,7 +1801,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-license-026",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
@@ -1801,7 +1809,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-license-027",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
@@ -1809,7 +1817,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-license-028",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
@@ -1817,7 +1825,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-license-029",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
@@ -1825,19 +1833,19 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-license-030",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
 writeMetadataTest(
     identifier="metadata-schema-license-031",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
 writeMetadataTest(
     identifier="metadata-schema-license-032",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -1845,7 +1853,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-license-033",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
@@ -1892,7 +1900,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-copyright-006",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -1900,7 +1908,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-copyright-007",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-localizable-text-required",
     valid=False,
 )
 
@@ -1908,7 +1916,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-copyright-008",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -1916,7 +1924,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-copyright-009",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -1924,7 +1932,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-copyright-010",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -1932,19 +1940,19 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-copyright-011",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
 writeMetadataTest(
     identifier="metadata-schema-copyright-012",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
 writeMetadataTest(
     identifier="metadata-schema-copyright-013",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -1952,7 +1960,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-copyright-014",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
@@ -1960,7 +1968,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-copyright-015",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -1968,7 +1976,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-copyright-016",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -1976,7 +1984,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-copyright-017",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
@@ -1984,7 +1992,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-copyright-018",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
@@ -1992,7 +2000,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-copyright-019",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
@@ -2000,19 +2008,19 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-copyright-020",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
 writeMetadataTest(
     identifier="metadata-schema-copyright-021",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
 writeMetadataTest(
     identifier="metadata-schema-copyright-022",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -2020,7 +2028,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-copyright-023",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
@@ -2028,7 +2036,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-copyright-024",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
@@ -2036,7 +2044,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-copyright-025",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
@@ -2044,7 +2052,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-copyright-026",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
@@ -2052,19 +2060,19 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-copyright-027",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
 writeMetadataTest(
     identifier="metadata-schema-copyright-028",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
 writeMetadataTest(
     identifier="metadata-schema-copyright-029",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -2072,7 +2080,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-copyright-030",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
@@ -2084,7 +2092,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-trademark-001",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
@@ -2120,7 +2128,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-trademark-006",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -2128,7 +2136,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-trademark-007",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-localizable-text-required",
     valid=False,
 )
 
@@ -2136,7 +2144,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-trademark-008",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -2144,7 +2152,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-trademark-009",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -2152,7 +2160,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-trademark-010",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -2160,19 +2168,19 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-trademark-011",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
 writeMetadataTest(
     identifier="metadata-schema-trademark-012",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
 writeMetadataTest(
     identifier="metadata-schema-trademark-013",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -2180,7 +2188,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-trademark-014",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
@@ -2188,7 +2196,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-trademark-015",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -2196,7 +2204,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-trademark-016",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -2204,7 +2212,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-trademark-017",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
@@ -2212,7 +2220,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-trademark-018",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
@@ -2220,7 +2228,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-trademark-019",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
@@ -2228,19 +2236,19 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-trademark-020",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
 writeMetadataTest(
     identifier="metadata-schema-trademark-021",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
 writeMetadataTest(
     identifier="metadata-schema-trademark-022",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -2248,7 +2256,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-trademark-023",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
@@ -2256,7 +2264,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-trademark-024",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
@@ -2264,7 +2272,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-trademark-025",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
@@ -2272,7 +2280,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-trademark-026",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
@@ -2280,19 +2288,19 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-trademark-027",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
 writeMetadataTest(
     identifier="metadata-schema-trademark-028",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
 writeMetadataTest(
     identifier="metadata-schema-trademark-029",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -2300,7 +2308,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-trademark-030",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
@@ -2319,7 +2327,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-licensee-002",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -2327,7 +2335,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-licensee-003",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-licensee-required",
     valid=False,
 )
 
@@ -2335,19 +2343,19 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-licensee-004",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
 writeMetadataTest(
     identifier="metadata-schema-licensee-005",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
 writeMetadataTest(
     identifier="metadata-schema-licensee-006",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -2355,7 +2363,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-licensee-007",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=True,
 )
 
@@ -2363,7 +2371,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-licensee-008",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -2371,7 +2379,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-licensee-009",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -2379,7 +2387,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-licensee-010",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -2440,7 +2448,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-extension-008",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-extension-itemrequired",
     valid=False,
 )
 
@@ -2448,7 +2456,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-extension-009",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -2456,7 +2464,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-extension-010",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -2464,7 +2472,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-extension-011",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -2521,7 +2529,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-extension-019",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -2529,7 +2537,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-extension-020",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -2590,7 +2598,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-extension-028",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid woff1:#conform-namerequired",
     valid=False,
 )
 
@@ -2598,7 +2606,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-extension-029",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid woff1:#conform-valuerequired",
     valid=False,
 )
 
@@ -2606,7 +2614,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-extension-030",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -2614,7 +2622,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-extension-031",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -2622,7 +2630,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-extension-032",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -2679,7 +2687,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-extension-040",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -2687,7 +2695,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-extension-041",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -2744,7 +2752,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-extension-049",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
@@ -2752,7 +2760,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-extension-050",
-    specLink="#conform-metadata-schemavalid",
+    specLink="woff1:#conform-metadata-schemavalid",
     valid=False,
 )
 
