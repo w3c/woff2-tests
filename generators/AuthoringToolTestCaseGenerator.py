@@ -27,15 +27,8 @@ from fontTools.ttLib.sfnt import sfntDirectorySize, sfntDirectoryEntrySize
 from testCaseGeneratorLib.defaultData import defaultSFNTTestData
 from testCaseGeneratorLib.sfnt import packSFNT
 from testCaseGeneratorLib.paths import resourcesDirectory, authoringToolDirectory, authoringToolTestDirectory, authoringToolResourcesDirectory
-from testCaseGeneratorLib.html import generateAuthoringToolIndexHTML
+from testCaseGeneratorLib.html import generateAuthoringToolIndexHTML, expandSpecLinks
 from testCaseGeneratorLib.utilities import padData, calcPaddingLength, calcTableChecksum
-
-# ------------------------
-# Specification URL
-# This is used frequently.
-# ------------------------
-
-specificationURL = "http://dev.w3.org/webfonts/WOFF2/spec/"
 
 # ------------------
 # Directory Creation
@@ -103,10 +96,10 @@ that is bitwise identical to the original SFNT.
 groupDefinitions = [
     # identifier, title, spec section, category note
     ("validsfnt", "Valid SFNTs", None, validNote),
-    ("invalidsfnt", "Invalid SFNT Tests", specificationURL+"#conform-incorrect-reject", invalidSFNTNote),
-    ("tabledata", "SFNT Table Data Tests", specificationURL+"#DataTables", tableDataNote),
-    ("tabledirectory", "SFNT Table Directory Tests", specificationURL+"#DataTables", tableDirectoryNote),
-    ("bitwiseidentical", "SFNT Bitwise Identical Tests", specificationURL+"#conform-identical", bitwiseNote),
+    ("invalidsfnt", "Invalid SFNT Tests", expandSpecLinks("#conform-incorrect-reject"), invalidSFNTNote),
+    ("tabledata", "SFNT Table Data Tests", expandSpecLinks("#DataTables"), tableDataNote),
+    ("tabledirectory", "SFNT Table Directory Tests", expandSpecLinks("#DataTables"), tableDirectoryNote),
+    ("bitwiseidentical", "SFNT Bitwise Identical Tests", expandSpecLinks("#conform-identical"), bitwiseNote),
 ]
 
 testRegistry = {}
@@ -161,10 +154,7 @@ def writeTest(identifier, title, description, data, specLink=None, credits=[], s
     registeredTitles.add(title)
     registeredDescriptions.add(description)
 
-    if specLink is None:
-        specLink = specificationURL
-    else:
-        specLink = specificationURL + specLink
+    specLink = expandSpecLinks(specLink)
 
     # generate the SFNT
     sfntPath = os.path.join(authoringToolTestDirectory, identifier)
