@@ -76,7 +76,7 @@ unknownTableTagFlag = 63
 
 transformedTables = ("glyf", "loca")
 
-def transformTable(font, tag, noCompositeBBox=False, alt255UInt16=0):
+def transformTable(font, tag, noCompositeBBox=False, alt255UInt16=False):
     origData = font.getTableData(tag)
     transformedData = origData
     if tag in transformedTables:
@@ -89,28 +89,27 @@ def transformTable(font, tag, noCompositeBBox=False, alt255UInt16=0):
 
     return (origData, transformedData)
 
-def pack255UInt16(n, alternate=0):
-    if not alternate:
-        if n < 253:
-            ret = struct.pack(">B", n)
-        elif n < 506:
-            ret = struct.pack(">BB", 255, n - 253)
-        elif n < 762:
+alt255UInt16 = 0
+
+def pack255UInt16(n, alternate=True):
+    global alt255UInt16
+    if n < 253:
+        ret = struct.pack(">B", n)
+    elif n < 506:
+        ret = struct.pack(">BB", 255, n - 253)
+    elif n < 762:
+        if not alternate:
             ret = struct.pack(">BB", 254, n - 506)
         else:
-            ret = struct.pack(">BH", 253, n)
-    else:
-        if n < 253:
-            ret = struct.pack(">BH", 253, n)
-        elif n < 506:
-            ret = struct.pack(">BB", 255, n - 253)
-        elif n < 762:
-            if alternate == 1 and n < 508:
-                ret = struct.pack(">BB", 255, n - 253)
-            else:
+            if alt255UInt16 == 0:
+                ret = struct.pack(">BB", 254, n - 506)
+            elif alt255UInt16 == 1 or n > 508:
                 ret = struct.pack(">BH", 253, n)
-        else:
-            ret = struct.pack(">BH", 253, n)
+            else:
+                ret = struct.pack(">BB", 255, n - 253)
+            alt255UInt16 += 1
+    else:
+        ret = struct.pack(">BH", 253, n)
 
     return ret
 
@@ -158,7 +157,7 @@ def packTriplet(x, y, onCurve):
 
     return (flags, glyphs)
 
-def transformGlyf(font, noCompositeBBox=False, alt255UInt16=0):
+def transformGlyf(font, noCompositeBBox=False, alt255UInt16=False):
     glyf = font["glyf"]
     head = font["head"]
 

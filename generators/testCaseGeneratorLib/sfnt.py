@@ -14,7 +14,7 @@ from woff import transformTable
 # Unpacking
 # ---------
 
-def getSFNTData(pathOrFile, noCompositeBBox=False, alt255UInt16=0):
+def getSFNTData(pathOrFile, noCompositeBBox=False, alt255UInt16=False):
     font = TTFont(pathOrFile)
     tableChecksums = {}
     tableData = {}

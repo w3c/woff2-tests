@@ -775,47 +775,26 @@ writeFileStructureTest(
 # --------------------------
 # File Structure: Data Types
 # --------------------------
-def make255UInt16Alt1(alt):
+def make255UInt16Alt1():
     from testCaseGeneratorLib.sfnt import getSFNTData
-    tableData, compressedData, tableOrder, tableChecksums = getSFNTData(sfntTTFSourcePath, alt255UInt16=alt)
+    tableData, compressedData, tableOrder, tableChecksums = getSFNTData(sfntTTFSourcePath, alt255UInt16=True)
     header, directory, tableData = defaultTestData(tableData=tableData, compressedData=compressedData, flavor="ttf")
     data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
     return data
 
-# default 255UInt16 representation
+# alternate representations of 255UInt16 506
+#  [254, 0]
+#  [253, 1, 250]
+#  [255, 253]
 writeFileStructureTest(
     identifier="datatypes-alt-255uint16-001",
     flavor="TTF",
-    title="Default Representation of 255UInt16",
-    assertion="Valid TTF flavored WOFF using default representation of 255UInt16",
+    title="Different Representations of 255UInt16",
+    assertion="Valid TTF flavored WOFF with different valid representation of the same 255UInt16 encoded number",
     credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
     sfntDisplaySpecLink="#conform-mustAccept255UInt16",
     shouldDisplaySFNT=True,
-    data=make255UInt16Alt1(0)
-)
-
-# 506 as [253, 1, 250]
-writeFileStructureTest(
-    identifier="datatypes-alt-255uint16-002",
-    flavor="TTF",
-    title="Alternate Representation of 255UInt16 1",
-    assertion="Valid TTF flavored WOFF using alternate representation of 255UInt16",
-    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
-    sfntDisplaySpecLink="#conform-mustAccept255UInt16",
-    shouldDisplaySFNT=True,
-    data=make255UInt16Alt1(1)
-)
-
-# 506 as [255, 253]
-writeFileStructureTest(
-    identifier="datatypes-alt-255uint16-003",
-    flavor="TTF",
-    title="Alternate Representation of 255UInt16 2",
-    assertion="Valid TTF flavored WOFF using another alternate representation of 255UInt16",
-    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
-    sfntDisplaySpecLink="#conform-mustAccept255UInt16",
-    shouldDisplaySFNT=True,
-    data=make255UInt16Alt1(2)
+    data=make255UInt16Alt1()
 )
 
 # -----------------------------------
