@@ -473,6 +473,18 @@ writeFileStructureTest(
 # File Structure: Data Blocks: Extraneous Data
 # --------------------------------------------
 
+# between header and table directory
+
+writeFileStructureTest(
+    identifier="blocks-extraneous-data-000",
+    title=makeExtraneousData0Title,
+    assertion=makeExtraneousData0Description,
+    credits=makeExtraneousData0Credits,
+    shouldDisplaySFNT=False,
+    sfntDisplaySpecLink="#conform-extraneous-reject",
+    data=makeExtraneousData0()
+)
+
 # between table directory and table data
 
 writeFileStructureTest(

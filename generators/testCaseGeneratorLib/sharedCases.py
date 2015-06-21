@@ -225,6 +225,20 @@ makeHeaderInvalidReserved1Credits = [dict(title="Tal Leming", role="author", lin
 # File Structure: Data Blocks: Extraneous Data
 # --------------------------------------------
 
+# between header and table directory
+
+def makeExtraneousData0():
+    header, directory, tableData = defaultTestData()
+    bogusByteLength = 4
+    bogusBytes = "\0" * bogusByteLength
+    header["length"] += bogusByteLength
+    data = padData(packTestHeader(header) + bogusBytes + packTestDirectory(directory) + tableData)
+    return data
+
+makeExtraneousData0Title = "Extraneous Data Between Header and Directory"
+makeExtraneousData0Description = "There are four null bytes between the header and the table directory."
+makeExtraneousData0Credits =  [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
+
 # between table directory and table data
 
 def makeExtraneousData1():
