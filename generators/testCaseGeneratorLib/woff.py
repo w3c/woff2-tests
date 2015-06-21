@@ -270,9 +270,11 @@ def base128Size(n):
         n = n >> 7
     return size
 
-def packBase128(n):
+def packBase128(n, bug=False):
     size = base128Size(n)
     ret = ""
+    if bug:
+        ret += struct.pack(">B", 0x80)
     for i in range(size):
         b = (n >> (7 * (size - i - 1))) & 0x7f
         if i < size - 1:
@@ -283,7 +285,7 @@ def packBase128(n):
 def packTestHeader(header):
     return sstruct.pack(woffHeaderFormat, header)
 
-def packTestDirectory(directory):
+def packTestDirectory(directory, Base128Bug=False):
     data = ""
     directory = [(entry["tag"], entry) for entry in directory]
     for tag, table in sorted(directory):
@@ -292,9 +294,9 @@ def packTestDirectory(directory):
         else:
             data += struct.pack(">B", unknownTableTagFlag)
             data += struct.pack(">4s", tag)
-        data += packBase128(table["origLength"])
+        data += packBase128(table["origLength"], bug=Base128Bug)
         if tag in transformedTables:
-            data += packBase128(table["transformLength"])
+            data += packBase128(table["transformLength"], bug=Base128Bug)
     return data
 
 def packTestMetadata((origMetadata, compMetadata), havePrivateData=False):

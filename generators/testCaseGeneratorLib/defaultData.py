@@ -221,7 +221,7 @@ for tag in sfntCFFTableOrder:
 # Default Data Creator
 # --------------------
 
-def defaultTestData(header=None, directory=None, tableData=None, compressedData=None, metadata=None, privateData=None, flavor="cff"):
+def defaultTestData(header=None, directory=None, tableData=None, compressedData=None, metadata=None, privateData=None, flavor="cff", Base128Bug=False):
     parts = []
     # setup the header
     if header is None:
@@ -269,7 +269,7 @@ def defaultTestData(header=None, directory=None, tableData=None, compressedData=
         entry["origLength"] = origLength
         entry["transformLength"] = transformLength
         header["totalSfntSize"] += origPaddedLength
-    header["length"] = woffHeaderSize + len(packTestDirectory(directory)) + len(compressedData)
+    header["length"] = woffHeaderSize + len(packTestDirectory(directory, Base128Bug=Base128Bug)) + len(compressedData)
     header["length"] += calcPaddingLength(header["length"])
     # setup the metadata
     if metadata is not None:

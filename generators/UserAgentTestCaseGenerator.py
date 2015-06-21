@@ -809,6 +809,26 @@ writeFileStructureTest(
     data=make255UInt16Alt1()
 )
 
+def makeBase128Bug1():
+    from testCaseGeneratorLib.sfnt import getSFNTData
+    tableData, compressedData, tableOrder, tableChecksums = getSFNTData(sfntTTFSourcePath)
+    header, directory, tableData = defaultTestData(tableData=tableData, compressedData=compressedData, flavor="ttf", Base128Bug=True)
+    data = padData(packTestHeader(header) + packTestDirectory(directory, Base128Bug=True) + tableData)
+    return data
+
+# UIntBase128 with leading zeros
+
+writeFileStructureTest(
+    identifier="datatypes-invalid-base128",
+    flavor="TTF",
+    title="Invalid UIntBase128 With Leading Zeros",
+    assertion="Invalid TTF flavored WOFF that has UIntBase128 numbers with leading zeros",
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    sfntDisplaySpecLink="#conform-mustRejectInvalidBase128",
+    shouldDisplaySFNT=False,
+    data=makeBase128Bug1()
+)
+
 # -----------------------------------
 # File Structure: Metadata: No Effect
 # -----------------------------------
