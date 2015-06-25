@@ -403,6 +403,24 @@ writeFileStructureTest(
     metadataDisplaySpecLink="#conform-metadata-maydisplay"
 )
 
+def makeValidOFF():
+    from testCaseGeneratorLib.sfnt import getSFNTData
+    tableData, compressedData, tableOrder, tableChecksums = getSFNTData(sfntTTFCompositeSourcePath)
+    header, directory, tableData = defaultTestData(tableData=tableData, compressedData=compressedData, flavor="ttf")
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
+    return data
+
+writeFileStructureTest(
+    identifier="valid-009",
+    flavor="TTF",
+    title="Valid WOFF 9",
+    assertion="Valid TTF flavored WOFF with simple and composite glyphs",
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    sfntDisplaySpecLink="#conform-mustProduceOFF",
+    shouldDisplaySFNT=True,
+    data=makeValidOFF()
+)
+
 # ---------------------------------
 # File Structure: Header: signature
 # ---------------------------------
@@ -763,25 +781,6 @@ writeFileStructureTest(
     sfntDisplaySpecLink="#conform-mustRejectNoCompositeBBox",
     shouldDisplaySFNT=False,
     data=makeGlyfNoBBox2()
-)
-
-def makeCompositeData():
-    from testCaseGeneratorLib.sfnt import getSFNTData
-    tableData, compressedData, tableOrder, tableChecksums = getSFNTData(sfntTTFCompositeSourcePath)
-    header, directory, tableData = defaultTestData(tableData=tableData, compressedData=compressedData, flavor="ttf")
-    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
-    return data
-
-# valide font with composite glyphs
-writeFileStructureTest(
-    identifier="tabledata-valid-loca-001",
-    flavor="TTF",
-    title="Valid Font With Composite Glyphs",
-    assertion="Valid TTF flavored WOFF with simple and composite glyphs",
-    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
-    sfntDisplaySpecLink="#conform-mustRecordLocaOffsets",
-    shouldDisplaySFNT=True,
-    data=makeCompositeData()
 )
 
 # --------------------------
