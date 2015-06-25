@@ -747,40 +747,40 @@ writeFileStructureTest(
     data=makeTableBadOrigLengthLocaTest2()
 )
 
-def makeGlyfNoBBox1():
+def makeGlyfBBox1():
     header, directory, tableData = defaultTestData()
     data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
     return data
 
 # glyph without explicit bbox
 writeFileStructureTest(
-    identifier="tabledata-glyf-no-bbox-001",
+    identifier="tabledata-glyf-bbox-001",
     flavor="TTF",
     title="Glyph Without Explicit Bounding Box",
     assertion="Valid TTF flavored WOFF with a glyph with no explicit bounding box",
     credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
     sfntDisplaySpecLink="#conform-mustCalculateBBox",
     shouldDisplaySFNT=True,
-    data=makeGlyfNoBBox1()
+    data=makeGlyfBBox1()
 )
 
-def makeGlyfNoBBox2():
+def makeGlyfBBox2():
     from testCaseGeneratorLib.sfnt import getSFNTData
-    tableData, compressedData, tableOrder, tableChecksums = getSFNTData(sfntTTFCompositeSourcePath, noCompositeBBox=True)
+    tableData, compressedData, tableOrder, tableChecksums = getSFNTData(sfntTTFCompositeSourcePath, glyphBBox="nocomposite")
     header, directory, tableData = defaultTestData(tableData=tableData, compressedData=compressedData, flavor="ttf")
     data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
     return data
 
 # glyph without explicit bbox
 writeFileStructureTest(
-    identifier="tabledata-glyf-no-bbox-002",
+    identifier="tabledata-glyf-bbox-002",
     flavor="TTF",
     title="Composite Glyph Without Bounding Box",
     assertion="Invalid TTF flavored WOFF due to composite glyphs without bounding box",
     credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
     sfntDisplaySpecLink="#conform-mustRejectNoCompositeBBox",
     shouldDisplaySFNT=False,
-    data=makeGlyfNoBBox2()
+    data=makeGlyfBBox2()
 )
 
 # --------------------------

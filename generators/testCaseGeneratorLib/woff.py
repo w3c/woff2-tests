@@ -76,12 +76,12 @@ unknownTableTagFlag = 63
 
 transformedTables = ("glyf", "loca")
 
-def transformTable(font, tag, noCompositeBBox=False, alt255UInt16=False):
+def transformTable(font, tag, glyphBBox="", alt255UInt16=False):
     origData = font.getTableData(tag)
     transformedData = origData
     if tag in transformedTables:
         if tag == "glyf":
-            transformedData = transformGlyf(font, noCompositeBBox=noCompositeBBox, alt255UInt16=alt255UInt16)
+            transformedData = transformGlyf(font, glyphBBox=glyphBBox, alt255UInt16=alt255UInt16)
         elif tag == "loca":
             transformedData = ""
         else:
@@ -157,7 +157,7 @@ def packTriplet(x, y, onCurve):
 
     return (flags, glyphs)
 
-def transformGlyf(font, noCompositeBBox=False, alt255UInt16=False):
+def transformGlyf(font, glyphBBox="", alt255UInt16=False):
     glyf = font["glyf"]
     head = font["head"]
 
@@ -228,7 +228,7 @@ def transformGlyf(font, noCompositeBBox=False, alt255UInt16=False):
 
         writeBBox = False
         if glyph.isComposite():
-            writeBBox = not noCompositeBBox
+            writeBBox = glyphBBox != "nocomposite"
         else:
             coords = glyph.getCoordinates(glyf)[0]
             oldBounds = (glyph.xMin, glyph.yMin, glyph.xMax, glyph.yMax)
