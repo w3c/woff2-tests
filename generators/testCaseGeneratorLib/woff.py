@@ -184,6 +184,9 @@ def transformGlyf(font, glyphBBox="", alt255UInt16=False):
         haveInstructions = False
 
         if glyph.numberOfContours == 0:
+            if glyphBBox == "empty":
+                bboxBitmap[glyphId >> 3] |= 0x80 >> (glyphId & 7)
+                bboxStream += struct.pack(">hhhh", 0, 0, 0, 0)
             continue
         elif glyph.isComposite():
             # compositeStream

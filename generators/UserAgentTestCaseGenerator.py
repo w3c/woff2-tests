@@ -783,6 +783,25 @@ writeFileStructureTest(
     data=makeGlyfBBox2()
 )
 
+def makeGlyfBBox3():
+    from testCaseGeneratorLib.sfnt import getSFNTData
+    tableData, compressedData, tableOrder, tableChecksums = getSFNTData(sfntTTFSourcePath, glyphBBox="empty")
+    header, directory, tableData = defaultTestData(tableData=tableData, compressedData=compressedData, flavor="ttf")
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
+    return data
+
+# empty glyph with bbox
+writeFileStructureTest(
+    identifier="tabledata-glyf-bbox-003",
+    flavor="TTF",
+    title="Empty Glyph With Bounding Box",
+    assertion="Invalid TTF flavored WOFF due to empty glyph with bounding box",
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    sfntDisplaySpecLink="#conform-mustRejectNonEmptyBBox",
+    shouldDisplaySFNT=False,
+    data=makeGlyfBBox3()
+)
+
 # --------------------------
 # File Structure: Data Types
 # --------------------------
