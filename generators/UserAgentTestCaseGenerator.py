@@ -699,8 +699,7 @@ writeFileStructureTest(
 # File Structure: Table Data: Transformations
 # -------------------------------------------
 
-# loca's transformLength is not zero
-
+# loca transformLength is not zero
 writeFileStructureTest(
     identifier="tabledata-non-zero-loca-001",
     title=makeTableNonZeroLocaTest1Title,
@@ -719,6 +718,7 @@ def makeTableBadOrigLengthLocaTest1():
     data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
     return data
 
+# loca origLength smaller than the calculated size
 writeFileStructureTest(
     identifier="tabledata-bad-origlength-loca-001",
     title="Font Table Data Small Loca Original Length",
@@ -737,6 +737,7 @@ def makeTableBadOrigLengthLocaTest2():
     data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
     return data
 
+# loca origLength bigger than the calculated size
 writeFileStructureTest(
     identifier="tabledata-bad-origlength-loca-002",
     title="Font Table Data Large Loca Original Length",
