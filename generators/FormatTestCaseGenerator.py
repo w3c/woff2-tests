@@ -892,6 +892,16 @@ writeTest(
     specLink="#conform-metadata-alwayscompress"
 )
 
+writeTest(
+    identifier="metadata-compression-002",
+    title=makeMetadataCompression2Title,
+    description=makeMetadataCompression2Description,
+    credits=makeMetadataCompression2Credits,
+    valid=False,
+    data=makeMetadataCompression2(),
+    specLink="#conform-mustBeBrotliCompressedMetadata"
+)
+
 # --------------------------------
 # Metadata Display: metaOrigLength
 # --------------------------------

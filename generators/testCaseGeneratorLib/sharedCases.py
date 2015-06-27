@@ -509,9 +509,22 @@ def makeMetadataCompression1():
     data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData) + packTestMetadata(metadata)
     return data
 
-makeMetadataCompression1Title = "Metadata Invalid Compression"
+makeMetadataCompression1Title = "Metadata No Compression"
 makeMetadataCompression1Description = "The metadata is stored in an uncompressed state and therefore does not have the proper compression format."
 makeMetadataCompression1Credits = [dict(title="Tal Leming", role="author", link="http://typesupply.com")]
+
+def makeMetadataCompression2():
+    header, directory, tableData, metadata = defaultTestData(metadata=testDataWOFFMetadata)
+    metadata = metadata[0], zlib.compress(metadata[0])
+    diff = len(metadata[1]) - header["metaLength"]
+    header["metaLength"] += diff
+    header["length"] += diff
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData) + packTestMetadata(metadata)
+    return data
+
+makeMetadataCompression2Title = "Metadata Invalid Compression"
+makeMetadataCompression2Description = "The metadata is compressed with Gzip and therefore does not have the proper compression format."
+makeMetadataCompression2Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
 
 # --------------------------------
 # Metadata Display: metaOrigLength
