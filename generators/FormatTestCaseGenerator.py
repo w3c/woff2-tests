@@ -711,6 +711,25 @@ writeTest(
     data=makeDataBlockPrivateData1()
 )
 
+# data after private data
+
+def makeDataBlockPrivateData2():
+    header, directory, tableData, privateData = defaultTestData(privateData=testDataWOFFPrivateData)
+    header["length"] += 4
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData) + packTestPrivateData(privateData)
+    data += 4 * '\0'
+    return data
+
+writeTest(
+    identifier="blocks-private-002",
+    title="Data After Private Data",
+    description="The private data does not correspond to the end of the WOFF2 file because there are 4 null bytes after it.",
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    valid=False,
+    specLink="#conform-private-end",
+    data=makeDataBlockPrivateData2()
+)
+
 # ----------------------------------------------
 # File Structure: Table Data: Compression Format
 # ----------------------------------------------
