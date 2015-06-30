@@ -462,20 +462,17 @@ makeTableDecompressedLengthTest4Credits = [dict(title="Khaled Hosny", role="auth
 # File Structure: Table Data: Transformations
 # -------------------------------------------
 
-def getTransformSFNTData(locaTest=False):
+def getTransformSFNTData(nonZeroLoca=False):
     font = TTFont(sfntTTFSourcePath)
     tableChecksums = {}
     tableData = {}
     tableOrder = [i for i in sorted(font.keys()) if len(i) == 4]
     for tag in tableOrder:
         tableChecksums[tag] = font.reader.tables[tag].checkSum
-        if locaTest:
-            if tag == "loca":
-                tableData[tag] = (font.getTableData(tag), "\0" * 4)
-            else:
-                tableData[tag] = transformTable(font, tag)
+        if nonZeroLoca and tag == "loca":
+            tableData[tag] = (font.getTableData(tag), "\0" * 4)
         else:
-            tableData[tag] = (font.getTableData(tag), font.getTableData(tag))
+            tableData[tag] = transformTable(font, tag)
     totalData = "".join([tableData[tag][1] for tag in tableOrder])
     compData = brotli.compress(totalData, brotli.MODE_FONT)
     if len(compData) >= len(totalData):
@@ -485,7 +482,7 @@ def getTransformSFNTData(locaTest=False):
     return tableData, compData, tableOrder, tableChecksums
 
 def makeTableNonZeroLocaTest1():
-    sfntData = getTransformSFNTData(locaTest=True)
+    sfntData = getTransformSFNTData(nonZeroLoca=True)
     compressedData = sfntData[1]
     uncompressedData = sfntData[0]
     header, directory, tableData = defaultTestData(flavor="ttf", tableData=uncompressedData, compressedData=compressedData)
