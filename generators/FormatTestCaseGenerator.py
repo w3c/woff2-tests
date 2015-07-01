@@ -834,6 +834,36 @@ writeTest(
     data=makeTableNonZeroLocaTest1()
 )
 
+writeTest(
+    identifier="tabledata-loca-size-001",
+    title=makeLocaSizeTest1Title,
+    description=makeLocaSizeTest1Description,
+    credits=makeLocaSizeTest1Credits,
+    valid=True,
+    specLink="#conform-OriginalLocaSize",
+    data=makeLocaSizeTest1()
+)
+
+writeTest(
+    identifier="tabledata-loca-size-002",
+    title=makeLocaSizeTest2Title,
+    description=makeLocaSizeTest2Description,
+    credits=makeLocaSizeTest2Credits,
+    valid=True,
+    specLink="#conform-OriginalLocaSize",
+    data=makeLocaSizeTest2()
+)
+
+writeTest(
+    identifier="tabledata-loca-size-003",
+    title=makeLocaSizeTest3Title,
+    description=makeLocaSizeTest3Description,
+    credits=makeLocaSizeTest3Credits,
+    valid=True,
+    specLink="#conform-OriginalLocaSize",
+    data=makeLocaSizeTest3()
+)
+
 def makeGlyfBBox1():
     from testCaseGeneratorLib.sfnt import getSFNTData
     tableData, compressedData, tableOrder, tableChecksums = getSFNTData(sfntTTFCompositeSourcePath)

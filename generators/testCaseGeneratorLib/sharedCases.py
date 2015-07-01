@@ -462,8 +462,15 @@ makeTableDecompressedLengthTest4Credits = [dict(title="Khaled Hosny", role="auth
 # File Structure: Table Data: Transformations
 # -------------------------------------------
 
-def getTransformSFNTData(nonZeroLoca=False):
+def getTransformSFNTData(nonZeroLoca=False, longLoca=False):
     font = TTFont(sfntTTFSourcePath)
+
+    loca = font["loca"]
+    head = font["head"]
+
+    if longLoca:
+        head.indexToLocFormat = 1
+
     tableChecksums = {}
     tableData = {}
     tableOrder = [i for i in sorted(font.keys()) if len(i) == 4]
@@ -471,6 +478,8 @@ def getTransformSFNTData(nonZeroLoca=False):
         tableChecksums[tag] = font.reader.tables[tag].checkSum
         if nonZeroLoca and tag == "loca":
             tableData[tag] = (font.getTableData(tag), "\0" * 4)
+        elif longLoca and tag == "loca":
+            tableData[tag] = ("\0" * len(loca) * 4, "")
         else:
             tableData[tag] = transformTable(font, tag)
     totalData = "".join([tableData[tag][1] for tag in tableOrder])
@@ -492,6 +501,39 @@ def makeTableNonZeroLocaTest1():
 makeTableNonZeroLocaTest1Title = "Font Table Data Loca Is Not Zero"
 makeTableNonZeroLocaTest1Description = "The transormed loca table contains 4 zero bytes and its transformLength is 4."
 makeTableNonZeroLocaTest1Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
+
+def makeLocaSizeTest1():
+    sfntData = getTransformSFNTData(longLoca=True)
+    compressedData = sfntData[1]
+    uncompressedData = sfntData[0]
+    header, directory, tableData = defaultTestData(flavor="ttf", tableData=uncompressedData, compressedData=compressedData)
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
+    return data
+
+makeLocaSizeTest1Title = "Loca Table With Long Format"
+makeLocaSizeTest1Description = "A valid TTF flavoured font where the loca table uses the long format."
+makeLocaSizeTest1Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
+
+def makeLocaSizeTest2():
+    sfntData = getTransformSFNTData(longLoca=False)
+    compressedData = sfntData[1]
+    uncompressedData = sfntData[0]
+    header, directory, tableData = defaultTestData(flavor="ttf", tableData=uncompressedData, compressedData=compressedData)
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
+    return data
+
+makeLocaSizeTest2Title = "Loca Table With Short Format"
+makeLocaSizeTest2Description = "A valid TTF flavoured font where the loca table uses the short format."
+makeLocaSizeTest2Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
+
+def makeLocaSizeTest3():
+    header, directory, tableData = defaultTestData(flavor="cff")
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
+    return data
+
+makeLocaSizeTest3Title = "No Loca Table"
+makeLocaSizeTest3Description = "A valid CFF flavoured font which naturally have no loca table."
+makeLocaSizeTest3Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
 
 # -----------------------------
 # Metadata Display: Compression
