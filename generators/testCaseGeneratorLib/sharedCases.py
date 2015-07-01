@@ -499,7 +499,7 @@ def makeTableNonZeroLocaTest1():
     return data
 
 makeTableNonZeroLocaTest1Title = "Font Table Data Loca Is Not Zero"
-makeTableNonZeroLocaTest1Description = "The transormed loca table contains 4 zero bytes and its transformLength is 4."
+makeTableNonZeroLocaTest1Description = "The transformed loca table contains 4 zero bytes and its transformLength is 4."
 makeTableNonZeroLocaTest1Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
 
 def makeLocaSizeTest1():
