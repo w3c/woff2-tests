@@ -864,6 +864,16 @@ writeTest(
     data=makeLocaSizeTest3()
 )
 
+writeTest(
+    identifier="tabledata-transform-tables-001",
+    title=makeTransformedTables1Title,
+    description=makeTransformedTables1Description,
+    credits=makeTransformedTables1Credits,
+    valid=True,
+    specLink="#conform-mustTransformTables",
+    data=makeTransformedTables1()
+)
+
 def makeGlyfBBox1():
     from testCaseGeneratorLib.sfnt import getSFNTData
     tableData, compressedData, tableOrder, tableChecksums = getSFNTData(sfntTTFCompositeSourcePath)

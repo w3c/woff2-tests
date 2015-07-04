@@ -535,6 +535,15 @@ makeLocaSizeTest3Title = "No Loca Table"
 makeLocaSizeTest3Description = "A valid CFF flavoured font which naturally have no loca table."
 makeLocaSizeTest3Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
 
+def makeTransformedTables1():
+    header, directory, tableData = defaultTestData(flavor="ttf")
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
+    return data
+
+makeTransformedTables1Title = "WOFF With Transformed Tables"
+makeTransformedTables1Description = "Valid TTF flavored WOFF with transformed glyf and loca tables"
+makeTransformedTables1Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
+
 # -----------------------------
 # Metadata Display: Compression
 # -----------------------------
