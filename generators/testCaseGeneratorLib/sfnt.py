@@ -30,6 +30,46 @@ def getSFNTData(pathOrFile, glyphBBox="", alt255UInt16=False):
     del font
     return tableData, compData, tableOrder, tableChecksums
 
+def getSFNTCollectionData(pathOrFiles):
+    tableChecksums = []
+    tableData = []
+    tableOrder = []
+    collectionDirectory = []
+
+    for i, pathOrFile in enumerate(pathOrFiles):
+        font = TTFont(pathOrFile)
+
+        # Make the name table unique
+        name = font["name"]
+        for namerecord in name.names:
+            nameID = namerecord.nameID
+            string = namerecord.toUnicode()
+            if nameID == 1:
+                namerecord.string = "%s %d" % (string, i)
+            elif nameID == 4:
+                namerecord.string = string.replace("Regular", "%d Regular" % i)
+            elif nameID == 6:
+                namerecord.string = string.replace("-", "%d-" % i)
+
+        tags = [i for i in sorted(font.keys()) if len(i) == 4]
+        tableIndices = []
+        for tag in tags:
+            data = transformTable(font, tag)
+            if [tag, data] not in tableData:
+                tableData.append([tag, data])
+                tableChecksums.append([tag, font.reader.tables[tag].checkSum])
+                tableOrder.append(tag)
+            tableIndices.append(tableData.index([tag, data]))
+        collectionDirectory.append(dict(numTables=len(tableIndices), flavor=font.sfntVersion, index=tableIndices))
+        font.close()
+        del font
+
+    totalData = "".join([data[1][1] for data in tableData])
+    compData = brotli.compress(totalData, brotli.MODE_FONT)
+    if len(compData) >= len(totalData):
+        compData = totalData
+    return tableData, compData, tableOrder, tableChecksums, collectionDirectory
+
 # -------
 # Packing
 # -------

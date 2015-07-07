@@ -10,7 +10,7 @@ from copy import deepcopy
 from fontTools.ttLib import TTFont
 from fontTools.ttLib.sfnt import sfntDirectoryEntrySize
 from testCaseGeneratorLib.woff import packTestHeader, packTestDirectory, packTestMetadata, packTestPrivateData,\
-    woffHeaderSize, transformTable
+    woffHeaderSize, transformTable, packTestCollectionHeader, packTestCollectionDirectory
 from testCaseGeneratorLib.defaultData import defaultTestData, testDataWOFFMetadata, testDataWOFFPrivateData,\
     sfntCFFTableData, testCFFDataWOFFDirectory
 from testCaseGeneratorLib.paths import sfntTTFSourcePath
@@ -220,6 +220,20 @@ def makeHeaderInvalidReserved1():
 makeHeaderInvalidReserved1Title = "Header Reserved Invalid Value"
 makeHeaderInvalidReserved1Description = "The reserved field contains 1."
 makeHeaderInvalidReserved1Credits = [dict(title="Tal Leming", role="author", link="http://typesupply.com")]
+
+# ---------------------------
+# File Structure: Collections
+# ---------------------------
+
+def makeCollection1():
+    from testCaseGeneratorLib.sfnt import getSFNTCollectionData
+
+    tableData, compressedData, tableOrder, tableChecksums, collectionDirectory = getSFNTCollectionData([sfntTTFSourcePath, sfntTTFSourcePath])
+    directory = [dict(tag=tag, origLength=0, transformLength=0) for tag in tableOrder]
+    header, directory, collectionHeader, collectionDirectory, tableData = defaultTestData(directory=directory, tableData=tableData, compressedData=compressedData, collectionDirectory=collectionDirectory, flavor="ttf")
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + packTestCollectionHeader(collectionHeader) + packTestCollectionDirectory(collectionDirectory) + tableData)
+
+    return data
 
 # --------------------------------------------
 # File Structure: Data Blocks: Extraneous Data

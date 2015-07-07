@@ -6,7 +6,7 @@ import brotli
 from copy import deepcopy
 from fontTools.ttLib.sfnt import sfntDirectoryFormat, sfntDirectorySize, sfntDirectoryEntryFormat, sfntDirectoryEntrySize
 from sfnt import getSFNTData
-from woff import packTestDirectory, woffHeaderSize
+from woff import packTestDirectory, packTestCollectionHeader, packTestCollectionDirectory, woffHeaderSize
 from paths import sfntCFFSourcePath, sfntTTFSourcePath
 from utilities import calcPaddingLength, calcTableChecksum
 
@@ -221,7 +221,8 @@ for tag in sfntCFFTableOrder:
 # Default Data Creator
 # --------------------
 
-def defaultTestData(header=None, directory=None, tableData=None, compressedData=None, metadata=None, privateData=None, flavor="cff", Base128Bug=False):
+def defaultTestData(header=None, directory=None, collectionHeader=None, collectionDirectory=None, tableData=None, compressedData=None, metadata=None, privateData=None, flavor="cff", Base128Bug=False):
+    isCollection = collectionDirectory is not None
     parts = []
     # setup the header
     if header is None:
@@ -234,6 +235,11 @@ def defaultTestData(header=None, directory=None, tableData=None, compressedData=
         else:
             directory = deepcopy(testTTFDataWOFFDirectory)
     parts.append(directory)
+    if isCollection:
+        if collectionHeader is None:
+            collectionHeader = dict(version=0x00010000, numFonts=len(collectionDirectory))
+        parts.append(collectionHeader)
+        parts.append(collectionDirectory)
     # setup the table data
     if tableData is None:
         if flavor == "cff":
@@ -248,28 +254,41 @@ def defaultTestData(header=None, directory=None, tableData=None, compressedData=
     parts.append(compressedData)
     # sanity checks
     assert len(directory) == len(tableData)
-    assert set(tableData.keys()) == set([entry["tag"] for entry in directory])
+    if not isCollection:
+        assert set(tableData.keys()) == set([entry["tag"] for entry in directory])
     # apply the directory data to the header
     header["numTables"] = len(directory)
-    if "CFF " in tableData:
+    if isCollection:
+        header["flavor"] = "ttcf"
+    elif "CFF " in tableData:
         header["flavor"] = "OTTO"
     else:
         header["flavor"] = "\000\001\000\000"
     # apply the table data to the directory and the header
-    header["totalSfntSize"] = sfntDirectorySize + (len(directory) * sfntDirectoryEntrySize)
+    if isCollection:
+        # TTC header
+        header["totalSfntSize"] = 12 + 4 * collectionHeader["numFonts"]
+        header["totalSfntSize"] += sfntDirectorySize * collectionHeader["numFonts"]
+        for entry in collectionDirectory:
+            header["totalSfntSize"] += sfntDirectoryEntrySize * entry["numTables"]
+    else:
+        header["totalSfntSize"] = sfntDirectorySize + (len(directory) * sfntDirectoryEntrySize)
     header["totalCompressedSize"] = len(compressedData)
-    for entry in directory:
+    for i, entry in enumerate(directory):
         tag = entry["tag"]
-        origData, transformData = tableData[tag]
-        # measure
-        origLength = len(origData)
-        transformLength = len(transformData)
-        origPaddedLength = origLength + calcPaddingLength(origLength)
-        # store
-        entry["origLength"] = origLength
-        entry["transformLength"] = transformLength
-        header["totalSfntSize"] += origPaddedLength
-    header["length"] = woffHeaderSize + len(packTestDirectory(directory, Base128Bug=Base128Bug)) + len(compressedData)
+        if isCollection:
+            origData, transformData = tableData[i][1]
+        else:
+            origData, transformData = tableData[tag]
+        entry["origLength"] = len(origData)
+        entry["transformLength"] = len(transformData)
+        header["totalSfntSize"] += entry["origLength"]
+        header["totalSfntSize"] += calcPaddingLength(header["totalSfntSize"])
+    header["length"] = woffHeaderSize + len(packTestDirectory(directory, Base128Bug=Base128Bug))
+    if isCollection:
+        header["length"] += len(packTestCollectionHeader(collectionHeader))
+        header["length"] += len(packTestCollectionDirectory(collectionDirectory))
+    header["length"] += len(compressedData)
     header["length"] += calcPaddingLength(header["length"])
     # setup the metadata
     if metadata is not None:

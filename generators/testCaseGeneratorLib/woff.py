@@ -302,6 +302,18 @@ def packTestDirectory(directory, Base128Bug=False):
             data += packBase128(table["transformLength"], bug=Base128Bug)
     return data
 
+def packTestCollectionHeader(header):
+    return struct.pack(">L", header["version"]) + pack255UInt16(header["numFonts"])
+
+def packTestCollectionDirectory(directory):
+    data = ""
+    for entry in directory:
+        data += pack255UInt16(entry["numTables"])
+        data += struct.pack(">4s", entry["flavor"])
+        for i in entry["index"]:
+            data += pack255UInt16(i)
+    return data
+
 def packTestMetadata((origMetadata, compMetadata), havePrivateData=False):
     if havePrivateData:
         compMetadata = padData(compMetadata)
