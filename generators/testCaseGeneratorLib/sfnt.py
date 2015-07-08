@@ -57,6 +57,10 @@ def getSFNTCollectionData(pathOrFiles):
                 namerecord.string = string.replace("-", "%d-" % i)
 
         tags = [i for i in sorted(font.keys()) if len(i) == 4]
+        if "glyf" in tags:
+            glyf = tags.index("glyf")
+            loca = tags.index("loca")
+            tags.insert(glyf + 1, tags.pop(loca))
         tableIndices = []
         for tag in tags:
             data = transformTable(font, tag)

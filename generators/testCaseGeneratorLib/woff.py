@@ -288,10 +288,11 @@ def packBase128(n, bug=False):
 def packTestHeader(header):
     return sstruct.pack(woffHeaderFormat, header)
 
-def packTestDirectory(directory, unsortGlyfLoca=False, Base128Bug=False):
+def packTestDirectory(directory, isCollection=False, unsortGlyfLoca=False, Base128Bug=False):
     data = ""
     directory = [(entry["tag"], entry) for entry in directory]
-    directory = sorted(directory)
+    if not isCollection:
+        directory = sorted(directory)
     if unsortGlyfLoca:
         loca = None
         glyf = None

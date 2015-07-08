@@ -230,8 +230,12 @@ def makeCollection1():
 
     tableData, compressedData, tableOrder, tableChecksums, collectionDirectory = getSFNTCollectionData([sfntTTFSourcePath, sfntTTFSourcePath])
     directory = [dict(tag=tag, origLength=0, transformLength=0) for tag in tableOrder]
-    header, directory, collectionHeader, collectionDirectory, tableData = defaultTestData(directory=directory, tableData=tableData, compressedData=compressedData, collectionDirectory=collectionDirectory, flavor="ttf")
-    data = padData(packTestHeader(header) + packTestDirectory(directory) + packTestCollectionHeader(collectionHeader) + packTestCollectionDirectory(collectionDirectory) + tableData)
+    header, directory, collectionHeader, collectionDirectory, tableData = defaultTestData(directory=directory, tableData=tableData,
+                                                                                          compressedData=compressedData,
+                                                                                          collectionDirectory=collectionDirectory,
+                                                                                          flavor="ttf")
+    data = padData(packTestHeader(header) + packTestDirectory(directory, isCollection=True) + packTestCollectionHeader(collectionHeader) + \
+            packTestCollectionDirectory(collectionDirectory) + tableData)
 
     return data
 
