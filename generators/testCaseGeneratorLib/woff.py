@@ -288,10 +288,20 @@ def packBase128(n, bug=False):
 def packTestHeader(header):
     return sstruct.pack(woffHeaderFormat, header)
 
-def packTestDirectory(directory, Base128Bug=False):
+def packTestDirectory(directory, unsortGlyfLoca=False, Base128Bug=False):
     data = ""
     directory = [(entry["tag"], entry) for entry in directory]
-    for tag, table in sorted(directory):
+    directory = sorted(directory)
+    if unsortGlyfLoca:
+        loca = None
+        glyf = None
+        for i, entry in enumerate(directory):
+            if   entry[0] == "loca": loca = i
+            elif entry[0] == "glyf": glyf = i
+        assert loca
+        assert glyf
+        directory.insert(glyf, directory.pop(loca))
+    for tag, table in directory:
         if tag in knownTableTags:
             data += struct.pack(">B", knownTableTags.index(tag))
         else:

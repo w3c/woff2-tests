@@ -14,11 +14,16 @@ from woff import transformTable
 # Unpacking
 # ---------
 
-def getSFNTData(pathOrFile, glyphBBox="", alt255UInt16=False):
+def getSFNTData(pathOrFile, unsortGlyfLoca=False, glyphBBox="", alt255UInt16=False):
     font = TTFont(pathOrFile)
     tableChecksums = {}
     tableData = {}
     tableOrder = [i for i in sorted(font.keys()) if len(i) == 4]
+    if unsortGlyfLoca:
+        assert "loca" in tableOrder
+        loca = tableOrder.index("loca")
+        glyf = tableOrder.index("glyf")
+        tableOrder.insert(glyf, tableOrder.pop(loca))
     for tag in tableOrder:
         tableChecksums[tag] = font.reader.tables[tag].checkSum
         tableData[tag] = transformTable(font, tag, glyphBBox=glyphBBox, alt255UInt16=alt255UInt16)

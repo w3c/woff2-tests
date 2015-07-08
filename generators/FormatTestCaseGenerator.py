@@ -407,6 +407,37 @@ writeTest(
     data=makeHeaderInvalidReserved1()
 )
 
+# -----------------------------------------
+# File Structure: Table Directory: Ordering
+# -----------------------------------------
+
+writeTest(
+    identifier="directory-table-order-001",
+    title="WOFF2 With Correct Table Order",
+    description="A valid WOFF2 font with tables ordered correctly in the table directory",
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    valid=True,
+    specLink="#conform-tableOrdering",
+    data=makeValidWOFF1()
+)
+
+def makeWrongTableOrder1():
+    from testCaseGeneratorLib.sfnt import getSFNTData
+    tableData, compressedData, tableOrder, tableChecksums = getSFNTData(sfntTTFSourcePath, unsortGlyfLoca=True)
+    header, directory, tableData = defaultTestData(tableData=tableData, compressedData=compressedData, flavor="ttf")
+    data = padData(packTestHeader(header) + packTestDirectory(directory, unsortGlyfLoca=True) + tableData)
+    return data
+
+writeTest(
+    identifier="directory-table-order-002",
+    title="WOFF2 With Wrong Table Order",
+    description="An invalid WOFF2 font with loca before glyf in the table directory",
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    valid=True,
+    specLink="#conform-tableOrdering",
+    data=makeWrongTableOrder1()
+)
+
 # --------------------------------------------
 # File Structure: Data Blocks: Extraneous Data
 # --------------------------------------------
