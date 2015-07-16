@@ -866,6 +866,36 @@ writeFileStructureTest(
     data=makeBase128Bug1()
 )
 
+# ---------------------------
+# File Structure: Collections
+# ---------------------------
+
+def makeMismatchedCollection1():
+    from testCaseGeneratorLib.sfnt import getSFNTCollectionData
+
+    tableData, compressedData, tableOrder, tableChecksums, collectionDirectory = getSFNTCollectionData([sfntTTFSourcePath, sfntTTFSourcePath],
+                                                                                                       MismatchGlyfLoca=True)
+    directory = [dict(tag=tag, origLength=0, transformLength=0) for tag in tableOrder]
+    header, directory, collectionHeader, collectionDirectory, tableData = defaultTestData(directory=directory, tableData=tableData,
+                                                                                          compressedData=compressedData,
+                                                                                          collectionDirectory=collectionDirectory,
+                                                                                          flavor="ttf")
+    data = padData(packTestHeader(header) + packTestDirectory(directory, isCollection=True) + packTestCollectionHeader(collectionHeader) + \
+            packTestCollectionDirectory(collectionDirectory) + tableData)
+
+    return data
+
+writeFileStructureTest(
+    identifier="directory-collections-mismatched-tables",
+    flavor="TTF",
+    title="Font Collection With Mismatched Glyf/Loca Tables",
+    assertion="Invalid TTF flavored WOFF font collection with two pairs of mismatched glyf/loca tables",
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    sfntDisplaySpecLink="#conform-mustCheckRejectMismatchedTables",
+    shouldDisplaySFNT=False,
+    data=makeMismatchedCollection1()
+)
+
 # -----------------------------------
 # File Structure: Metadata: No Effect
 # -----------------------------------

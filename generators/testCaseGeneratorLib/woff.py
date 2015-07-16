@@ -322,7 +322,7 @@ def packTestCollectionDirectory(directory):
         data += pack255UInt16(entry["numTables"])
         data += struct.pack(">4s", entry["flavor"])
         for i in entry["index"]:
-            data += pack255UInt16(i)
+            data += pack255UInt16(entry["index"][i])
     return data
 
 def packTestMetadata((origMetadata, compMetadata), havePrivateData=False):

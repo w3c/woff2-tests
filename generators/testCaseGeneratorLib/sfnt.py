@@ -3,6 +3,7 @@ SFNT data extractor.
 """
 
 import brotli
+from collections import OrderedDict
 from fontTools.misc import sstruct
 from fontTools.ttLib import TTFont, getSearchRange
 from fontTools.ttLib.sfnt import \
@@ -35,11 +36,12 @@ def getSFNTData(pathOrFile, unsortGlyfLoca=False, glyphBBox="", alt255UInt16=Fal
     del font
     return tableData, compData, tableOrder, tableChecksums
 
-def getSFNTCollectionData(pathOrFiles):
+def getSFNTCollectionData(pathOrFiles, MismatchGlyfLoca=False):
     tableChecksums = []
     tableData = []
     tableOrder = []
     collectionDirectory = []
+    locaIndices = []
 
     for i, pathOrFile in enumerate(pathOrFiles):
         font = TTFont(pathOrFile)
@@ -61,18 +63,31 @@ def getSFNTCollectionData(pathOrFiles):
             glyf = tags.index("glyf")
             loca = tags.index("loca")
             tags.insert(glyf + 1, tags.pop(loca))
-        tableIndices = []
+        tableIndices = OrderedDict()
         for tag in tags:
             data = transformTable(font, tag)
-            if [tag, data] not in tableData:
+            if MismatchGlyfLoca and tag in ("glyf", "loca"):
                 tableData.append([tag, data])
                 tableChecksums.append([tag, font.reader.tables[tag].checkSum])
                 tableOrder.append(tag)
-            tableIndices.append(tableData.index([tag, data]))
+                tableIndex = len(tableData) - 1
+                tableIndices[tag] = tableIndex
+                if tag == "loca":
+                    locaIndices.append(tableIndex)
+            else:
+                if [tag, data] not in tableData:
+                    tableData.append([tag, data])
+                    tableChecksums.append([tag, font.reader.tables[tag].checkSum])
+                    tableOrder.append(tag)
+                tableIndices[tag] = tableData.index([tag, data])
         collectionDirectory.append(dict(numTables=len(tableIndices), flavor=font.sfntVersion, index=tableIndices))
         font.close()
         del font
 
+    if MismatchGlyfLoca:
+        locaIndices.reverse()
+        for i, entry in enumerate(collectionDirectory):
+            entry["index"]["loca"] = locaIndices[i]
     totalData = "".join([data[1][1] for data in tableData])
     compData = brotli.compress(totalData, brotli.MODE_FONT)
     if len(compData) >= len(totalData):
