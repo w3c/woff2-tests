@@ -77,6 +77,8 @@ unknownTableTagFlag = 63
 transformedTables = ("glyf", "loca")
 
 def transformTable(font, tag, glyphBBox="", alt255UInt16=False):
+    if tag == "head":
+        font["head"].flags |= 0x08
     origData = font.getTableData(tag)
     transformedData = origData
     if tag in transformedTables:
