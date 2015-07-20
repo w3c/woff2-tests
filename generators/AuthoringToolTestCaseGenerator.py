@@ -638,8 +638,8 @@ writeTest(
 
 # add bogus DSIG
 
-def makeBitwiseIdenticalDSIG1():
-    header, directory, tableData = defaultSFNTTestData()
+def makeBitwiseIdenticalDSIG1(flavor="CFF"):
+    header, directory, tableData = defaultSFNTTestData(flavor=flavor)
     # adjust the header
     header["numTables"] += 1
     # store the data
@@ -663,7 +663,7 @@ def makeBitwiseIdenticalDSIG1():
         )
     )
     # compile
-    data = packSFNT(header, directory, tableData)
+    data = packSFNT(header, directory, tableData, flavor=flavor)
     return data
 
 writeTest(
@@ -784,6 +784,31 @@ writeTest(
     credits=[dict(title="Tal Leming", role="author", link="http://typesupply.com")],
     specLink="#conform-identical",
     data=makeBitwiseIdenticalNotRecommendedTableOrder2(),
+    flavor="TTF"
+)
+
+# ----
+# DSIG
+# ----
+
+writeTest(
+    identifier="tabledata-dsig-001",
+    title="CFF SFNT With DSIG Table",
+    description="The CFF flavored SFNT has a DSIG table. (Note: this is not a valid DSIG. It should not be used for testing anything other than the presence of the table after the conversion process.) The process of converting to WOFF should remove the DSIG table.",
+    shouldConvert=True,
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    specLink="#conform-mustRemoveDSIG",
+    data=makeBitwiseIdenticalDSIG1()
+)
+
+writeTest(
+    identifier="tabledata-dsig-002",
+    title="TTF SFNT With DSIG Table",
+    description="The TFF flavored SFNT has a DSIG table. (Note: this is not a valid DSIG. It should not be used for testing anything other than the presence of the table after the conversion process.) The process of converting to WOFF should remove the DSIG table.",
+    shouldConvert=True,
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    specLink="#conform-mustRemoveDSIG",
+    data=makeBitwiseIdenticalDSIG1(flavor="TTF"),
     flavor="TTF"
 )
 
