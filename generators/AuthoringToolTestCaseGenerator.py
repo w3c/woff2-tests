@@ -812,6 +812,31 @@ writeTest(
     flavor="TTF"
 )
 
+# --------------------
+# Bit 11 of head flags
+# --------------------
+
+writeTest(
+    identifier="tabledata-bit11-001",
+    title="Valid CFF SFNT For Bit 11",
+    description="The bit 11 of the head table flags must be set for CFF flavored SFNT.",
+    shouldConvert=True,
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    specLink="#conform-mustSetBit11",
+    data=makeValidSFNT1()
+)
+
+writeTest(
+    identifier="tabledata-bit11-002",
+    title="Valid TTF SFNT For Bit 11",
+    description="The bit 11 of the head table flags must be set for TTF flavored SFNT.",
+    shouldConvert=True,
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    specLink="#conform-mustSetBit11",
+    data=makeValidSFNT2(),
+    flavor="TTF"
+)
+
 # ------------------
 # Generate the Index
 # ------------------
