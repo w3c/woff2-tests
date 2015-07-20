@@ -837,6 +837,21 @@ writeTest(
     flavor="TTF"
 )
 
+# ---------------
+# Transformations
+# ---------------
+
+writeTest(
+    identifier="tabledata-transform-001",
+    title="Valid TTF SFNT For Table Transformations",
+    description="TTF flavored SFNT where the glyf and loca tables must be transformed.",
+    shouldConvert=True,
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    specLink="#conform-mustUseTransform",
+    data=makeValidSFNT2(),
+    flavor="TTF"
+)
+
 # ------------------
 # Generate the Index
 # ------------------
