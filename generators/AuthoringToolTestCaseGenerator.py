@@ -23,10 +23,13 @@ import glob
 import struct
 import zipfile
 from fontTools.misc import sstruct
-from fontTools.ttLib.sfnt import sfntDirectorySize, sfntDirectoryEntrySize
+from fontTools.ttLib import TTFont, getSearchRange
+from fontTools.ttLib.sfnt import sfntDirectoryFormat, sfntDirectorySize, sfntDirectoryEntryFormat, sfntDirectoryEntrySize,\
+                                 ttcHeaderFormat, ttcHeaderSize
 from testCaseGeneratorLib.defaultData import defaultSFNTTestData
 from testCaseGeneratorLib.sfnt import packSFNT
-from testCaseGeneratorLib.paths import resourcesDirectory, authoringToolDirectory, authoringToolTestDirectory, authoringToolResourcesDirectory
+from testCaseGeneratorLib.paths import resourcesDirectory, authoringToolDirectory, authoringToolTestDirectory,\
+                                       authoringToolResourcesDirectory, sfntTTFSourcePath, sfntTTFCompositeSourcePath
 from testCaseGeneratorLib.html import generateAuthoringToolIndexHTML, expandSpecLinks
 from testCaseGeneratorLib.utilities import padData, calcPaddingLength, calcTableChecksum
 
@@ -849,6 +852,101 @@ writeTest(
     credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
     specLink="#conform-mustUseTransform",
     data=makeValidSFNT2(),
+    flavor="TTF"
+)
+
+# -----------
+# Collections
+# -----------
+
+def getFontCollection(pathOrFiles, modifyNames=True):
+    tables = []
+    offsets = {}
+
+    fonts = [TTFont(pathOrFile) for pathOrFile in pathOrFiles]
+    numFonts = len(fonts)
+
+    header = dict(
+        TTCTag="ttcf",
+        Version=0x00010000,
+        numFonts=numFonts,
+    )
+
+    fontData = sstruct.pack(ttcHeaderFormat, header)
+    offset = ttcHeaderSize + (numFonts * struct.calcsize(">L"))
+    for font in fonts:
+        fontData += struct.pack(">L", offset)
+        tags = [i for i in sorted(font.keys()) if len(i) == 4]
+        offset += sfntDirectorySize + (len(tags) * sfntDirectoryEntrySize)
+
+    for i, font in enumerate(fonts):
+        # Make the name table unique
+        if modifyNames:
+            name = font["name"]
+            for namerecord in name.names:
+                nameID = namerecord.nameID
+                string = namerecord.toUnicode()
+                if nameID == 1:
+                    namerecord.string = "%s %d" % (string, i)
+                elif nameID == 4:
+                    namerecord.string = string.replace("Regular", "%d Regular" % i)
+                elif nameID == 6:
+                    namerecord.string = string.replace("-", "%d-" % i)
+
+        tags = [i for i in sorted(font.keys()) if len(i) == 4]
+
+        searchRange, entrySelector, rangeShift = getSearchRange(len(tags), 16)
+        offsetTable = dict(
+            sfntVersion=font.sfntVersion,
+            numTables=len(tags),
+            searchRange=searchRange,
+            entrySelector=entrySelector,
+            rangeShift=rangeShift,
+        )
+
+        fontData += sstruct.pack(sfntDirectoryFormat, offsetTable)
+
+        for tag in tags:
+            data = font.getTableData(tag)
+            checksum = font.reader.tables[tag].checkSum
+            entry = dict(
+                tag=tag,
+                offset=offset,
+                length=len(data),
+                checkSum=checksum,
+            )
+
+            if data not in tables:
+                tables.append(data)
+                offsets[checksum] = offset
+                offset += len(data) + calcPaddingLength(len(data))
+            else:
+                entry["offset"] = offsets[checksum]
+
+            fontData += sstruct.pack(sfntDirectoryEntryFormat, entry)
+
+    for table in tables:
+        table += "\0" * calcPaddingLength(len(table))
+        fontData += table
+
+    for font in fonts:
+        font.close()
+
+    return fontData
+
+def makeCollection1():
+    data = getFontCollection([sfntTTFSourcePath, sfntTTFSourcePath], modifyNames=False)
+
+    return data
+
+writeTest(
+    identifier="tabledata-no-duplicates-001",
+    title="Valid Font Collection No Duplicate Tables",
+    description="TTF flavored SFNT collection with all tables being shared, output WOFF font must not contain any duplicate tables.",
+    shouldConvert=True,
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    specLink="#conform-mustNotDuplicateTables",
+    data=makeCollection1(),
     flavor="TTF"
 )
 
