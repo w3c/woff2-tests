@@ -859,7 +859,7 @@ writeTest(
 # Collections
 # -----------
 
-def getFontCollection(pathOrFiles, modifyNames=True):
+def getFontCollection(pathOrFiles, modifyNames=True, duplicates=[]):
     tables = []
     offsets = {}
 
@@ -916,7 +916,7 @@ def getFontCollection(pathOrFiles, modifyNames=True):
                 checkSum=checksum,
             )
 
-            if data not in tables:
+            if tag in duplicates or data not in tables:
                 tables.append(data)
                 offsets[checksum] = offset
                 offset += len(data) + calcPaddingLength(len(data))
@@ -979,6 +979,38 @@ writeTest(
     credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
     specLink="#conform-mustNotDuplicateTables",
     data=makeCollectionSharing3(),
+    flavor="TTF"
+)
+
+def makeCollectionSharing4():
+    data = getFontCollection([sfntTTFSourcePath, sfntTTFSourcePath], duplicates=["loca"])
+
+    return data
+
+writeTest(
+    identifier="tabledata-sharing-004",
+    title="Invalid Font Collection With Unshared Loca",
+    description="An invalid TTF flavored SFNT collection containing two fonts sharing glyf but not loca table.",
+    shouldConvert=False,
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    specLink="#conform-mustRejectSingleGlyfLocaShared",
+    data=makeCollectionSharing4(),
+    flavor="TTF"
+)
+
+def makeCollectionSharing5():
+    data = getFontCollection([sfntTTFSourcePath, sfntTTFSourcePath], duplicates=["glyf"])
+
+    return data
+
+writeTest(
+    identifier="tabledata-sharing-005",
+    title="Invalid Font Collection With Unshared Glyf",
+    description="An invalid TTF flavored SFNT collection containing two fonts sharing loca but not glyf table.",
+    shouldConvert=False,
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    specLink="#conform-mustRejectSingleGlyfLocaShared",
+    data=makeCollectionSharing5(),
     flavor="TTF"
 )
 
