@@ -859,7 +859,7 @@ writeTest(
 # Collections
 # -----------
 
-def getFontCollection(pathOrFiles, modifyNames=True, duplicates=[]):
+def getFontCollection(pathOrFiles, modifyNames=True, reverseNames=False, duplicates=[]):
     tables = []
     offsets = {}
 
@@ -882,16 +882,19 @@ def getFontCollection(pathOrFiles, modifyNames=True, duplicates=[]):
     for i, font in enumerate(fonts):
         # Make the name table unique
         if modifyNames:
+            index = i
+            if reverseNames:
+                index = len(fonts) - i - 1
             name = font["name"]
             for namerecord in name.names:
                 nameID = namerecord.nameID
                 string = namerecord.toUnicode()
                 if nameID == 1:
-                    namerecord.string = "%s %d" % (string, i)
+                    namerecord.string = "%s %d" % (string, index)
                 elif nameID == 4:
-                    namerecord.string = string.replace("Regular", "%d Regular" % i)
+                    namerecord.string = string.replace("Regular", "%d Regular" % index)
                 elif nameID == 6:
-                    namerecord.string = string.replace("-", "%d-" % i)
+                    namerecord.string = string.replace("-", "%d-" % index)
 
         tags = [i for i in sorted(font.keys()) if len(i) == 4]
 
@@ -1027,6 +1030,22 @@ writeTest(
     credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
     specLink="#conform-mustTransformMultipleGlyfLoca",
     data=makeCollectionTransform1(),
+    flavor="TTF"
+)
+
+def makeCollectionOrder1():
+    data = getFontCollection([sfntTTFSourcePath, sfntTTFSourcePath, sfntTTFSourcePath], reverseNames=True)
+
+    return data
+
+writeTest(
+    identifier="tabledirectory-order-001",
+    title="Valid Font Collection With Unsorted fonts",
+    description="TTF flavored SFNT collection with fonts not in alphabetical order. WOFF creation process must reserve the font order.",
+    shouldConvert=True,
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    specLink="#conform-mustPreserveFontOrder",
+    data=makeCollectionOrder1(),
     flavor="TTF"
 )
 
