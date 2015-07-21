@@ -950,6 +950,38 @@ writeTest(
     flavor="TTF"
 )
 
+def makeCollectionSharing2():
+    data = getFontCollection([sfntTTFSourcePath, sfntTTFSourcePath])
+
+    return data
+
+writeTest(
+    identifier="tabledata-sharing-002",
+    title="Valid Font Collection With Shared Glyf/Loca",
+    description="TTF flavored SFNT collection containing two fonts sharing the same glyf and loca tables.",
+    shouldConvert=True,
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    specLink="#conform-mustVerifyGlyfLocaShared",
+    data=makeCollectionSharing2(),
+    flavor="TTF"
+)
+
+def makeCollectionSharing3():
+    data = getFontCollection([sfntTTFSourcePath, sfntTTFSourcePath, sfntTTFCompositeSourcePath])
+
+    return data
+
+writeTest(
+    identifier="tabledata-sharing-003",
+    title="Valid Font Collection With Shared And Unshared Glyf/Loca",
+    description="TTF flavored SFNT collection containing three fonts, two of them sharing the same glyf and loca tables and the third using different glyf and loca tables.",
+    shouldConvert=True,
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    specLink="#conform-mustNotDuplicateTables",
+    data=makeCollectionSharing3(),
+    flavor="TTF"
+)
+
 def makeCollectionTransform1():
     data = getFontCollection([sfntTTFSourcePath, sfntTTFCompositeSourcePath])
 
