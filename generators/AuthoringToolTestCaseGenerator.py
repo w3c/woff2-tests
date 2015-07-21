@@ -934,23 +934,23 @@ def getFontCollection(pathOrFiles, modifyNames=True):
 
     return fontData
 
-def makeCollection1():
+def makeCollectionSharing1():
     data = getFontCollection([sfntTTFSourcePath, sfntTTFSourcePath], modifyNames=False)
 
     return data
 
 writeTest(
-    identifier="tabledata-no-duplicates-001",
-    title="Valid Font Collection No Duplicate Tables",
+    identifier="tabledata-sharing-001",
+    title="Valid Font Collection With No Duplicate Tables",
     description="TTF flavored SFNT collection with all tables being shared, output WOFF font must not contain any duplicate tables.",
     shouldConvert=True,
     credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
     specLink="#conform-mustNotDuplicateTables",
-    data=makeCollection1(),
+    data=makeCollectionSharing1(),
     flavor="TTF"
 )
 
-def makeCollection2():
+def makeCollectionTransform1():
     data = getFontCollection([sfntTTFSourcePath, sfntTTFCompositeSourcePath])
 
     return data
@@ -962,7 +962,7 @@ writeTest(
     shouldConvert=True,
     credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
     specLink="#conform-mustTransformMultipleGlyfLoca",
-    data=makeCollection2(),
+    data=makeCollectionTransform1(),
     flavor="TTF"
 )
 
