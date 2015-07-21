@@ -950,6 +950,22 @@ writeTest(
     flavor="TTF"
 )
 
+def makeCollection2():
+    data = getFontCollection([sfntTTFSourcePath, sfntTTFCompositeSourcePath])
+
+    return data
+
+writeTest(
+    identifier="tabledata-transform-002",
+    title="Valid Font Collection With Multiple Glyf/Loca",
+    description="TTF flavored SFNT collection with multiple unshared glyf and loca tables, all of them must be transformed in the output WOFF font.",
+    shouldConvert=True,
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    specLink="#conform-mustTransformMultipleGlyfLoca",
+    data=makeCollection2(),
+    flavor="TTF"
+)
+
 # ------------------
 # Generate the Index
 # ------------------
