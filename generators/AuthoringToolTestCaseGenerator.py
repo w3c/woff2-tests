@@ -1049,6 +1049,17 @@ writeTest(
     flavor="TTF"
 )
 
+writeTest(
+    identifier="tabledirectory-collection-index-001",
+    title="Valid Font Collection",
+    description="TTF flavored SFNT collection. WOFF creation process must record the index of the matching TableDirectoryEntry into the CollectionFontEntry for each font.",
+    shouldConvert=True,
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    specLink="#conform-mustRecordCollectionEntryIndex",
+    data=makeCollectionSharing2(),
+    flavor="TTF"
+)
+
 # ------------------
 # Generate the Index
 # ------------------
