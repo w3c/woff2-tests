@@ -358,6 +358,27 @@ makeExtraneousData7Title = "Extraneous Data After Private Data"
 makeExtraneousData7Description = "There are four null bytes after the private data."
 makeExtraneousData7Credits = [dict(title="Tal Leming", role="author", link="http://typesupply.com")]
 
+# before last table
+
+def makeExtraneousData8():
+    header, directory, tableData = defaultTestData()
+
+    table = sfntCFFTableData[directory[-1]["tag"]][0]
+    tableData = brotli.decompress(tableData)
+    tableData = brotli.compress(tableData[:-len(table)] + table + table)
+
+    header["length"] = woffHeaderSize + len(packTestDirectory(directory)) + len(tableData)
+    header["length"] += calcPaddingLength(header["length"])
+    header["totalCompressedSize"] = len(tableData)
+
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
+    return data
+
+makeExtraneousData8Title = "Extraneous Data Betwen Table Data"
+makeExtraneousData8Description = "There is extraneous data before the last table."
+makeExtraneousData8Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
+
+
 # -------------------------------------
 # File Structure: Data Blocks: Overlaps
 # -------------------------------------

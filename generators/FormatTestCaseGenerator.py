@@ -526,6 +526,18 @@ writeTest(
     data=makeExtraneousData7()
 )
 
+# before last table
+
+writeTest(
+    identifier="tabledata-extraneous-data-001",
+    title=makeExtraneousData8Title,
+    description=makeExtraneousData8Description,
+    credits=makeExtraneousData8Credits,
+    valid=False,
+    specLink="#conform-mustRejectExtraData",
+    data=makeExtraneousData8()
+)
+
 # -------------------------------------
 # File Structure: Data Blocks: Overlaps
 # -------------------------------------

@@ -587,6 +587,17 @@ writeFileStructureTest(
     data=makeExtraneousData7()
 )
 
+# before last table
+
+writeFileStructureTest(
+    identifier="tabledata-extraneous-data-001",
+    title=makeExtraneousData8Title,
+    assertion=makeExtraneousData8Description,
+    credits=makeExtraneousData8Credits,
+    shouldDisplaySFNT=False,
+    sfntDisplaySpecLink="#conform-mustRejectExtraData",
+    data=makeExtraneousData8()
+)
 # -------------------------------------
 # File Structure: Data Blocks: Overlaps
 # -------------------------------------
