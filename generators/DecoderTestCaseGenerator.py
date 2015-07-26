@@ -1,0 +1,259 @@
+"""
+This script generates the decoder test cases. It will create a directory
+one level up from the directory containing this script called "Decoder".
+That directory will have the structure:
+
+    /Format
+        README.txt - information about how the tests were generated and how they should be modified
+        /Tests
+            testcaseindex.xht - index of all test cases
+            test-case-name-number.otf/ttf - individual SFNT test case
+            /resources
+                index.css - index CSS file
+
+Within this script, each test case is generated with a call to the
+writeTest function. In this, SFNT data must be passed along with
+details about the data. This function will generate the SFNT
+and register the case in the suite index.
+"""
+
+import os
+import shutil
+import glob
+import struct
+import zipfile
+from fontTools.misc import sstruct
+from fontTools.ttLib import TTFont, getSearchRange
+from fontTools.ttLib.sfnt import sfntDirectoryFormat, sfntDirectorySize, sfntDirectoryEntryFormat, sfntDirectoryEntrySize,\
+                                 ttcHeaderFormat, ttcHeaderSize
+from testCaseGeneratorLib.defaultData import defaultSFNTTestData, defaultTestData
+from testCaseGeneratorLib.sfnt import packSFNT
+from testCaseGeneratorLib.paths import resourcesDirectory, decoderDirectory, decoderTestDirectory,\
+                                       decoderResourcesDirectory, sfntTTFSourcePath, sfntTTFCompositeSourcePath
+from testCaseGeneratorLib.woff import packTestDirectory, packTestHeader
+from testCaseGeneratorLib.html import generateDecoderIndexHTML, expandSpecLinks
+from testCaseGeneratorLib.utilities import padData, calcPaddingLength, calcTableChecksum
+
+# ------------------
+# Directory Creation
+# (if needed)
+# ------------------
+
+if not os.path.exists(decoderDirectory):
+    os.makedirs(decoderDirectory)
+if not os.path.exists(decoderTestDirectory):
+    os.makedirs(decoderTestDirectory)
+if not os.path.exists(decoderResourcesDirectory):
+    os.makedirs(decoderResourcesDirectory)
+
+# -------------------
+# Move HTML Resources
+# -------------------
+
+# index css
+destPath = os.path.join(decoderResourcesDirectory, "index.css")
+if os.path.exists(destPath):
+    os.remove(destPath)
+shutil.copy(os.path.join(resourcesDirectory, "index.css"), destPath)
+
+# ---------------
+# Test Case Index
+# ---------------
+
+# As the tests are generated a log will be kept.
+# This log will be translated into an index after
+# all of the tests have been written.
+
+indexNote = """
+The tests in this suite represent SFNT data to be used for WOFF
+conversion without any alteration or correction.
+""".strip()
+
+roundTripNote = """
+These files are provided as test cases for checking that the
+result of converting to WOFF and back to SFNT results in a file
+that is functionaly equivalent to the original SFNT.
+""".strip()
+
+validationNote = """
+These files are provided as test cases for checking that the
+result of converting WOFF back to SFNT results in a file
+that confirms the OFF structure validity..
+""".strip()
+
+groupDefinitions = [
+    # identifier, title, spec section, category note
+    ("roundtrip", "Round-Trip Tests", None, roundTripNote),
+    ("validation", "OFF Validation Tests", None, validationNote),
+]
+
+testRegistry = {}
+for group in groupDefinitions:
+    tag = group[0]
+    testRegistry[tag] = []
+
+# -----------------
+# Test Case Writing
+# -----------------
+
+registeredIdentifiers = set()
+registeredTitles = set()
+registeredDescriptions = set()
+
+def writeTest(identifier, title, description, data, specLink=None, credits=[], roundTrip=False, flavor="CFF"):
+    """
+    This function generates all of the files needed by a test case and
+    registers the case with the suite. The arguments:
+
+    identifier: The identifier for the test case. The identifier must be
+    a - separated sequence of group name (from the groupDefinitions
+    listed above), test case description (arbitrary length) and a number
+    to make the name unique. The number should be zero padded to a length
+    of three characters (ie "001" instead of "1").
+
+    title: A thorough, but not too long, title for the test case.
+
+    description: A detailed statement about what the test case is proving.
+
+    data: The complete binary data for either the WOFF, or both WOFF and SFNT.
+
+    specLink: The anchor in the WOFF spec that the test case is testing.
+
+    credits: A list of dictionaries defining the credits for the test case. The
+    dictionaries must have this form:
+
+        title="Name of the autor or reviewer",
+        role="author or reviewer",
+        link="mailto:email or http://contactpage"
+
+    roundTrip: A boolean indicating if this is a round-trip test.
+
+    flavor: The flavor of the WOFF data. The options are CFF or TTF.
+    """
+    print "Compiling %s..." % identifier
+    assert identifier not in registeredIdentifiers, "Duplicate identifier! %s" % identifier
+    assert title not in registeredTitles, "Duplicate title! %s" % title
+    assert description not in registeredDescriptions, "Duplicate description! %s" % description
+    registeredIdentifiers.add(identifier)
+    registeredTitles.add(title)
+    registeredDescriptions.add(description)
+
+    specLink = expandSpecLinks(specLink)
+
+    # generate the SFNT
+    if roundTrip:
+        sfntPath = os.path.join(decoderTestDirectory, identifier)
+        if flavor == "CFF":
+            sfntPath += ".otf"
+        else:
+            sfntPath += ".ttf"
+        f = open(sfntPath, "wb")
+        f.write(data[0])
+        f.close()
+        data = data[1]
+    woffPath = os.path.join(decoderTestDirectory, identifier) + ".woff"
+    f = open(woffPath, "wb")
+    f.write(data)
+    f.close()
+
+    # register the test
+    tag = identifier.split("-")[0]
+    testRegistry[tag].append(
+        dict(
+            identifier=identifier,
+            title=title,
+            description=description,
+            roundTrip=roundTrip,
+            specLink=specLink
+        )
+    )
+
+# -----
+# Tests
+# -----
+
+
+# ------------------
+# Generate the Index
+# ------------------
+
+print "Compiling index..."
+
+testGroups = []
+
+for tag, title, url, note in groupDefinitions:
+    group = dict(title=title, url=url, testCases=testRegistry[tag], note=note)
+    testGroups.append(group)
+
+generateDecoderIndexHTML(directory=decoderTestDirectory, testCases=testGroups, note=indexNote)
+
+# ----------------
+# Generate the zip
+# ----------------
+
+print "Compiling zip file..."
+
+zipPath = os.path.join(decoderTestDirectory, "DecoderTestFonts.zip")
+if os.path.exists(zipPath):
+    os.remove(zipPath)
+
+allBinariesZip = zipfile.ZipFile(zipPath, "w")
+
+pattern = os.path.join(decoderTestDirectory, "*.*tf")
+for path in glob.glob(pattern):
+    ext = os.path.splitext(path)[1]
+    assert ext in (".otf", ".ttf")
+    allBinariesZip.write(path, os.path.basename(path))
+
+allBinariesZip.close()
+
+# ---------------------
+# Generate the Manifest
+# ---------------------
+
+print "Compiling manifest..."
+
+manifest = []
+
+for tag, title, url, note in groupDefinitions:
+    for testCase in testRegistry[tag]:
+        identifier = testCase["identifier"]
+        title = testCase["title"]
+        assertion = testCase["description"]
+        links = "#" + testCase["specLink"].split("#")[-1]
+        # XXX force the chapter onto the links
+        links = "#TableDirectory," + links
+        flags = ""
+        credits = ""
+        # format the line
+        line = "%s\t%s\t%s\t%s\t%s\t%s" % (
+            identifier,             # id
+            "",                     # reference
+            title,                  # title
+            flags,                  # flags
+            links,                  # links
+            assertion               # assertion
+        )
+        # store
+        manifest.append(line)
+
+path = os.path.join(decoderDirectory, "manifest.txt")
+if os.path.exists(path):
+    os.remove(path)
+f = open(path, "wb")
+f.write("\n".join(manifest))
+f.close()
+
+# -----------------------
+# Check for Unknown Files
+# -----------------------
+
+otfPattern = os.path.join(decoderTestDirectory, "*.otf")
+ttfPattern = os.path.join(decoderTestDirectory, "*.ttf")
+filesOnDisk = glob.glob(otfPattern) + glob.glob(ttfPattern)
+
+for path in filesOnDisk:
+    identifier = os.path.basename(path)
+    identifier = identifier.split(".")[0]
+    if identifier not in registeredIdentifiers:
+        print "Unknown file:", path

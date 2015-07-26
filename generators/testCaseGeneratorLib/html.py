@@ -506,6 +506,93 @@ def generateAuthoringToolIndexHTML(directory=None, testCases=[], note=None):
     f.write(html)
     f.close()
 
+def generateDecoderIndexHTML(directory=None, testCases=[], note=None):
+    testCount = sum([len(group["testCases"]) for group in testCases])
+    html = [
+        "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">",
+        "<html xmlns=\"http://www.w3.org/1999/xhtml\">",
+        "\t<head>",
+        "\t\t<title>WOFF 2.0: Decoder Test Suite</title>",
+        "\t\t<style type=\"text/css\">",
+        "\t\t\t@import \"resources/index.css\";",
+        "\t\t</style>",
+        "\t</head>",
+        "\t<body>",
+        "\t\t<h1>WOFF 2.0: Decoder Test Suite (%d tests)</h1>" % testCount,
+    ]
+    # add a download note
+    html.append("\t\t<div class=\"mainNote\">")
+    html.append("\t\t\tThe files used in these test can be obtained individually <a href=\"../xhtml1\">here</a> or as a single zip file <a href=\"AuthoringToolTestFonts.zip\">here</a>.")
+    html.append("\t\t</div>")
+    # add the note
+    if note:
+        html.append("\t\t<div class=\"mainNote\">")
+        for line in note.splitlines():
+            html.append("\t\t\t" + line)
+        html.append("\t\t</div>")
+    # add the test groups
+    for group in testCases:
+        title = group["title"]
+        title = cgi.escape(title)
+        # write the group header
+        html.append("")
+        html.append("\t\t<h2 class=\"testCategory\">%s</h2>" % title)
+        # write the group note
+        note = group["note"]
+        if note:
+            html.append("\t\t<div class=\"testCategoryNote\">")
+            for line in note.splitlines():
+                html.append("\t\t\t" + line)
+            html.append("\t\t</div>")
+        # write the individual test cases
+        for test in group["testCases"]:
+            identifier = test["identifier"]
+            title = test["title"]
+            title = cgi.escape(title)
+            description = test["description"]
+            description = cgi.escape(description)
+            roundTrip = test["roundTrip"]
+            if roundTrip:
+                roundTrip = "Yes"
+            else:
+                roundTrip = "No"
+            specLink = test["specLink"]
+            # start the test case div
+            html.append("\t\t<div class=\"testCase\" id=\"%s\">" % identifier)
+            # start the overview div
+            html.append("\t\t\t<div class=\"testCaseOverview\">")
+            # title
+            html.append("\t\t\t\t<h3><a href=\"#%s\">%s</a>: %s</h3>" % (identifier, identifier, title))
+            # assertion
+            html.append("\t\t\t\t<p>%s</p>" % description)
+            # close the overview div
+            html.append("\t\t\t</div>")
+            # start the details div
+            html.append("\t\t\t<div class=\"testCaseDetails\">")
+            # validity
+            string = "Round-Trip Test: <span id=\"%s-shouldconvert\">%s</span>" % (identifier, roundTrip)
+            html.append("\t\t\t\t\t<p>%s</p>" % string)
+            # documentation
+            if specLink is not None:
+                string = "\t\t\t\t\t<p><a href=\"%s\">Documentation</a></p>" % specLink
+                html.append(string)
+            # close the details div
+            html.append("\t\t\t</div>")
+            # close the test case div
+            html.append("\t\t</div>")
+    # close body
+    html.append("\t</body>")
+    # close html
+    html.append("</html>")
+    # finalize
+    html = "\n".join(html)
+    # write
+    path = os.path.join(directory, "testcaseindex.xht")
+    f = open(path, "wb")
+    f.write(html)
+    f.close()
+
+
 
 def expandSpecLinks(links):
     """

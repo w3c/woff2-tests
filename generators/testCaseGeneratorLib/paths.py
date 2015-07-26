@@ -44,6 +44,10 @@ authoringToolDirectory = os.path.join(mainDirectory, "AuthoringTool")
 authoringToolTestDirectory = os.path.join(authoringToolDirectory, "Tests", "xhtml1")
 authoringToolResourcesDirectory = os.path.join(authoringToolTestDirectory, "resources")
 
+decoderDirectory = os.path.join(mainDirectory, "Decoder")
+decoderTestDirectory = os.path.join(decoderDirectory, "Tests", "xhtml1")
+decoderResourcesDirectory = os.path.join(decoderTestDirectory, "resources")
+
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
