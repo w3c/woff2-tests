@@ -78,7 +78,7 @@ transformedTables = ("glyf", "loca")
 
 def transformTable(font, tag, glyphBBox="", alt255UInt16=False):
     if tag == "head":
-        font["head"].flags |= 0x08
+        font["head"].flags |= 1 << 11
     origData = font.getTableData(tag)
     transformedData = origData
     if tag in transformedTables:
