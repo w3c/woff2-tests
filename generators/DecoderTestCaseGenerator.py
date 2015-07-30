@@ -27,7 +27,7 @@ from fontTools.ttLib import TTFont, getSearchRange
 from fontTools.ttLib.sfnt import sfntDirectoryFormat, sfntDirectorySize, sfntDirectoryEntryFormat, sfntDirectoryEntrySize,\
                                  ttcHeaderFormat, ttcHeaderSize
 from testCaseGeneratorLib.defaultData import defaultSFNTTestData, defaultTestData
-from testCaseGeneratorLib.sfnt import packSFNT
+from testCaseGeneratorLib.sfnt import packSFNT, getSFNTCollectionData, getWOFFCollectionData
 from testCaseGeneratorLib.paths import resourcesDirectory, decoderDirectory, decoderTestDirectory,\
                                        decoderResourcesDirectory, sfntTTFSourcePath, sfntTTFCompositeSourcePath
 from testCaseGeneratorLib.woff import packTestDirectory, packTestHeader
@@ -172,6 +172,22 @@ def writeTest(identifier, title, description, data, specLink=None, credits=[], r
 # Tests
 # -----
 
+def makeCollectionOffsetTables1():
+    paths = [sfntTTFSourcePath, sfntTTFSourcePath, sfntTTFSourcePath]
+    woffdata = getWOFFCollectionData(paths)
+    sfntdata = getSFNTCollectionData(paths)
+
+    return woffdata, sfntdata
+
+writeTest(
+    identifier="roundtrip-offset-tables-001",
+    title="Font Collection Offset Tables",
+    description="TTF flavored font collection to verify that the output file has the same number of font entries in the font collection and that each font entry is represented by the same set of font tables as the input file.",
+    roundTrip=True,
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    specLink="#conform-mustRestoreCollectionOffsetTables",
+    data=makeCollectionOffsetTables1()
+)
 
 # ------------------
 # Generate the Index
