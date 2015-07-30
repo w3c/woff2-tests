@@ -3,12 +3,14 @@ SFNT data extractor.
 """
 
 import brotli
+import struct
 from collections import OrderedDict
 from fontTools.misc import sstruct
 from fontTools.ttLib import TTFont, getSearchRange
 from fontTools.ttLib.sfnt import \
-    SFNTDirectoryEntry, sfntDirectoryFormat, sfntDirectorySize, sfntDirectoryEntryFormat, sfntDirectoryEntrySize
-from utilities import padData, calcHeadCheckSumAdjustmentSFNT
+    SFNTDirectoryEntry, sfntDirectoryFormat, sfntDirectorySize, sfntDirectoryEntryFormat, sfntDirectoryEntrySize, \
+    ttcHeaderFormat, ttcHeaderSize
+from utilities import padData, calcPaddingLength, calcHeadCheckSumAdjustmentSFNT
 from woff import transformTable
 
 # ---------
@@ -35,6 +37,83 @@ def getSFNTData(pathOrFile, unsortGlyfLoca=False, glyphBBox="", alt255UInt16=Fal
     font.close()
     del font
     return tableData, compData, tableOrder, tableChecksums
+
+def getSFNTCollectionData(pathOrFiles, modifyNames=True, reverseNames=False, duplicates=[]):
+    tables = []
+    offsets = {}
+
+    fonts = [TTFont(pathOrFile) for pathOrFile in pathOrFiles]
+    numFonts = len(fonts)
+
+    header = dict(
+        TTCTag="ttcf",
+        Version=0x00010000,
+        numFonts=numFonts,
+    )
+
+    fontData = sstruct.pack(ttcHeaderFormat, header)
+    offset = ttcHeaderSize + (numFonts * struct.calcsize(">L"))
+    for font in fonts:
+        fontData += struct.pack(">L", offset)
+        tags = [i for i in sorted(font.keys()) if len(i) == 4]
+        offset += sfntDirectorySize + (len(tags) * sfntDirectoryEntrySize)
+
+    for i, font in enumerate(fonts):
+        # Make the name table unique
+        if modifyNames:
+            index = i
+            if reverseNames:
+                index = len(fonts) - i - 1
+            name = font["name"]
+            for namerecord in name.names:
+                nameID = namerecord.nameID
+                string = namerecord.toUnicode()
+                if nameID == 1:
+                    namerecord.string = "%s %d" % (string, index)
+                elif nameID == 4:
+                    namerecord.string = string.replace("Regular", "%d Regular" % index)
+                elif nameID == 6:
+                    namerecord.string = string.replace("-", "%d-" % index)
+
+        tags = [i for i in sorted(font.keys()) if len(i) == 4]
+
+        searchRange, entrySelector, rangeShift = getSearchRange(len(tags), 16)
+        offsetTable = dict(
+            sfntVersion=font.sfntVersion,
+            numTables=len(tags),
+            searchRange=searchRange,
+            entrySelector=entrySelector,
+            rangeShift=rangeShift,
+        )
+
+        fontData += sstruct.pack(sfntDirectoryFormat, offsetTable)
+
+        for tag in tags:
+            data = font.getTableData(tag)
+            checksum = font.reader.tables[tag].checkSum
+            entry = dict(
+                tag=tag,
+                offset=offset,
+                length=len(data),
+                checkSum=checksum,
+            )
+
+            if tag in duplicates or data not in tables:
+                tables.append(data)
+                offsets[checksum] = offset
+                offset += len(data) + calcPaddingLength(len(data))
+            else:
+                entry["offset"] = offsets[checksum]
+
+            fontData += sstruct.pack(sfntDirectoryEntryFormat, entry)
+
+    for table in tables:
+        fontData += padData(table)
+
+    for font in fonts:
+        font.close()
+
+    return fontData
 
 def getWOFFCollectionData(pathOrFiles, MismatchGlyfLoca=False):
     tableChecksums = []
