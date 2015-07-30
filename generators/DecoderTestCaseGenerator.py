@@ -148,9 +148,9 @@ def writeTest(identifier, title, description, data, specLink=None, credits=[], r
         else:
             sfntPath += ".ttf"
         f = open(sfntPath, "wb")
-        f.write(data[0])
+        f.write(data[1])
         f.close()
-        data = data[1]
+        data = data[0]
     woffPath = os.path.join(decoderTestDirectory, identifier) + ".woff2"
     f = open(woffPath, "wb")
     f.write(data)
