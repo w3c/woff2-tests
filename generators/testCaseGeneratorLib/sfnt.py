@@ -36,7 +36,7 @@ def getSFNTData(pathOrFile, unsortGlyfLoca=False, glyphBBox="", alt255UInt16=Fal
     del font
     return tableData, compData, tableOrder, tableChecksums
 
-def getSFNTCollectionData(pathOrFiles, MismatchGlyfLoca=False):
+def getWOFFCollectionData(pathOrFiles, MismatchGlyfLoca=False):
     tableChecksums = []
     tableData = []
     tableOrder = []

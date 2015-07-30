@@ -226,9 +226,9 @@ makeHeaderInvalidReserved1Credits = [dict(title="Tal Leming", role="author", lin
 # ---------------------------
 
 def makeCollection1():
-    from testCaseGeneratorLib.sfnt import getSFNTCollectionData
+    from testCaseGeneratorLib.sfnt import getWOFFCollectionData
 
-    tableData, compressedData, tableOrder, tableChecksums, collectionDirectory = getSFNTCollectionData([sfntTTFSourcePath, sfntTTFSourcePath])
+    tableData, compressedData, tableOrder, tableChecksums, collectionDirectory = getWOFFCollectionData([sfntTTFSourcePath, sfntTTFSourcePath])
     directory = [dict(tag=tag, origLength=0, transformLength=0) for tag in tableOrder]
     header, directory, collectionHeader, collectionDirectory, tableData = defaultTestData(directory=directory, tableData=tableData,
                                                                                           compressedData=compressedData,

@@ -882,9 +882,9 @@ writeFileStructureTest(
 # ---------------------------
 
 def makeMismatchedCollection1():
-    from testCaseGeneratorLib.sfnt import getSFNTCollectionData
+    from testCaseGeneratorLib.sfnt import getWOFFCollectionData
 
-    tableData, compressedData, tableOrder, tableChecksums, collectionDirectory = getSFNTCollectionData([sfntTTFSourcePath, sfntTTFSourcePath],
+    tableData, compressedData, tableOrder, tableChecksums, collectionDirectory = getWOFFCollectionData([sfntTTFSourcePath, sfntTTFSourcePath],
                                                                                                        MismatchGlyfLoca=True)
     directory = [dict(tag=tag, origLength=0, transformLength=0) for tag in tableOrder]
     header, directory, collectionHeader, collectionDirectory, tableData = defaultTestData(directory=directory, tableData=tableData,
