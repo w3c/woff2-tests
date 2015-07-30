@@ -929,8 +929,7 @@ def getFontCollection(pathOrFiles, modifyNames=True, reverseNames=False, duplica
             fontData += sstruct.pack(sfntDirectoryEntryFormat, entry)
 
     for table in tables:
-        table += "\0" * calcPaddingLength(len(table))
-        fontData += table
+        fontData += padData(table)
 
     for font in fonts:
         font.close()
