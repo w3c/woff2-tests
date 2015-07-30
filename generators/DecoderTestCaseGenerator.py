@@ -151,7 +151,7 @@ def writeTest(identifier, title, description, data, specLink=None, credits=[], r
         f.write(data[0])
         f.close()
         data = data[1]
-    woffPath = os.path.join(decoderTestDirectory, identifier) + ".woff"
+    woffPath = os.path.join(decoderTestDirectory, identifier) + ".woff2"
     f = open(woffPath, "wb")
     f.write(data)
     f.close()
@@ -199,10 +199,12 @@ if os.path.exists(zipPath):
 
 allBinariesZip = zipfile.ZipFile(zipPath, "w")
 
-pattern = os.path.join(decoderTestDirectory, "*.*tf")
-for path in glob.glob(pattern):
+sfntPattern = os.path.join(decoderTestDirectory, "*.*tf")
+woffPattern = os.path.join(decoderTestDirectory, "*.woff2")
+filesOnDisk = glob.glob(sfntPattern) + glob.glob(woffPattern)
+for path in filesOnDisk:
     ext = os.path.splitext(path)[1]
-    assert ext in (".otf", ".ttf")
+    assert ext in (".otf", ".ttf", ".woff2")
     allBinariesZip.write(path, os.path.basename(path))
 
 allBinariesZip.close()
@@ -250,7 +252,8 @@ f.close()
 
 otfPattern = os.path.join(decoderTestDirectory, "*.otf")
 ttfPattern = os.path.join(decoderTestDirectory, "*.ttf")
-filesOnDisk = glob.glob(otfPattern) + glob.glob(ttfPattern)
+woffPattern = os.path.join(decoderTestDirectory, "*.woff2")
+filesOnDisk = glob.glob(otfPattern) + glob.glob(ttfPattern) + glob.glob(woffPattern)
 
 for path in filesOnDisk:
     identifier = os.path.basename(path)
