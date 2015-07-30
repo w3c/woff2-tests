@@ -884,15 +884,7 @@ writeFileStructureTest(
 def makeMismatchedCollection1():
     from testCaseGeneratorLib.sfnt import getWOFFCollectionData
 
-    tableData, compressedData, tableOrder, tableChecksums, collectionDirectory = getWOFFCollectionData([sfntTTFSourcePath, sfntTTFSourcePath],
-                                                                                                       MismatchGlyfLoca=True)
-    directory = [dict(tag=tag, origLength=0, transformLength=0) for tag in tableOrder]
-    header, directory, collectionHeader, collectionDirectory, tableData = defaultTestData(directory=directory, tableData=tableData,
-                                                                                          compressedData=compressedData,
-                                                                                          collectionDirectory=collectionDirectory,
-                                                                                          flavor="ttf")
-    data = padData(packTestHeader(header) + packTestDirectory(directory, isCollection=True) + packTestCollectionHeader(collectionHeader) + \
-            packTestCollectionDirectory(collectionDirectory) + tableData)
+    data = getWOFFCollectionData([sfntTTFSourcePath, sfntTTFSourcePath], MismatchGlyfLoca=True)
 
     return data
 

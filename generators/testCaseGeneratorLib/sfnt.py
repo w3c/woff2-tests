@@ -11,7 +11,7 @@ from fontTools.ttLib.sfnt import \
     SFNTDirectoryEntry, sfntDirectoryFormat, sfntDirectorySize, sfntDirectoryEntryFormat, sfntDirectoryEntrySize, \
     ttcHeaderFormat, ttcHeaderSize
 from utilities import padData, calcPaddingLength, calcHeadCheckSumAdjustmentSFNT
-from woff import transformTable
+from woff import packTestCollectionDirectory, packTestDirectory, packTestCollectionHeader, packTestHeader, transformTable
 
 # ---------
 # Unpacking
@@ -116,6 +116,8 @@ def getSFNTCollectionData(pathOrFiles, modifyNames=True, reverseNames=False, dup
     return fontData
 
 def getWOFFCollectionData(pathOrFiles, MismatchGlyfLoca=False):
+    from defaultData import defaultTestData
+
     tableChecksums = []
     tableData = []
     tableOrder = []
@@ -171,7 +173,21 @@ def getWOFFCollectionData(pathOrFiles, MismatchGlyfLoca=False):
     compData = brotli.compress(totalData, brotli.MODE_FONT)
     if len(compData) >= len(totalData):
         compData = totalData
-    return tableData, compData, tableOrder, tableChecksums, collectionDirectory
+
+    directory = [dict(tag=tag, origLength=0, transformLength=0) for tag in tableOrder]
+
+    header, directory, collectionHeader, collectionDirectory, tableData = defaultTestData(directory=directory,
+            tableData=tableData, compressedData=compData, collectionDirectory=collectionDirectory)
+
+    data = packTestHeader(header)
+    data += packTestDirectory(directory, isCollection=True)
+    data += packTestCollectionHeader(collectionHeader)
+    data += packTestCollectionDirectory(collectionDirectory)
+    data += tableData
+
+    data = padData(data)
+
+    return data
 
 # -------
 # Packing
