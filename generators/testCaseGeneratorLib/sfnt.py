@@ -10,7 +10,7 @@ from fontTools.ttLib import TTFont, getSearchRange
 from fontTools.ttLib.sfnt import \
     SFNTDirectoryEntry, sfntDirectoryFormat, sfntDirectorySize, sfntDirectoryEntryFormat, sfntDirectoryEntrySize, \
     ttcHeaderFormat, ttcHeaderSize
-from utilities import padData, calcPaddingLength, calcHeadCheckSumAdjustmentSFNT
+from utilities import padData, calcPaddingLength, calcHeadCheckSumAdjustmentSFNT, calcTableChecksum
 from woff import packTestCollectionDirectory, packTestDirectory, packTestCollectionHeader, packTestHeader, transformTable
 
 # ---------
@@ -38,7 +38,7 @@ def getSFNTData(pathOrFile, unsortGlyfLoca=False, glyphBBox="", alt255UInt16=Fal
     del font
     return tableData, compData, tableOrder, tableChecksums
 
-def getSFNTCollectionData(pathOrFiles, modifyNames=True, reverseNames=False, duplicates=[]):
+def getSFNTCollectionData(pathOrFiles, modifyNames=True, reverseNames=False, DSIG=False, duplicates=[]):
     tables = []
     offsets = {}
 
@@ -51,12 +51,26 @@ def getSFNTCollectionData(pathOrFiles, modifyNames=True, reverseNames=False, dup
         numFonts=numFonts,
     )
 
+    if DSIG:
+        header["version"] = 0x00020000
+
     fontData = sstruct.pack(ttcHeaderFormat, header)
     offset = ttcHeaderSize + (numFonts * struct.calcsize(">L"))
+    if DSIG:
+        offset += 3 * struct.calcsize(">L")
+
     for font in fonts:
         fontData += struct.pack(">L", offset)
         tags = [i for i in sorted(font.keys()) if len(i) == 4]
         offset += sfntDirectorySize + (len(tags) * sfntDirectoryEntrySize)
+
+    if DSIG:
+        data = "\0" * 4
+        tables.append(data)
+        offset += len(data)
+        fontData += struct.pack(">4s", "DSIG")
+        fontData += struct.pack(">L", len(data))
+        fontData += struct.pack(">L", offset)
 
     for i, font in enumerate(fonts):
         # Make the name table unique

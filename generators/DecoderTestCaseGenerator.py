@@ -184,9 +184,28 @@ writeTest(
     title="Font Collection Offset Tables",
     description="TTF flavored font collection to verify that the output file has the same number of font entries in the font collection and that each font entry is represented by the same set of font tables as the input file.",
     roundTrip=True,
+    flavor="TTF",
     credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
     specLink="#conform-mustRestoreCollectionOffsetTables",
     data=makeCollectionOffsetTables1()
+)
+
+def makeFixCollection1():
+    paths = [sfntTTFSourcePath, sfntTTFSourcePath, sfntTTFSourcePath]
+    woffdata = getWOFFCollectionData(paths)
+    sfntdata = getSFNTCollectionData(paths, DSIG=True)
+
+    return woffdata, sfntdata
+
+writeTest(
+    identifier="roundtrip-collection-dsig-001",
+    title="Font Collection With DSIG table",
+    description="TTF flavored font collection with DSIG table to verify that the output file has the same number of font entries in the font collection and that DSIG table entry was deleted. Check the font collection header format and if it's set to version 2.0 make sure that it was either modified to have the TTC Header fields {ulDsigTag, ulDsigLength, ulDsigOffset} set to zeros, or that TTC Header was converted to version 1.0.",
+    roundTrip=True,
+    flavor="TTF",
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    specLink="#conform-mustFixCollection",
+    data=makeFixCollection1()
 )
 
 # ------------------
