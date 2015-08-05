@@ -937,6 +937,22 @@ writeTest(
     flavor="TTF"
 )
 
+def makeCollectionSharing6():
+    data = getSFNTCollectionData([sfntTTFSourcePath, sfntTTFSourcePath], shared=["cmap"])
+
+    return data
+
+writeTest(
+    identifier="tabledata-sharing-006",
+    title="Font Collection With Single Shared Table",
+    description="A valid TTF flavored SFNT collection containing two fonts sharing only the cmap table.",
+    shouldConvert=True,
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    specLink="#conform-mustEmitSingleEntryDirectory",
+    data=makeCollectionSharing6(),
+    flavor="TTF"
+)
+
 def makeCollectionTransform1():
     data = getSFNTCollectionData([sfntTTFSourcePath, sfntTTFCompositeSourcePath])
 

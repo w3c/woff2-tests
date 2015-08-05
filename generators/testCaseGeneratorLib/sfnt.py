@@ -38,7 +38,7 @@ def getSFNTData(pathOrFile, unsortGlyfLoca=False, glyphBBox="", alt255UInt16=Fal
     del font
     return tableData, compData, tableOrder, tableChecksums
 
-def getSFNTCollectionData(pathOrFiles, modifyNames=True, reverseNames=False, DSIG=False, duplicates=[]):
+def getSFNTCollectionData(pathOrFiles, modifyNames=True, reverseNames=False, DSIG=False, duplicates=[], shared=[]):
     tables = []
     offsets = {}
 
@@ -112,7 +112,7 @@ def getSFNTCollectionData(pathOrFiles, modifyNames=True, reverseNames=False, DSI
                 checkSum=checksum,
             )
 
-            if tag in duplicates or data not in tables:
+            if (shared and tag not in shared) or tag in duplicates or data not in tables:
                 tables.append(data)
                 offsets[checksum] = offset
                 offset += len(data) + calcPaddingLength(len(data))
