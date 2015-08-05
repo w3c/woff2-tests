@@ -208,6 +208,24 @@ writeTest(
     data=makeFixCollection1()
 )
 
+def makeCollectionOrder1():
+    paths = [sfntTTFSourcePath, sfntTTFSourcePath, sfntTTFSourcePath]
+    woffdata = getWOFFCollectionData(paths, reverseNames=True)
+    sfntdata = getSFNTCollectionData(paths, reverseNames=True)
+
+    return woffdata, sfntdata
+
+writeTest(
+    identifier="roundtrip-collection-order-001",
+    title="Font Collection With Unsorted Fonts",
+    description="TTF flavored font collection with fonts not in alphabetical order. The encoder/decoder must keep the original font order in the collection.",
+    roundTrip=True,
+    flavor="TTF",
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    specLink="#conform-mustRestoreFontOrder",
+    data=makeCollectionOrder1()
+)
+
 # ------------------
 # Generate the Index
 # ------------------

@@ -129,7 +129,7 @@ def getSFNTCollectionData(pathOrFiles, modifyNames=True, reverseNames=False, DSI
 
     return fontData
 
-def getWOFFCollectionData(pathOrFiles, MismatchGlyfLoca=False):
+def getWOFFCollectionData(pathOrFiles, MismatchGlyfLoca=False, reverseNames=False):
     from defaultData import defaultTestData
 
     tableChecksums = []
@@ -138,8 +138,11 @@ def getWOFFCollectionData(pathOrFiles, MismatchGlyfLoca=False):
     collectionDirectory = []
     locaIndices = []
 
-    for i, pathOrFile in enumerate(pathOrFiles):
-        font = TTFont(pathOrFile)
+    fonts = [TTFont(pathOrFile) for pathOrFile in pathOrFiles]
+    for i, font in enumerate(fonts):
+        index = i
+        if reverseNames:
+            index = len(fonts) - i - 1
 
         # Make the name table unique
         name = font["name"]
@@ -147,11 +150,11 @@ def getWOFFCollectionData(pathOrFiles, MismatchGlyfLoca=False):
             nameID = namerecord.nameID
             string = namerecord.toUnicode()
             if nameID == 1:
-                namerecord.string = "%s %d" % (string, i)
+                namerecord.string = "%s %d" % (string, index)
             elif nameID == 4:
-                namerecord.string = string.replace("Regular", "%d Regular" % i)
+                namerecord.string = string.replace("Regular", "%d Regular" % index)
             elif nameID == 6:
-                namerecord.string = string.replace("-", "%d-" % i)
+                namerecord.string = string.replace("-", "%d-" % index)
 
         tags = [i for i in sorted(font.keys()) if len(i) == 4]
         if "glyf" in tags:
