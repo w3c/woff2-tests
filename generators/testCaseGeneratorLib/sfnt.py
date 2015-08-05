@@ -104,7 +104,7 @@ def getSFNTCollectionData(pathOrFiles, modifyNames=True, reverseNames=False, DSI
 
         for tag in tags:
             data = font.getTableData(tag)
-            checksum = font.reader.tables[tag].checkSum
+            checksum = calcTableChecksum(tag, data)
             entry = dict(
                 tag=tag,
                 offset=offset,
