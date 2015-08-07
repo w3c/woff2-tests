@@ -13,7 +13,7 @@ from testCaseGeneratorLib.woff import packTestHeader, packTestDirectory, packTes
     woffHeaderSize, transformTable, packTestCollectionHeader, packTestCollectionDirectory
 from testCaseGeneratorLib.defaultData import defaultTestData, testDataWOFFMetadata, testDataWOFFPrivateData,\
     sfntCFFTableData, testCFFDataWOFFDirectory
-from testCaseGeneratorLib.paths import sfntTTFSourcePath
+from testCaseGeneratorLib.paths import sfntTTFSourcePath, sfntTTFCompositeSourcePath
 from testCaseGeneratorLib.utilities import calcPaddingLength, padData, calcTableChecksum, stripMetadata
 
 def makeMetadataTest(metadata):
@@ -483,8 +483,8 @@ makeTableDecompressedLengthTest4Credits = [dict(title="Khaled Hosny", role="auth
 # File Structure: Table Data: Transformations
 # -------------------------------------------
 
-def getTransformSFNTData(nonZeroLoca=False, longLoca=False):
-    font = TTFont(sfntTTFSourcePath)
+def getModifiedSFNTData(path=sfntTTFSourcePath, nonZeroLoca=False, longLoca=False):
+    font = TTFont(path)
 
     loca = font["loca"]
     head = font["head"]
@@ -512,7 +512,7 @@ def getTransformSFNTData(nonZeroLoca=False, longLoca=False):
     return tableData, compData, tableOrder, tableChecksums
 
 def makeTableNonZeroLocaTest1():
-    sfntData = getTransformSFNTData(nonZeroLoca=True)
+    sfntData = getModifiedSFNTData(nonZeroLoca=True)
     compressedData = sfntData[1]
     uncompressedData = sfntData[0]
     header, directory, tableData = defaultTestData(flavor="ttf", tableData=uncompressedData, compressedData=compressedData)
@@ -524,7 +524,7 @@ makeTableNonZeroLocaTest1Description = "The transformed loca table contains 4 ze
 makeTableNonZeroLocaTest1Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
 
 def makeLocaSizeTest1():
-    sfntData = getTransformSFNTData(longLoca=True)
+    sfntData = getModifiedSFNTData(longLoca=True)
     compressedData = sfntData[1]
     uncompressedData = sfntData[0]
     header, directory, tableData = defaultTestData(flavor="ttf", tableData=uncompressedData, compressedData=compressedData)
@@ -536,7 +536,7 @@ makeLocaSizeTest1Description = "A valid TTF flavoured font where the loca table 
 makeLocaSizeTest1Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
 
 def makeLocaSizeTest2():
-    sfntData = getTransformSFNTData(longLoca=False)
+    sfntData = getModifiedSFNTData(longLoca=False)
     compressedData = sfntData[1]
     uncompressedData = sfntData[0]
     header, directory, tableData = defaultTestData(flavor="ttf", tableData=uncompressedData, compressedData=compressedData)
@@ -564,6 +564,29 @@ def makeTransformedTables1():
 makeTransformedTables1Title = "WOFF With Transformed Tables"
 makeTransformedTables1Description = "Valid TTF flavored WOFF with transformed glyf and loca tables"
 makeTransformedTables1Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
+
+def makeValidLoca1():
+    from testCaseGeneratorLib.sfnt import getSFNTData
+    tableData, compressedData, tableOrder, tableChecksums = getSFNTData(sfntTTFCompositeSourcePath)
+    header, directory, tableData = defaultTestData(tableData=tableData, compressedData=compressedData, flavor="ttf")
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
+    return data
+
+makeValidLoca1Title = "Font With Short Loca and Composite Glyphs"
+makeValidLoca1Description = "Valid TTF flavored WOFF with simple composite glyphs where the loca table uses the short format, to check loca reconstruction"
+makeValidLoca1Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
+
+def makeValidLoca2():
+    sfntData = getModifiedSFNTData(path=sfntTTFCompositeSourcePath, longLoca=True)
+    compressedData = sfntData[1]
+    uncompressedData = sfntData[0]
+    header, directory, tableData = defaultTestData(flavor="ttf", tableData=uncompressedData, compressedData=compressedData)
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
+    return data
+
+makeValidLoca2Title = "Font With Long Loca and Composite Glyphs"
+makeValidLoca2Description = "Valid TTF flavored WOFF with simple composite glyphs where the loca table uses the long format, to check loca reconstruction"
+makeValidLoca2Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
 
 # -----------------------------
 # Metadata Display: Compression

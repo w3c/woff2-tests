@@ -33,6 +33,7 @@ from testCaseGeneratorLib.paths import resourcesDirectory, decoderDirectory, dec
 from testCaseGeneratorLib.woff import packTestDirectory, packTestHeader
 from testCaseGeneratorLib.html import generateDecoderIndexHTML, expandSpecLinks
 from testCaseGeneratorLib.utilities import padData, calcPaddingLength, calcTableChecksum
+from testCaseGeneratorLib.sharedCases import *
 
 # ------------------
 # Directory Creation
@@ -224,6 +225,28 @@ writeTest(
     credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
     specLink="#conform-mustRestoreFontOrder",
     data=makeCollectionOrder1()
+)
+
+writeTest(
+    identifier="validation-loca-format-001",
+    title=makeValidLoca1Title,
+    description=makeValidLoca1Description,
+    credits=makeValidLoca1Credits,
+    roundTrip=False,
+    flavor="TTF",
+    specLink="#conform-mustRecordLocaOffsets",
+    data=makeValidLoca1()
+)
+
+writeTest(
+    identifier="validation-loca-format-002",
+    title=makeValidLoca2Title,
+    description=makeValidLoca2Description,
+    credits=makeValidLoca2Credits,
+    roundTrip=False,
+    flavor="TTF",
+    specLink="#conform-mustRecordLocaOffsets",
+    data=makeValidLoca2()
 )
 
 # ------------------

@@ -759,22 +759,15 @@ writeFileStructureTest(
     data=makeTableBadOrigLengthLocaTest2()
 )
 
-def makeValidLoca():
-    from testCaseGeneratorLib.sfnt import getSFNTData
-    tableData, compressedData, tableOrder, tableChecksums = getSFNTData(sfntTTFCompositeSourcePath)
-    header, directory, tableData = defaultTestData(tableData=tableData, compressedData=compressedData, flavor="ttf")
-    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
-    return data
-
 writeFileStructureTest(
     identifier="tabledata-recontruct-loca-001",
     flavor="TTF",
-    title="Font With Loca and Compoiste Glyphs",
-    assertion="Valid TTF flavored WOFF with simple composite glyphs to check loca reconstruction",
-    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    title=makeValidLoca1Title,
+    assertion=makeValidLoca1Description,
+    credits=makeValidLoca1Credits,
     sfntDisplaySpecLink="#conform-mustReconstructLoca",
     shouldDisplaySFNT=True,
-    data=makeValidLoca()
+    data=makeValidLoca1()
 )
 
 def makeGlyfBBox1():
