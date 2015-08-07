@@ -483,7 +483,7 @@ makeTableDecompressedLengthTest4Credits = [dict(title="Khaled Hosny", role="auth
 # File Structure: Table Data: Transformations
 # -------------------------------------------
 
-def getModifiedSFNTData(path=sfntTTFSourcePath, nonZeroLoca=False, longLoca=False):
+def getModifiedSFNTData(path=sfntTTFSourcePath, noTransform=False, nonZeroLoca=False, longLoca=False):
     font = TTFont(path)
 
     loca = font["loca"]
@@ -501,6 +501,8 @@ def getModifiedSFNTData(path=sfntTTFSourcePath, nonZeroLoca=False, longLoca=Fals
             tableData[tag] = (font.getTableData(tag), "\0" * 4)
         elif longLoca and tag == "loca":
             tableData[tag] = ("\0" * len(loca) * 4, "")
+        elif noTransform:
+            tableData[tag] = (font.getTableData(tag), font.getTableData(tag))
         else:
             tableData[tag] = transformTable(font, tag)
     totalData = "".join([tableData[tag][1] for tag in tableOrder])

@@ -848,7 +848,7 @@ writeTest(
 # glyf and loca are not transformed
 
 def makeTableNotransformationTest1():
-    sfntData = getModifiedSFNTData()
+    sfntData = getModifiedSFNTData(noTransform=True)
     compressedData = sfntData[1]
     uncompressedData = sfntData[0]
     header, directory, tableData = defaultTestData(flavor="ttf", tableData=uncompressedData, compressedData=compressedData)
