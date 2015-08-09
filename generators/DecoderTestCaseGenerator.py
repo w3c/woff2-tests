@@ -272,9 +272,10 @@ writeTest(
 writeTest(
     identifier="validation-bbox-001",
     title="WOFF Empty Bbox Calculation",
-    description="Valid CFF flavored WOFF file, the output file is put through an OFF validator to check that the bounding box of empty glyphs is set to zeros.",
+    description="Valid TTF flavored WOFF file, the output file is put through an OFF validator to check that the bounding box of empty glyphs is set to zeros.",
     credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
     roundTrip=False,
+    flavor="TTF",
     specLink="#conform-mustCalculateEmptyBBox",
     data=makeValidWOFF5()
 )
