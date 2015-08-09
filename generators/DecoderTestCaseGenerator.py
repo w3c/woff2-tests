@@ -249,6 +249,36 @@ writeTest(
     data=makeValidLoca2()
 )
 
+writeTest(
+    identifier="validation-checksum-001",
+    title="WOFF Checksum Calculation",
+    description="Valid CFF flavored WOFF file, the output file is put through an OFF validator to check the validity of table checksums.",
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    roundTrip=False,
+    specLink="#conform-mustCalculateCheckSum",
+    data=makeValidWOFF1()
+)
+
+writeTest(
+    identifier="validation-checksum-002",
+    title="WOFF Head Checksum Calculation",
+    description="Valid CFF flavored WOFF file, the output file is put through an OFF validator to check the validity of head table checkSumAdjustment.",
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    roundTrip=False,
+    specLink="#conform-mustRecalculateHeadCheckSum",
+    data=makeValidWOFF1()
+)
+
+writeTest(
+    identifier="validation-bbox-001",
+    title="WOFF Empty Bbox Calculation",
+    description="Valid CFF flavored WOFF file, the output file is put through an OFF validator to check that the bounding box of empty glyphs is set to zeros.",
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    roundTrip=False,
+    specLink="#conform-mustCalculateEmptyBBox",
+    data=makeValidWOFF5()
+)
+
 # ------------------
 # Generate the Index
 # ------------------
