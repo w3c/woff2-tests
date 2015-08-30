@@ -33,7 +33,7 @@ from testCaseGeneratorLib.defaultData import defaultTestData, testDataWOFFMetada
 from testCaseGeneratorLib.html import generateSFNTDisplayTestHTML, generateSFNTDisplayRefHTML, generateSFNTDisplayIndexHTML, expandSpecLinks
 from testCaseGeneratorLib.paths import resourcesDirectory, userAgentDirectory, userAgentTestDirectory, userAgentTestResourcesDirectory, userAgentFontsToInstallDirectory, sfntTTFCompositeSourcePath
 from testCaseGeneratorLib import sharedCases
-from testCaseGeneratorLib.woff import transformedTables, woffHeaderSize
+from testCaseGeneratorLib.woff import base128Size, transformedTables, woffHeaderSize
 from testCaseGeneratorLib.sharedCases import *
 
 # ------------------
@@ -914,6 +914,30 @@ writeFileStructureTest(
     sfntDisplaySpecLink="#conform-mustCheckRejectMismatchedTables",
     shouldDisplaySFNT=False,
     data=makeMismatchedCollection1()
+)
+
+def makeBase128Bug3():
+    header, directory, tableData = defaultTestData(flavor="ttf")
+    for entry in directory:
+        if entry["tag"] in transformedTables:
+            entry["origLength"] = 2**35
+            assert base128Size(entry["origLength"]) > 5
+    header["length"] = woffHeaderSize + len(packTestDirectory(directory)) + len(tableData)
+    header["length"] += calcPaddingLength(header["length"])
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
+    return data
+
+# UIntBase128 longer than 5 bytes
+
+writeFileStructureTest(
+    identifier="datatypes-invalid-base128-003",
+    flavor="TTF",
+    title="Invalid UIntBase128 Longer Than 5 Bytes",
+    assertion="Invalid TTF flavored WOFF that has UIntBase128 numbers longer than 5 bytes",
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    sfntDisplaySpecLink="#conform-mustRejectInvalidBase128",
+    shouldDisplaySFNT=False,
+    data=makeBase128Bug3()
 )
 
 # -----------------------------------
