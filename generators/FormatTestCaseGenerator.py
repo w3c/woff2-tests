@@ -421,18 +421,11 @@ writeTest(
     data=makeValidWOFF1()
 )
 
-def makeWrongTableOrder1():
-    from testCaseGeneratorLib.sfnt import getSFNTData
-    tableData, compressedData, tableOrder, tableChecksums = getSFNTData(sfntTTFSourcePath, unsortGlyfLoca=True)
-    header, directory, tableData = defaultTestData(tableData=tableData, compressedData=compressedData, flavor="ttf")
-    data = padData(packTestHeader(header) + packTestDirectory(directory, unsortGlyfLoca=True) + tableData)
-    return data
-
 writeTest(
     identifier="directory-table-order-002",
-    title="WOFF2 With Wrong Table Order",
-    description="An invalid WOFF2 font with loca before glyf in the table directory",
-    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    title=makeWrongTableOrder1Title,
+    description=makeWrongTableOrder1Description,
+    credits=makeWrongTableOrder1Credits,
     valid=True,
     specLink="#conform-tableOrdering",
     data=makeWrongTableOrder1()
@@ -917,19 +910,12 @@ writeTest(
     data=makeTransformedTables1()
 )
 
-def makeGlyfBBox1():
-    from testCaseGeneratorLib.sfnt import getSFNTData
-    tableData, compressedData, tableOrder, tableChecksums = getSFNTData(sfntTTFCompositeSourcePath)
-    header, directory, tableData = defaultTestData(tableData=tableData, compressedData=compressedData, flavor="ttf")
-    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
-    return data
-
 # composite glyph with bbox
 writeTest(
     identifier="tabledata-glyf-composite-bbox-001",
-    title="Composite Glyph Without Bounding Box",
-    description="Valid TTF flavored WOFF with composite glyphs",
-    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    title=makeGlyfBBox1Title,
+    description=makeGlyfBBox1Description,
+    credits=makeGlyfBBox1Credits,
     valid=True,
     specLink="#conform-mustHaveCompositeBBox",
     data=makeGlyfBBox1()

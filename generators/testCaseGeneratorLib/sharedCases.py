@@ -590,6 +590,32 @@ makeValidLoca2Title = "Font With Long Loca and Composite Glyphs"
 makeValidLoca2Description = "Valid TTF flavored WOFF with simple composite glyphs where the loca table uses the long format, to check loca reconstruction"
 makeValidLoca2Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
 
+def makeGlyfBBox1():
+    from testCaseGeneratorLib.sfnt import getSFNTData
+    tableData, compressedData, tableOrder, tableChecksums = getSFNTData(sfntTTFCompositeSourcePath)
+    header, directory, tableData = defaultTestData(tableData=tableData, compressedData=compressedData, flavor="ttf")
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
+    return data
+
+makeGlyfBBox1Title = "Composite Glyph Without Bounding Box"
+makeGlyfBBox1Description = "Valid TTF flavored WOFF with composite glyphs"
+makeGlyfBBox1Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
+
+# -----------------------------------------
+# File Structure: Table Directory: Ordering
+# -----------------------------------------
+
+def makeWrongTableOrder1():
+    from testCaseGeneratorLib.sfnt import getSFNTData
+    tableData, compressedData, tableOrder, tableChecksums = getSFNTData(sfntTTFSourcePath, unsortGlyfLoca=True)
+    header, directory, tableData = defaultTestData(tableData=tableData, compressedData=compressedData, flavor="ttf")
+    data = padData(packTestHeader(header) + packTestDirectory(directory, unsortGlyfLoca=True) + tableData)
+    return data
+
+makeWrongTableOrder1Title = "WOFF2 With Wrong Table Order"
+makeWrongTableOrder1Description = "An invalid WOFF2 font with loca before glyf in the table directory"
+makeWrongTableOrder1Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
+
 # -----------------------------
 # Metadata Display: Compression
 # -----------------------------

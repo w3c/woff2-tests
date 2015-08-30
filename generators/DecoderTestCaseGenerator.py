@@ -33,6 +33,7 @@ from testCaseGeneratorLib.paths import resourcesDirectory, decoderDirectory, dec
 from testCaseGeneratorLib.woff import packTestDirectory, packTestHeader
 from testCaseGeneratorLib.html import generateDecoderIndexHTML, expandSpecLinks
 from testCaseGeneratorLib.utilities import padData, calcPaddingLength, calcTableChecksum
+from testCaseGeneratorLib import sharedCases
 from testCaseGeneratorLib.sharedCases import *
 
 # ------------------
@@ -169,6 +170,63 @@ def writeTest(identifier, title, description, data, specLink=None, credits=[], r
         )
     )
 
+def writeTestCollection(identifier, title, description, data, specLink=None, credits=[]):
+    """
+    This function generates all of the files needed by a test case and
+    registers the case with the suite. The arguments:
+
+    identifier: The base identifier for the test case. The identifier must be
+    a - separated sequence of group name (from the groupDefinitions
+    listed above) and test case description (arbitrary length).
+
+    title: A thorough, but not too long, title for the test case.
+
+    description: A detailed statement about what the test case is proving.
+
+    data: A list of the complete binary data for WOFF.
+
+    specLink: The anchor in the WOFF spec that the test case is testing.
+
+    credits: A list of dictionaries defining the credits for the test case. The
+    dictionaries must have this form:
+
+        title="Name of the autor or reviewer",
+        role="author or reviewer",
+        link="mailto:email or http://contactpage"
+    """
+    assert description not in registeredDescriptions, "Duplicate description! %s" % description
+    registeredDescriptions.add(description)
+
+    specLink = expandSpecLinks(specLink)
+    tag = identifier.split("-")[0]
+
+    for i, d in enumerate(data):
+        number = "%03d" % (i + 1)
+        test_identifier = identifier + "-" + number
+        test_title = title + " " + number
+        print "Compiling %s..." % test_identifier
+
+        assert test_title not in registeredTitles, "Duplicate title! %s" % test_title
+        assert test_identifier not in registeredIdentifiers, "Duplicate identifier! %s" % test_identifier
+        registeredIdentifiers.add(test_identifier)
+        registeredTitles.add(test_title)
+
+        woffPath = os.path.join(decoderTestDirectory, test_identifier) + ".woff2"
+        f = open(woffPath, "wb")
+        f.write(d)
+        f.close()
+
+        # register the test
+        testRegistry[tag].append(
+            dict(
+                identifier=test_identifier,
+                title=test_title,
+                description=description,
+                roundTrip=False,
+                specLink=specLink
+            )
+        )
+
 # -----
 # Tests
 # -----
@@ -278,6 +336,85 @@ writeTest(
     flavor="TTF",
     specLink="#conform-mustCalculateEmptyBBox",
     data=makeValidWOFF5()
+)
+
+metadata = [
+    "schema-vendor-001", "schema-vendor-002", "schema-vendor-003",
+    "schema-vendor-006", "schema-vendor-007", "schema-vendor-009",
+    "schema-credits-002", "schema-credit-001", "schema-credit-002",
+    "schema-credit-003", "schema-credit-005", "schema-credit-006",
+    "schema-credit-008", "schema-description-001", "schema-description-002",
+    "schema-description-003", "schema-description-004",
+    "schema-description-005", "schema-description-006",
+    "schema-description-007", "schema-license-001", "schema-license-002",
+    "schema-license-003", "schema-license-004", "schema-license-005",
+    "schema-license-006", "schema-license-007", "schema-license-008",
+    "schema-copyright-001", "schema-copyright-002", "schema-copyright-003",
+    "schema-copyright-004", "schema-copyright-005", "schema-trademark-002",
+    "schema-trademark-003", "schema-trademark-004", "schema-trademark-005",
+    "schema-licensee-001", "schema-extension-001", "schema-extension-002",
+    "schema-extension-003", "schema-extension-004", "schema-extension-005",
+    "schema-extension-006", "schema-extension-007", "schema-extension-012",
+    "schema-extension-013", "schema-extension-014", "schema-extension-015",
+    "schema-extension-016", "schema-extension-018", "schema-extension-021",
+    "schema-extension-022", "schema-extension-023", "schema-extension-024",
+    "schema-extension-025", "schema-extension-026", "schema-extension-027",
+    "schema-extension-033", "schema-extension-034", "schema-extension-035",
+    "schema-extension-036", "schema-extension-037", "schema-extension-039",
+    "schema-extension-042", "schema-extension-043", "schema-extension-044",
+    "schema-extension-045", "schema-extension-046", "schema-extension-048",
+    "encoding-001", "encoding-004", "encoding-005", "schema-metadata-001",
+    "schema-uniqueid-001", "schema-uniqueid-002", "schema-credits-001",
+    "schema-description-013", "schema-description-014",
+    "schema-description-016", "schema-description-019",
+    "schema-description-020", "schema-description-021",
+    "schema-description-022", "schema-description-023",
+    "schema-description-025", "schema-description-026",
+    "schema-description-027", "schema-description-028",
+    "schema-description-029", "schema-description-030",
+    "schema-description-032", "schema-license-010", "schema-license-014",
+    "schema-license-015", "schema-license-017", "schema-license-020",
+    "schema-license-021", "schema-license-022", "schema-license-023",
+    "schema-license-024", "schema-license-026", "schema-license-027",
+    "schema-license-028", "schema-license-029", "schema-license-030",
+    "schema-license-031", "schema-license-033", "schema-copyright-011",
+    "schema-copyright-012", "schema-copyright-014", "schema-copyright-017",
+    "schema-copyright-018", "schema-copyright-019", "schema-copyright-020",
+    "schema-copyright-021", "schema-copyright-023", "schema-copyright-024",
+    "schema-copyright-025", "schema-copyright-026", "schema-copyright-027",
+    "schema-copyright-028", "schema-copyright-030", "schema-trademark-001",
+    "schema-trademark-011", "schema-trademark-012", "schema-trademark-014",
+    "schema-trademark-017", "schema-trademark-018", "schema-trademark-019",
+    "schema-trademark-020", "schema-trademark-021", "schema-trademark-023",
+    "schema-trademark-024", "schema-trademark-025", "schema-trademark-026",
+    "schema-trademark-027", "schema-trademark-028", "schema-trademark-030",
+    "schema-licensee-004", "schema-licensee-005", "schema-licensee-007",
+]
+
+OFFData = [
+    makeValidWOFF1(), makeValidWOFF2(), makeValidWOFF3(), makeValidWOFF4(),
+    makeValidWOFF5(), makeValidWOFF6(), makeValidWOFF7(), makeValidWOFF8(),
+    makeLocaSizeTest1(), makeLocaSizeTest2(), makeLocaSizeTest3(),
+    makeWrongTableOrder1(), makeTransformedTables1(), makeGlyfBBox1()
+]
+
+for identifier in metadata:
+    parts = identifier.split("-")
+    number = int(parts[-1])
+    group = parts[:-1]
+    group = [i.title() for i in group]
+    group = "".join(group)
+    importBase = "metadata" + group + str(number)
+    metadata = getattr(sharedCases, importBase + "Metadata")
+    OFFData.append(makeMetadataTest(metadata)[0])
+
+writeTestCollection(
+    identifier="validation-off",
+    title="Valid WOFF File",
+    description="Valid WOFF file from the fire format tests, the decoded file should run through a font validator to confirm the OFF structure validity.",
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    specLink="#conform-mustProduceOFF",
+    data=OFFData
 )
 
 # ------------------
