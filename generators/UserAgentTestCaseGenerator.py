@@ -860,7 +860,7 @@ def makeBase128Bug1():
 # UIntBase128 with leading zeros
 
 writeFileStructureTest(
-    identifier="datatypes-invalid-base128",
+    identifier="datatypes-invalid-base128-001",
     flavor="TTF",
     title="Invalid UIntBase128 With Leading Zeros",
     assertion="Invalid TTF flavored WOFF that has UIntBase128 numbers with leading zeros",
@@ -882,7 +882,7 @@ def makeMismatchedCollection1():
     return data
 
 writeFileStructureTest(
-    identifier="directory-collections-mismatched-tables",
+    identifier="directory-mismatched-tables-001",
     flavor="TTF",
     title="Font Collection With Mismatched Glyf/Loca Tables",
     assertion="Invalid TTF flavored WOFF font collection with two pairs of mismatched glyf/loca tables",
