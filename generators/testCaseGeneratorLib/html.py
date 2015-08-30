@@ -231,6 +231,10 @@ def generateSFNTDisplayRefHTML(
     f.write(html)
     f.close()
 
+def poorManMath(text):
+    import re
+    return re.sub(r"\^\{(.*.)\}", r"<sup>\1</sup>", text)
+
 def generateSFNTDisplayIndexHTML(directory=None, testCases=[]):
     testCount = sum([len(group["testCases"]) for group in testCases])
     html = [
@@ -258,8 +262,10 @@ def generateSFNTDisplayIndexHTML(directory=None, testCases=[]):
             identifier = test["identifier"]
             title = test["title"]
             title = cgi.escape(title)
+            title = poorManMath(title)
             assertion = test["assertion"]
             assertion = cgi.escape(assertion)
+            assertion = poorManMath(assertion)
             sfntExpectation = test["sfntExpectation"]
             if sfntExpectation:
                 sfntExpectation = "Display"

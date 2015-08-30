@@ -33,6 +33,7 @@ from testCaseGeneratorLib.defaultData import defaultTestData, testDataWOFFMetada
 from testCaseGeneratorLib.html import generateSFNTDisplayTestHTML, generateSFNTDisplayRefHTML, generateSFNTDisplayIndexHTML, expandSpecLinks
 from testCaseGeneratorLib.paths import resourcesDirectory, userAgentDirectory, userAgentTestDirectory, userAgentTestResourcesDirectory, userAgentFontsToInstallDirectory, sfntTTFCompositeSourcePath
 from testCaseGeneratorLib import sharedCases
+from testCaseGeneratorLib.woff import transformedTables, woffHeaderSize
 from testCaseGeneratorLib.sharedCases import *
 
 # ------------------
@@ -868,6 +869,29 @@ writeFileStructureTest(
     sfntDisplaySpecLink="#conform-mustRejectInvalidBase128",
     shouldDisplaySFNT=False,
     data=makeBase128Bug1()
+)
+
+def makeBase128Bug2():
+    header, directory, tableData = defaultTestData(flavor="ttf")
+    for entry in directory:
+        if entry["tag"] in transformedTables:
+            entry["origLength"] = 2**32
+    header["length"] = woffHeaderSize + len(packTestDirectory(directory)) + len(tableData)
+    header["length"] += calcPaddingLength(header["length"])
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
+    return data
+
+# UIntBase128 exceeds 2^{32}-1
+
+writeFileStructureTest(
+    identifier="datatypes-invalid-base128-002",
+    flavor="TTF",
+    title="Invalid UIntBase128 That Exceeds 2^{32}-1",
+    assertion="Invalid TTF flavored WOFF that has UIntBase128 numbers which exceed 2^{32}-1",
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    sfntDisplaySpecLink="#conform-mustRejectInvalidBase128",
+    shouldDisplaySFNT=False,
+    data=makeBase128Bug2()
 )
 
 # ---------------------------
