@@ -495,7 +495,7 @@ writeFileStructureTest(
 # between header and table directory
 
 writeFileStructureTest(
-    identifier="blocks-extraneous-data-000",
+    identifier="blocks-extraneous-data-001",
     title=makeExtraneousData0Title,
     assertion=makeExtraneousData0Description,
     credits=makeExtraneousData0Credits,
@@ -507,7 +507,7 @@ writeFileStructureTest(
 # between table directory and table data
 
 writeFileStructureTest(
-    identifier="blocks-extraneous-data-001",
+    identifier="blocks-extraneous-data-002",
     title=makeExtraneousData1Title,
     assertion=makeExtraneousData1Description,
     credits=makeExtraneousData1Credits,
@@ -519,7 +519,7 @@ writeFileStructureTest(
 # after table data with no metadata or private data
 
 writeFileStructureTest(
-    identifier="blocks-extraneous-data-002",
+    identifier="blocks-extraneous-data-003",
     title=makeExtraneousData2Title,
     assertion=makeExtraneousData2Description,
     credits=makeExtraneousData2Credits,
@@ -531,7 +531,7 @@ writeFileStructureTest(
 # between tabledata and metadata
 
 writeFileStructureTest(
-    identifier="blocks-extraneous-data-003",
+    identifier="blocks-extraneous-data-004",
     title=makeExtraneousData3Title,
     assertion=makeExtraneousData3Description,
     credits=makeExtraneousData3Credits,
@@ -543,7 +543,7 @@ writeFileStructureTest(
 # between tabledata and private data
 
 writeFileStructureTest(
-    identifier="blocks-extraneous-data-004",
+    identifier="blocks-extraneous-data-005",
     title=makeExtraneousData4Title,
     assertion=makeExtraneousData4Description,
     credits=makeExtraneousData4Credits,
@@ -555,7 +555,7 @@ writeFileStructureTest(
 # between metadata and private data
 
 writeFileStructureTest(
-    identifier="blocks-extraneous-data-005",
+    identifier="blocks-extraneous-data-006",
     title=makeExtraneousData5Title,
     assertion=makeExtraneousData5Description,
     credits=makeExtraneousData5Credits,
@@ -567,7 +567,7 @@ writeFileStructureTest(
 # after metadata with no private data
 
 writeFileStructureTest(
-    identifier="blocks-extraneous-data-006",
+    identifier="blocks-extraneous-data-007",
     title=makeExtraneousData6Title,
     assertion=makeExtraneousData6Description,
     credits=makeExtraneousData6Credits,
@@ -579,7 +579,7 @@ writeFileStructureTest(
 # after private data
 
 writeFileStructureTest(
-    identifier="blocks-extraneous-data-007",
+    identifier="blocks-extraneous-data-008",
     title=makeExtraneousData7Title,
     assertion=makeExtraneousData7Description,
     credits=makeExtraneousData7Credits,
