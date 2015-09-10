@@ -290,6 +290,15 @@ def packBase128(n, bug=False):
 def packTestHeader(header):
     return sstruct.pack(woffHeaderFormat, header)
 
+def _setTransformBits(flag, tranasform):
+    if tranasform == 1:
+        flag |= 1 << 7
+    elif tranasform == 2:
+        flag |= 1 << 7
+    elif tranasform == 3:
+        flag |= 1 << 6 | 1 << 7
+    return flag
+
 def packTestDirectory(directory, isCollection=False, unsortGlyfLoca=False, Base128Bug=False):
     data = ""
     directory = [(entry["tag"], entry) for entry in directory]
@@ -305,10 +314,14 @@ def packTestDirectory(directory, isCollection=False, unsortGlyfLoca=False, Base1
         assert glyf
         directory.insert(glyf, directory.pop(loca))
     for tag, table in directory:
+        transformFlag = table["transformFlag"]
+        assert transformFlag <= 3
+        if transformFlag:
+            print tag, transformFlag
         if tag in knownTableTags:
-            data += struct.pack(">B", knownTableTags.index(tag))
+            data += struct.pack(">B", _setTransformBits(knownTableTags.index(tag), transformFlag))
         else:
-            data += struct.pack(">B", unknownTableTagFlag)
+            data += struct.pack(">B", _setTransformBits(unknownTableTagFlag, transformFlag))
             data += struct.pack(">4s", tag)
         data += packBase128(table["origLength"], bug=Base128Bug)
         if tag in transformedTables:

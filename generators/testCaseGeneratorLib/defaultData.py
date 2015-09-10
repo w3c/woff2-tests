@@ -175,6 +175,7 @@ for tag in sfntTTFTableOrder:
         tag=tag,
         origLength=0,
         transformLength=0,
+        transformFlag=0,
     )
     testTTFDataWOFFDirectory.append(d)
 
@@ -184,6 +185,7 @@ for tag in sfntCFFTableOrder:
         tag=tag,
         origLength=0,
         transformLength=0,
+        transformFlag=0,
     )
     testCFFDataWOFFDirectory.append(d)
 

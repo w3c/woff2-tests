@@ -826,6 +826,44 @@ writeFileStructureTest(
     data=makeGlyfBBox3()
 )
 
+def makeBadTransformFlag1():
+    header, directory, tableData = defaultTestData()
+    for entry in directory:
+        if entry["tag"] == "head":
+            entry["transformFlag"] = 1
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
+    return data
+
+writeFileStructureTest(
+    identifier="tabledata-bad-transform-001",
+    flavor="CFF",
+    title="Head Table With Tramsform Number 1",
+    assertion="Invalid CFF flavored WOFF with head table having transform version 1.",
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    sfntDisplaySpecLink="#conform-mustBeRejected-FailTransform",
+    shouldDisplaySFNT=False,
+    data=makeBadTransformFlag1()
+)
+
+def makeBadTransformFlag2():
+    header, directory, tableData = defaultTestData(flavor="TTF")
+    for entry in directory:
+        if entry["tag"] == "glyf":
+            entry["transformFlag"] = 3
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
+    return data
+
+writeFileStructureTest(
+    identifier="tabledata-bad-transform-002",
+    flavor="TTF",
+    title="Glyf Table With Tramsform Number 3",
+    assertion="Invalid TTF flavored WOFF with glyf table having transform version 3.",
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    sfntDisplaySpecLink="#conform-mustBeRejected-FailTransform",
+    shouldDisplaySFNT=False,
+    data=makeBadTransformFlag2()
+)
+
 # --------------------------
 # File Structure: Data Types
 # --------------------------

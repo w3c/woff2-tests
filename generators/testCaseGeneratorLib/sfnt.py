@@ -191,7 +191,7 @@ def getWOFFCollectionData(pathOrFiles, MismatchGlyfLoca=False, reverseNames=Fals
     if len(compData) >= len(totalData):
         compData = totalData
 
-    directory = [dict(tag=tag, origLength=0, transformLength=0) for tag in tableOrder]
+    directory = [dict(tag=tag, origLength=0, transformLength=0, transformFlag=0) for tag in tableOrder]
 
     header, directory, collectionHeader, collectionDirectory, tableData = defaultTestData(directory=directory,
             tableData=tableData, compressedData=compData, collectionDirectory=collectionDirectory)
