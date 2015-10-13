@@ -21,3 +21,6 @@ To compile a particular test suite, simply run the relevant script:
     >>> python FormatTestCaseGenerator.py
 
     >>> python UserAgentTestCaseGenerator.py
+
+# References
+http://www.w3.org/Fonts/WG/wiki/Main_Page contains the test specifications
