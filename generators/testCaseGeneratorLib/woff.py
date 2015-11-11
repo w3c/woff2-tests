@@ -370,8 +370,6 @@ def packTestDirectory(directory, isCollection=False, unsortGlyfLoca=False, Base1
     for tag, table in directory:
         transformFlag = table["transformFlag"]
         assert transformFlag <= 3
-        if transformFlag:
-            print tag, transformFlag
         if tag in knownTableTags:
             data += struct.pack(">B", _setTransformBits(knownTableTags.index(tag), transformFlag))
         else:
