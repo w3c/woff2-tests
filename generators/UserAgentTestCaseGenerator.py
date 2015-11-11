@@ -864,6 +864,25 @@ writeFileStructureTest(
     data=makeBadTransformFlag2()
 )
 
+def makeHmtxTransform1():
+    header, directory, tableData = defaultTestData(flavor="TTF")
+    for entry in directory:
+        if entry["tag"] == "hmtx":
+            assert entry["transformFlag"] == 1
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
+    return data
+
+writeFileStructureTest(
+    identifier="tabledata-transform-hmtx-001",
+    flavor="TTF",
+    title="Transformed Hmtx Table",
+    assertion="Valid TTF flavored WOFF with transformed hmtx table.",
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    sfntDisplaySpecLink="#conform-mustAcceptAllTransforms",
+    shouldDisplaySFNT=True,
+    data=makeHmtxTransform1()
+)
+
 # --------------------------
 # File Structure: Data Types
 # --------------------------
