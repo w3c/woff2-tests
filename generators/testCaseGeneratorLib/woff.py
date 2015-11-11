@@ -81,6 +81,8 @@ def transformTable(font, tag, glyphBBox="", alt255UInt16=False):
         font["head"].flags |= 1 << 11
     origData = font.getTableData(tag)
     transformedData = origData
+    if tag == "hmtx" and "glyf" in font:
+        transformedData = transformHmtx(font)
     if tag in transformedTables:
         if tag == "glyf":
             transformedData = transformGlyf(font, glyphBBox=glyphBBox, alt255UInt16=alt255UInt16)
@@ -265,6 +267,58 @@ def transformGlyf(font, glyphBBox="", alt255UInt16=False):
     data += glyphStream + compositeStream
     data += bboxBitmapStream + bboxStream
     data += instructionStream
+
+    return data
+
+def transformHmtx(font):
+    glyf = font["glyf"]
+    hhea = font["hhea"]
+    hmtx = font["hmtx"]
+    maxp = font["maxp"]
+
+    hasLsb = False
+    hasLeftSideBearing = False
+
+    if hhea.numberOfHMetrics != maxp.numGlyphs:
+        hasLeftSideBearing = True
+
+    for name in hmtx.metrics:
+        advance, lsb = hmtx.metrics[name]
+        xMin = 0
+        if hasattr(glyf[name], "xMin"):
+            xMin = glyf[name].xMin
+        if lsb != xMin:
+            hasLsb = True
+            break
+
+    flags = 0
+    if not hasLsb:
+        flags |= 1 << 0
+    if not hasLeftSideBearing:
+        flags |= 1 << 1
+
+    data = struct.pack(">B", flags)
+    for name in font.getGlyphOrder():
+        advance, lsb = hmtx.metrics[name]
+        data += struct.pack(">H", advance)
+
+    if hasLsb:
+        for name in font.getGlyphOrder():
+           advance, lsb = hmtx.metrics[name]
+           data += struct.pack(">H", lsb)
+
+    if hasLeftSideBearing:
+        metrics = []
+        for name in font.getGlyphOrder():
+            metrics.append(hmtx.metrics[name])
+        lastAdvance = metrics[-1][0]
+        lastIndex = len(metrics)
+        while metrics[lastIndex-2][0] == lastAdvance:
+            lastIndex -= 1
+            if lastIndex <= 1:
+                lastIndex = 1
+                break
+        data += "".join([struct.pack(">H", sb) for advance, sb in metrics[lastIndex:]])
 
     return data
 

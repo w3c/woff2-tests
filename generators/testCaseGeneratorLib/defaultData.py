@@ -284,6 +284,8 @@ def defaultTestData(header=None, directory=None, collectionHeader=None, collecti
             origData, transformData = tableData[tag]
         entry["origLength"] = len(origData)
         entry["transformLength"] = len(transformData)
+        if tag == "hmtx" and entry["origLength"] > entry["transformLength"]:
+            entry["transformFlag"] = 1
         header["totalSfntSize"] += entry["origLength"]
         header["totalSfntSize"] += calcPaddingLength(header["totalSfntSize"])
     header["length"] = woffHeaderSize + len(packTestDirectory(directory, Base128Bug=Base128Bug))
