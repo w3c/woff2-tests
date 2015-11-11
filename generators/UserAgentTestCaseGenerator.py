@@ -835,7 +835,7 @@ def makeBadTransformFlag1():
     return data
 
 writeFileStructureTest(
-    identifier="tabledata-bad-transform-001",
+    identifier="tabledata-transform-bad-flag-001",
     flavor="CFF",
     title="Head Table With Tramsform Number 1",
     assertion="Invalid CFF flavored WOFF with head table having transform version 1.",
@@ -854,7 +854,7 @@ def makeBadTransformFlag2():
     return data
 
 writeFileStructureTest(
-    identifier="tabledata-bad-transform-002",
+    identifier="tabledata-transform-bad-flag-002",
     flavor="TTF",
     title="Glyf Table With Tramsform Number 3",
     assertion="Invalid TTF flavored WOFF with glyf table having transform version 3.",
