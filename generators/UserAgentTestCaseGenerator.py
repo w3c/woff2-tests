@@ -27,13 +27,14 @@ it will register the case in the suite index.
 
 import os
 import shutil
+import struct
 import glob
-from testCaseGeneratorLib.woff import packTestHeader, packTestDirectory, packTestMetadata, packTestPrivateData
+from testCaseGeneratorLib.woff import packTestHeader, packTestDirectory, packTestMetadata, packTestPrivateData, base128Size, transformedTables, woffHeaderSize
 from testCaseGeneratorLib.defaultData import defaultTestData, testDataWOFFMetadata, testDataWOFFPrivateData
 from testCaseGeneratorLib.html import generateSFNTDisplayTestHTML, generateSFNTDisplayRefHTML, generateSFNTDisplayIndexHTML, expandSpecLinks
 from testCaseGeneratorLib.paths import resourcesDirectory, userAgentDirectory, userAgentTestDirectory, userAgentTestResourcesDirectory, userAgentFontsToInstallDirectory, sfntTTFCompositeSourcePath
 from testCaseGeneratorLib import sharedCases
-from testCaseGeneratorLib.woff import base128Size, transformedTables, woffHeaderSize
+from testCaseGeneratorLib.sfnt import getSFNTData
 from testCaseGeneratorLib.sharedCases import *
 
 # ------------------
@@ -405,7 +406,6 @@ writeFileStructureTest(
 )
 
 def makeValidOFF():
-    from testCaseGeneratorLib.sfnt import getSFNTData
     tableData, compressedData, tableOrder, tableChecksums = getSFNTData(sfntTTFCompositeSourcePath)
     header, directory, tableData = defaultTestData(tableData=tableData, compressedData=compressedData, flavor="ttf")
     data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
@@ -789,7 +789,6 @@ writeFileStructureTest(
 )
 
 def makeGlyfBBox2():
-    from testCaseGeneratorLib.sfnt import getSFNTData
     tableData, compressedData, tableOrder, tableChecksums = getSFNTData(sfntTTFCompositeSourcePath, glyphBBox="nocomposite")
     header, directory, tableData = defaultTestData(tableData=tableData, compressedData=compressedData, flavor="ttf")
     data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
@@ -808,7 +807,6 @@ writeFileStructureTest(
 )
 
 def makeGlyfBBox3():
-    from testCaseGeneratorLib.sfnt import getSFNTData
     tableData, compressedData, tableOrder, tableChecksums = getSFNTData(sfntTTFSourcePath, glyphBBox="empty")
     header, directory, tableData = defaultTestData(tableData=tableData, compressedData=compressedData, flavor="ttf")
     data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
@@ -887,7 +885,6 @@ writeFileStructureTest(
 # File Structure: Data Types
 # --------------------------
 def make255UInt16Alt1():
-    from testCaseGeneratorLib.sfnt import getSFNTData
     tableData, compressedData, tableOrder, tableChecksums = getSFNTData(sfntTTFSourcePath, alt255UInt16=True)
     header, directory, tableData = defaultTestData(tableData=tableData, compressedData=compressedData, flavor="ttf")
     data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
@@ -909,7 +906,6 @@ writeFileStructureTest(
 )
 
 def makeBase128Bug1():
-    from testCaseGeneratorLib.sfnt import getSFNTData
     tableData, compressedData, tableOrder, tableChecksums = getSFNTData(sfntTTFSourcePath)
     header, directory, tableData = defaultTestData(tableData=tableData, compressedData=compressedData, flavor="ttf", Base128Bug=True)
     data = padData(packTestHeader(header) + packTestDirectory(directory, Base128Bug=True) + tableData)
