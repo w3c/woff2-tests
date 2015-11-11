@@ -881,6 +881,62 @@ writeFileStructureTest(
     data=makeHmtxTransform1()
 )
 
+writeFileStructureTest(
+    identifier="tabledata-transform-hmtx-002",
+    flavor="TTF",
+    title="Transformed Hmtx Table With Correct Flags",
+    assertion="Valid TTF flavored WOFF with transformed hmtx table and correct flags field.",
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    sfntDisplaySpecLink="#conform-mustCheckLSBFlags",
+    shouldDisplaySFNT=True,
+    data=makeHmtxTransform1()
+)
+
+def makeHmtxTransform3():
+    tableData, compressedData, tableOrder, tableChecksums = getSFNTData(sfntTTFSourcePath)
+    flags = struct.unpack(">B", tableData["hmtx"][1][0])[0]
+    for bit in range(2, 8):
+        flags |= 1 << bit
+    tableData["hmtx"] = (tableData["hmtx"][0], struct.pack(">B", flags) + tableData["hmtx"][1][1:])
+    header, directory, tableData = defaultTestData(tableData=tableData, compressedData=compressedData, flavor="ttf")
+    for entry in directory:
+        if entry["tag"] == "hmtx":
+            assert entry["transformFlag"] == 1
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
+    return data
+
+writeFileStructureTest(
+    identifier="tabledata-transform-hmtx-003",
+    flavor="TTF",
+    title="Transformed Hmtx Table With Bad Flags 1",
+    assertion="Invalid TTF flavored WOFF with transformed hmtx table with non-zero reserved bits of the flags field.",
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    sfntDisplaySpecLink="#conform-mustCheckLSBFlags",
+    shouldDisplaySFNT=False,
+    data=makeHmtxTransform3()
+)
+
+def makeHmtxTransform4():
+    tableData, compressedData, tableOrder, tableChecksums = getSFNTData(sfntTTFSourcePath)
+    tableData["hmtx"] = (tableData["hmtx"][0], struct.pack(">B", 0) + tableData["hmtx"][1][1:])
+    header, directory, tableData = defaultTestData(tableData=tableData, compressedData=compressedData, flavor="ttf")
+    for entry in directory:
+        if entry["tag"] == "hmtx":
+            assert entry["transformFlag"] == 1
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
+    return data
+
+writeFileStructureTest(
+    identifier="tabledata-transform-hmtx-004",
+    flavor="TTF",
+    title="Transformed Hmtx Table With Bad Flags 2",
+    assertion="Invalid TTF flavored WOFF with transformed hmtx table with all flags bits set to 0",
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    sfntDisplaySpecLink="#conform-mustCheckLSBFlags",
+    shouldDisplaySFNT=False,
+    data=makeHmtxTransform4()
+)
+
 # --------------------------
 # File Structure: Data Types
 # --------------------------
