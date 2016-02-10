@@ -921,6 +921,16 @@ writeTest(
     data=makeGlyfBBox1()
 )
 
+writeTest(
+    identifier="tabledata-transform-hmtx-001",
+    title=makeHmtxTransform2Title,
+    description=makeHmtxTransform2Description,
+    credits=makeHmtxTransform2Credits,
+    valid=False,
+    specLink="#conform-mustReconstructLSBs",
+    data=makeHmtxTransform2()
+)
+
 # -----------------
 # Metadata: Padding
 # -----------------
