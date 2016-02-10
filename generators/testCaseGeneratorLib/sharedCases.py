@@ -6,6 +6,7 @@ import brotli
 import os
 import zlib
 import codecs
+import struct
 from copy import deepcopy
 from fontTools.ttLib import TTFont
 from fontTools.ttLib.sfnt import sfntDirectoryEntrySize
@@ -15,6 +16,7 @@ from testCaseGeneratorLib.defaultData import defaultTestData, testDataWOFFMetada
     sfntCFFTableData, testCFFDataWOFFDirectory
 from testCaseGeneratorLib.paths import sfntTTFSourcePath, sfntTTFCompositeSourcePath
 from testCaseGeneratorLib.utilities import calcPaddingLength, padData, calcTableChecksum, stripMetadata
+from testCaseGeneratorLib.sfnt import getSFNTData
 
 def makeMetadataTest(metadata):
     """
@@ -601,12 +603,54 @@ makeGlyfBBox1Title = "Composite Glyph Without Bounding Box"
 makeGlyfBBox1Description = "Valid TTF flavored WOFF with composite glyphs"
 makeGlyfBBox1Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
 
+def makeHmtxTransform1():
+    header, directory, tableData = defaultTestData(flavor="TTF")
+    for entry in directory:
+        if entry["tag"] == "hmtx":
+            assert entry["transformFlag"] == 1
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
+    return data
+
+makeHmtxTransform1Title = "Transformed Hmtx Table With Correct Flags"
+makeHmtxTransform1Description = "Valid TTF flavored WOFF with transformed hmtx table and correct flags field."
+makeHmtxTransform1Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
+
+def makeHmtxTransform2():
+    tableData, compressedData, tableOrder, tableChecksums = getSFNTData(sfntTTFSourcePath)
+    flags = struct.unpack(">B", tableData["hmtx"][1][0])[0]
+    for bit in range(2, 8):
+        flags |= 1 << bit
+    tableData["hmtx"] = (tableData["hmtx"][0], struct.pack(">B", flags) + tableData["hmtx"][1][1:])
+    header, directory, tableData = defaultTestData(tableData=tableData, compressedData=compressedData, flavor="ttf")
+    for entry in directory:
+        if entry["tag"] == "hmtx":
+            assert entry["transformFlag"] == 1
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
+    return data
+
+makeHmtxTransform2Title = "Transformed Hmtx Table With Bad Flags 1"
+makeHmtxTransform2Description = "Invalid TTF flavored WOFF with transformed hmtx table with non-zero reserved bits of the flags field."
+makeHmtxTransform2Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
+
+def makeHmtxTransform3():
+    tableData, compressedData, tableOrder, tableChecksums = getSFNTData(sfntTTFSourcePath)
+    tableData["hmtx"] = (tableData["hmtx"][0], struct.pack(">B", 0) + tableData["hmtx"][1][1:])
+    header, directory, tableData = defaultTestData(tableData=tableData, compressedData=compressedData, flavor="ttf")
+    for entry in directory:
+        if entry["tag"] == "hmtx":
+            assert entry["transformFlag"] == 1
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
+    return data
+
+makeHmtxTransform3Title = "Transformed Hmtx Table With Bad Flags 2"
+makeHmtxTransform3Description = "Invalid TTF flavored WOFF with transformed hmtx table with all flags bits set to 0"
+makeHmtxTransform3Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
+
 # -----------------------------------------
 # File Structure: Table Directory: Ordering
 # -----------------------------------------
 
 def makeWrongTableOrder1():
-    from testCaseGeneratorLib.sfnt import getSFNTData
     tableData, compressedData, tableOrder, tableChecksums = getSFNTData(sfntTTFSourcePath, unsortGlyfLoca=True)
     header, directory, tableData = defaultTestData(tableData=tableData, compressedData=compressedData, flavor="ttf")
     data = padData(packTestHeader(header) + packTestDirectory(directory, unsortGlyfLoca=True) + tableData)
