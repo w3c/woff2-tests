@@ -167,48 +167,6 @@ makeHeaderInvalidNumTables1Title = "Header Number of Tables Set to Zero"
 makeHeaderInvalidNumTables1Description = "The header contains 0 in the numTables field. A table directory and table data are present."
 makeHeaderInvalidNumTables1Credits = [dict(title="Tal Leming", role="author", link="http://typesupply.com")]
 
-# -------------------------------------
-# File Structure: Header: totalSfntSize
-# -------------------------------------
-
-def makeHeaderInvalidTotalSfntSize1():
-    header, directory, tableData = defaultTestData()
-    # find a padding value that can be subtracted from the totalSfntSize.
-    decreaseBy = None
-    for entry in directory:
-        paddingSize = calcPaddingLength(entry["origLength"])
-        if paddingSize:
-            decreaseBy = paddingSize
-            break
-    assert decreaseBy is not None
-    header["totalSfntSize"] -= decreaseBy
-    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
-    return data
-
-makeHeaderInvalidTotalSfntSize1Title = "Header Total SFNT Size Not a Multiple of 4"
-makeHeaderInvalidTotalSfntSize1Description = "The totalSfntSize field contains a value that is missing padding bytes between two tables."
-makeHeaderInvalidTotalSfntSize1Credits = [dict(title="Tal Leming", role="author", link="http://typesupply.com")]
-
-def makeHeaderInvalidTotalSfntSize2():
-    header, directory, tableData = defaultTestData()
-    header["totalSfntSize"] += 4
-    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
-    return data
-
-makeHeaderInvalidTotalSfntSize2Title = "Header Total SFNT Size Too Long"
-makeHeaderInvalidTotalSfntSize2Description = "The totalSfntSize field contains a value that is is four bytes too long."
-makeHeaderInvalidTotalSfntSize2Credits = [dict(title="Tal Leming", role="author", link="http://typesupply.com")]
-
-def makeHeaderInvalidTotalSfntSize3():
-    header, directory, tableData = defaultTestData()
-    header["totalSfntSize"] -= 4
-    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
-    return data
-
-makeHeaderInvalidTotalSfntSize3Title = "Header Total SFNT Size Too Short"
-makeHeaderInvalidTotalSfntSize3Description = "The totalSfntSize field contains a value that is is four bytes too short."
-makeHeaderInvalidTotalSfntSize3Credits = [dict(title="Tal Leming", role="author", link="http://typesupply.com")]
-
 # --------------------------------
 # File Structure: Header: reserved
 # --------------------------------
@@ -559,15 +517,6 @@ def makeLocaSizeTest3():
 makeLocaSizeTest3Title = "No Loca Table"
 makeLocaSizeTest3Description = "A valid CFF flavoured font which naturally have no loca table."
 makeLocaSizeTest3Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
-
-def makeTransformedTables1():
-    header, directory, tableData = defaultTestData(flavor="ttf")
-    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
-    return data
-
-makeTransformedTables1Title = "WOFF With Transformed Tables"
-makeTransformedTables1Description = "Valid TTF flavored WOFF with transformed glyf and loca tables"
-makeTransformedTables1Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
 
 def makeValidLoca1():
     from testCaseGeneratorLib.sfnt import getSFNTData

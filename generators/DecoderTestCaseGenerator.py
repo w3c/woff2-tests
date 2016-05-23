@@ -395,7 +395,7 @@ OFFData = [
     makeValidWOFF1(), makeValidWOFF2(), makeValidWOFF3(), makeValidWOFF4(),
     makeValidWOFF5(), makeValidWOFF6(), makeValidWOFF7(), makeValidWOFF8(),
     makeLocaSizeTest1(), makeLocaSizeTest2(), makeLocaSizeTest3(),
-    makeWrongTableOrder1(), makeTransformedTables1(), makeGlyfBBox1()
+    makeWrongTableOrder1(), makeGlyfBBox1()
 ]
 
 for identifier in metadata:

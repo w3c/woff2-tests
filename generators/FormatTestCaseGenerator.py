@@ -359,40 +359,6 @@ writeTest(
     data=makeHeaderInvalidNumTables1()
 )
 
-# -------------------------------------
-# File Structure: Header: totalSfntSize
-# -------------------------------------
-
-writeTest(
-    identifier="header-totalSfntSize-001",
-    title=makeHeaderInvalidTotalSfntSize1Title,
-    description=makeHeaderInvalidTotalSfntSize1Description,
-    credits=makeHeaderInvalidTotalSfntSize1Credits,
-    valid=False,
-    specLink="#conform-totalsize-longword",
-    data=makeHeaderInvalidTotalSfntSize1()
-)
-
-writeTest(
-    identifier="header-totalSfntSize-002",
-    title=makeHeaderInvalidTotalSfntSize2Title,
-    description=makeHeaderInvalidTotalSfntSize2Description,
-    credits=makeHeaderInvalidTotalSfntSize2Credits,
-    valid=False,
-    specLink="#conform-totalsize-longword",
-    data=makeHeaderInvalidTotalSfntSize2()
-)
-
-writeTest(
-    identifier="header-totalSfntSize-003",
-    title=makeHeaderInvalidTotalSfntSize3Title,
-    description=makeHeaderInvalidTotalSfntSize3Description,
-    credits=makeHeaderInvalidTotalSfntSize3Credits,
-    valid=False,
-    specLink="#conform-totalsize-longword",
-    data=makeHeaderInvalidTotalSfntSize3()
-)
-
 # --------------------------------
 # File Structure: Header: reserved
 # --------------------------------
@@ -838,26 +804,6 @@ writeTest(
 # File Structure: Table Data: Transformations
 # -------------------------------------------
 
-# glyf and loca are not transformed
-
-def makeTableNotransformationTest1():
-    sfntData = getModifiedSFNTData(noTransform=True)
-    compressedData = sfntData[1]
-    uncompressedData = sfntData[0]
-    header, directory, tableData = defaultTestData(flavor="ttf", tableData=uncompressedData, compressedData=compressedData)
-    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
-    return data
-
-writeTest(
-    identifier="tabledata-no-transform-001",
-    title="Font Table Data Untransformed Tables",
-    description="The glyf and loca tables are not transformed.",
-    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
-    valid=False,
-    specLink="#conform-mustTransformTables",
-    data=makeTableNotransformationTest1()
-)
-
 # loca's transformLength is not zero
 
 writeTest(
@@ -898,16 +844,6 @@ writeTest(
     valid=True,
     specLink="#conform-OriginalLocaSize",
     data=makeLocaSizeTest3()
-)
-
-writeTest(
-    identifier="tabledata-transform-tables-001",
-    title=makeTransformedTables1Title,
-    description=makeTransformedTables1Description,
-    credits=makeTransformedTables1Credits,
-    valid=True,
-    specLink="#conform-mustTransformTables",
-    data=makeTransformedTables1()
 )
 
 # composite glyph with bbox
