@@ -327,17 +327,6 @@ writeTest(
     data=makeValidWOFF1()
 )
 
-writeTest(
-    identifier="validation-bbox-001",
-    title="WOFF Empty Bbox Calculation",
-    description="Valid TTF flavored WOFF file, the output file is put through an OFF validator to check that the bounding box of empty glyphs is set to zeros.",
-    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
-    roundTrip=False,
-    flavor="TTF",
-    specLink="#conform-mustCalculateEmptyBBox",
-    data=makeValidWOFF5()
-)
-
 metadata = [
     "schema-vendor-001", "schema-vendor-002", "schema-vendor-003",
     "schema-vendor-006", "schema-vendor-007", "schema-vendor-009",
