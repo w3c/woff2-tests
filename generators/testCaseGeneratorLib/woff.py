@@ -376,7 +376,7 @@ def packTestDirectory(directory, isCollection=False, unsortGlyfLoca=False, Base1
             data += struct.pack(">B", _setTransformBits(unknownTableTagFlag, transformFlag))
             data += struct.pack(">4s", tag)
         data += packBase128(table["origLength"], bug=Base128Bug)
-        if tag in transformedTables:
+        if tag in transformedTables or transformFlag != 0:
             data += packBase128(table["transformLength"], bug=Base128Bug)
     return data
 
