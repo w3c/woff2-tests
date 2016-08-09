@@ -26,7 +26,7 @@ import zipfile
 from fontTools.misc import sstruct
 from testCaseGeneratorLib.woff import packTestHeader, packTestDirectory, packTestMetadata, packTestPrivateData
 from testCaseGeneratorLib.defaultData import defaultTestData, testDataWOFFMetadata, testDataWOFFPrivateData
-from testCaseGeneratorLib.paths import resourcesDirectory, formatDirectory, formatTestDirectory, formatResourcesDirectory, sfntTTFCompositeSourcePath
+from testCaseGeneratorLib.paths import resourcesDirectory, formatDirectory, formatTestDirectory, formatResourcesDirectory
 from testCaseGeneratorLib.html import generateFormatIndexHTML, expandSpecLinks
 from testCaseGeneratorLib import sharedCases
 from testCaseGeneratorLib.sharedCases import *

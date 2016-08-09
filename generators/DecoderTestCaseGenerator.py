@@ -29,7 +29,7 @@ from fontTools.ttLib.sfnt import sfntDirectoryFormat, sfntDirectorySize, sfntDir
 from testCaseGeneratorLib.defaultData import defaultSFNTTestData, defaultTestData
 from testCaseGeneratorLib.sfnt import packSFNT, getSFNTCollectionData, getWOFFCollectionData
 from testCaseGeneratorLib.paths import resourcesDirectory, decoderDirectory, decoderTestDirectory,\
-                                       decoderResourcesDirectory, sfntTTFSourcePath, sfntTTFCompositeSourcePath
+                                       decoderResourcesDirectory, sfntTTFSourcePath
 from testCaseGeneratorLib.woff import packTestDirectory, packTestHeader
 from testCaseGeneratorLib.html import generateDecoderIndexHTML, expandSpecLinks
 from testCaseGeneratorLib.utilities import padData, calcPaddingLength, calcTableChecksum
