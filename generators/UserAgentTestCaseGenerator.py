@@ -118,7 +118,7 @@ for group in groupDefinitions:
 
 groupChapterURLs = {}
 for tag, title, url in groupDefinitions:
-    groupChapterURLs[tag] = "#" + url.split("#")[-1]
+    groupChapterURLs[tag] = url
 
 # ---------------
 # File Generators
@@ -2950,8 +2950,8 @@ available1 = """
 		<meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
 		<title>WOFF Test: Font access</title>
 		<link rel="author" title="Chris Lilley" href="http://www.w3.org/People" />
-		<link rel="help" href="#General" />
-		<link rel="help" href="#conform-css3font-available" />
+		<link rel="help" href="%s" />
+		<link rel="help" href="%s" />
 		<meta name="flags" content="font" />
 		<meta name="assert" content="Linked fonts are only available to the documents that reference them" />
 		<style type="text/css"><![CDATA[
@@ -2976,7 +2976,7 @@ available1 = """
 
 	</body>
 </html>
-""".strip()
+""".strip() % (expandSpecLinks("#General"), expandSpecLinks("#conform-css3font-available"))
 p = os.path.join(userAgentTestDirectory, "available-001.xht")
 f = open(p, "wb")
 f.write(available1)
@@ -2990,8 +2990,8 @@ available2 = """
 		<title>WOFF Test: Font access</title>
 		<link rel="author" title="Tal Leming" href="http://typesupply.com" />
 		<link rel="author" title="Chris Lilley" href="http://www.w3.org/People" />
-		<link rel="help" href="#General" />
-		<link rel="help" href="#conform-css3font-available" />
+		<link rel="help" href="%s" />
+		<link rel="help" href="%s" />
 		<meta name="flags" content="font" />
 		<meta name="assert" content="Linked fonts are only available to the documents that reference them" />
 		<style type="text/css"><![CDATA[
@@ -3016,7 +3016,7 @@ available2 = """
 		<div class="test">P</div>
 	</body>
 </html>
-""".strip()
+""".strip() % (expandSpecLinks("#General"), expandSpecLinks("#conform-css3font-available"))
 p = os.path.join(userAgentTestDirectory, "available-001a.xht")
 f = open(p, "wb")
 f.write(available2)
@@ -3030,8 +3030,8 @@ available3 = """
 		<title>WOFF Test: Font access</title>
 		<link rel="author" title="Tal Leming" href="http://typesupply.com" />
 		<link rel="author" title="Chris Lilley" href="http://www.w3.org/People" />
-		<link rel="help" href="#General" />
-		<link rel="help" href="#conform-css3font-available" />
+		<link rel="help" href="%s" />
+		<link rel="help" href="%s" />
 		<meta name="flags" content="font" />
 		<meta name="assert" content="Linked fonts are only available to the documents that reference them" />
 		<style type="text/css"><![CDATA[
@@ -3052,7 +3052,7 @@ available3 = """
 		<div class="test">F</div>
 	</body>
 </html>
-""".strip()
+""".strip() % (expandSpecLinks("#General"), expandSpecLinks("#conform-css3font-available"))
 p = os.path.join(userAgentTestDirectory, "available-001b.xht")
 f = open(p, "wb")
 f.write(available3)
