@@ -10,7 +10,7 @@ import struct
 from copy import deepcopy
 from fontTools.ttLib import TTFont
 from fontTools.ttLib.sfnt import sfntDirectoryEntrySize
-from testCaseGeneratorLib.woff import packTestHeader, packTestDirectory, packTestMetadata, packTestPrivateData,\
+from testCaseGeneratorLib.woff import base128Size, packTestHeader, packTestDirectory, packTestMetadata, packTestPrivateData,\
     woffHeaderSize, transformTable, packTestCollectionHeader, packTestCollectionDirectory
 from testCaseGeneratorLib.defaultData import defaultTestData, testDataWOFFMetadata, testDataWOFFPrivateData,\
     sfntCFFTableData, testCFFDataWOFFDirectory
@@ -180,6 +180,32 @@ def makeHeaderInvalidReserved1():
 makeHeaderInvalidReserved1Title = "Header Reserved Invalid Value"
 makeHeaderInvalidReserved1Description = "The reserved field contains 1."
 makeHeaderInvalidReserved1Credits = [dict(title="Tal Leming", role="author", link="http://typesupply.com")]
+
+# -------------------------------------
+# File Structure: Header: totalSfntSize
+# -------------------------------------
+
+def makeHeaderIncorrectTotalSfntSize(big=False):
+    header, directory, tableData = defaultTestData()
+    numBytes = base128Size(header["totalSfntSize"])
+    totalSfntSize = 128**(numBytes -1)
+    if big:
+        totalSfntSize *= 127
+    else:
+        totalSfntSize += 1
+    assert numBytes == base128Size(totalSfntSize)
+    header["totalSfntSize"] = totalSfntSize
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
+    return data
+
+makeHeaderIncorrectTotalSfntSize1Title = "Header TotalSfntSize Too Small"
+makeHeaderIncorrectTotalSfntSize1Description = "The totalSfntSize feild contain a too small incorrect value."
+makeHeaderIncorrectTotalSfntSize1Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
+
+
+makeHeaderIncorrectTotalSfntSize2Title = "Header TotalSfntSize Too Big"
+makeHeaderIncorrectTotalSfntSize2Description = "The totalSfntSize feild contain a too big incorrect value."
+makeHeaderIncorrectTotalSfntSize2Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
 
 # --------------------------------------------
 # File Structure: Data Blocks: Extraneous Data

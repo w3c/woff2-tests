@@ -488,6 +488,30 @@ writeFileStructureTest(
     data=makeHeaderInvalidReserved1()
 )
 
+# -------------------------------------
+# File Structure: Header: totalSfntSize
+# -------------------------------------
+
+writeFileStructureTest(
+    identifier="header-totalsfntsize-001",
+    title=makeHeaderIncorrectTotalSfntSize1Title,
+    assertion=makeHeaderIncorrectTotalSfntSize1Description,
+    credits=makeHeaderIncorrectTotalSfntSize1Credits,
+    shouldDisplaySFNT=True,
+    sfntDisplaySpecLink="#conform-mustNotRejectIncorrectTotalSize",
+    data=makeHeaderIncorrectTotalSfntSize()
+)
+
+writeFileStructureTest(
+    identifier="header-totalsfntsize-002",
+    title=makeHeaderIncorrectTotalSfntSize2Title,
+    assertion=makeHeaderIncorrectTotalSfntSize2Description,
+    credits=makeHeaderIncorrectTotalSfntSize2Credits,
+    shouldDisplaySFNT=True,
+    sfntDisplaySpecLink="#conform-mustNotRejectIncorrectTotalSize",
+    data=makeHeaderIncorrectTotalSfntSize(True)
+)
+
 # --------------------------------------------
 # File Structure: Data Blocks: Extraneous Data
 # --------------------------------------------
