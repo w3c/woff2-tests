@@ -570,6 +570,8 @@ def makeHmtxTransform2():
     for bit in range(2, 8):
         flags |= 1 << bit
     tableData["hmtx"] = (tableData["hmtx"][0], struct.pack(">B", flags) + tableData["hmtx"][1][1:])
+    totalData = "".join([tableData[tag][1] for tag in tableOrder])
+    compressedData = brotli.compress(totalData, brotli.MODE_FONT)
     header, directory, tableData = defaultTestData(tableData=tableData, compressedData=compressedData, flavor="ttf")
     for entry in directory:
         if entry["tag"] == "hmtx":
@@ -584,6 +586,8 @@ makeHmtxTransform2Credits = [dict(title="Khaled Hosny", role="author", link="htt
 def makeHmtxTransform3():
     tableData, compressedData, tableOrder, tableChecksums = getSFNTData(sfntTTFSourcePath)
     tableData["hmtx"] = (tableData["hmtx"][0], struct.pack(">B", 0) + tableData["hmtx"][1][1:])
+    totalData = "".join([tableData[tag][1] for tag in tableOrder])
+    compressedData = brotli.compress(totalData, brotli.MODE_FONT)
     header, directory, tableData = defaultTestData(tableData=tableData, compressedData=compressedData, flavor="ttf")
     for entry in directory:
         if entry["tag"] == "hmtx":
