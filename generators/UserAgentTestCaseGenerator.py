@@ -871,7 +871,7 @@ def makeBadTransformFlag2():
     header, directory, tableData = defaultTestData(flavor="TTF")
     for entry in directory:
         if entry["tag"] == "glyf":
-            entry["transformFlag"] = 3
+            entry["transformFlag"] = 1
     data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
     return data
 
