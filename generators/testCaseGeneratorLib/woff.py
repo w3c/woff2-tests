@@ -358,7 +358,7 @@ def packTestHeader(header):
 
 def _setTransformBits(flag, tranasform):
     if tranasform == 1:
-        flag |= 1 << 7
+        flag |= 1 << 6
     elif tranasform == 2:
         flag |= 1 << 7
     elif tranasform == 3:
