@@ -91,6 +91,7 @@ def transformTable(font, tag, glyphBBox="", alt255UInt16=False):
         else:
             assert False, "Unknown transformed table tag: %s" % tag
 
+    assert transformedData <= origData
     return (origData, transformedData)
 
 alt255UInt16 = 0
@@ -276,13 +277,25 @@ def transformHmtx(font):
     hmtx = font["hmtx"]
     maxp = font["maxp"]
 
+    origData = font.getTableData("hmtx")
+
+    for name in hmtx.metrics:
+        advance, lsb = hmtx.metrics[name]
+        xMin = 0
+        if hasattr(glyf[name], "xMin"):
+            xMin = glyf[name].xMin
+        if lsb != xMin:
+            return origData
+
     hasLsb = False
     hasLeftSideBearing = False
 
     if hhea.numberOfHMetrics != maxp.numGlyphs:
         hasLeftSideBearing = True
 
-    for name in hmtx.metrics:
+    for index, name in enumerate(hmtx.metrics):
+        if index >= hhea.numberOfHMetrics:
+            break
         advance, lsb = hmtx.metrics[name]
         xMin = 0
         if hasattr(glyf[name], "xMin"):
@@ -298,28 +311,27 @@ def transformHmtx(font):
         flags |= 1 << 1
 
     data = struct.pack(">B", flags)
-    for name in font.getGlyphOrder():
+    for index, name in enumerate(hmtx.metrics):
+        if index >= hhea.numberOfHMetrics:
+            break
         advance, lsb = hmtx.metrics[name]
         data += struct.pack(">H", advance)
 
     if hasLsb:
-        for name in font.getGlyphOrder():
-           advance, lsb = hmtx.metrics[name]
-           data += struct.pack(">H", lsb)
+        for index, name in enumerate(hmtx.metrics):
+            if index >= hhea.numberOfHMetrics:
+                break
+            advance, lsb = hmtx.metrics[name]
+            data += struct.pack(">H", lsb)
 
     if hasLeftSideBearing:
-        metrics = []
-        for name in font.getGlyphOrder():
-            metrics.append(hmtx.metrics[name])
-        lastAdvance = metrics[-1][0]
-        lastIndex = len(metrics)
-        while metrics[lastIndex-2][0] == lastAdvance:
-            lastIndex -= 1
-            if lastIndex <= 1:
-                lastIndex = 1
-                break
-        data += "".join([struct.pack(">H", sb) for advance, sb in metrics[lastIndex:]])
+        for index, name in enumerate(hmtx.metrics):
+            if index < hhea.numberOfHMetrics:
+                continue
+            advance, lsb = hmtx.metrics[name]
+            data += struct.pack(">H", lsb)
 
+    assert len(data) < len(origData)
     return data
 
 def base128Size(n):
