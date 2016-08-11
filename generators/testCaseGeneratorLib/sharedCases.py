@@ -199,12 +199,12 @@ def makeHeaderIncorrectTotalSfntSize(big=False):
     return data
 
 makeHeaderIncorrectTotalSfntSize1Title = "Header TotalSfntSize Too Small"
-makeHeaderIncorrectTotalSfntSize1Description = "The totalSfntSize feild contain a too small incorrect value."
+makeHeaderIncorrectTotalSfntSize1Description = "The totalSfntSize field contains a too small incorrect value."
 makeHeaderIncorrectTotalSfntSize1Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
 
 
 makeHeaderIncorrectTotalSfntSize2Title = "Header TotalSfntSize Too Big"
-makeHeaderIncorrectTotalSfntSize2Description = "The totalSfntSize feild contain a too big incorrect value."
+makeHeaderIncorrectTotalSfntSize2Description = "The totalSfntSize field contains a too big incorrect value."
 makeHeaderIncorrectTotalSfntSize2Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
 
 # --------------------------------------------
