@@ -930,6 +930,26 @@ writeFileStructureTest(
     data=makeHmtxTransform3()
 )
 
+writeFileStructureTest(
+    identifier="tabledata-glyf-origlength-001",
+    title=makeGlyfIncorrectOrigLength1Title,
+    assertion=makeGlyfIncorrectOrigLength1Description,
+    credits=makeGlyfIncorrectOrigLength1Credits,
+    shouldDisplaySFNT=True,
+    sfntDisplaySpecLink="#conform-mustNotRejectGlyfSizeMismatch",
+    data=makeGlyfIncorrectOrigLength()
+)
+
+writeFileStructureTest(
+    identifier="tabledata-glyf-origlength-002",
+    title=makeGlyfIncorrectOrigLength2Title,
+    assertion=makeGlyfIncorrectOrigLength2Description,
+    credits=makeGlyfIncorrectOrigLength2Credits,
+    shouldDisplaySFNT=True,
+    sfntDisplaySpecLink="#conform-mustNotRejectGlyfSizeMismatch",
+    data=makeGlyfIncorrectOrigLength(True)
+)
+
 # --------------------------
 # File Structure: Data Types
 # --------------------------

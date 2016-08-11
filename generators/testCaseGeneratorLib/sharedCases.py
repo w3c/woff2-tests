@@ -625,6 +625,30 @@ makeHmtxTransform3Title = "Transformed Hmtx Table With Bad Flags 2"
 makeHmtxTransform3Description = "Invalid TTF flavored WOFF with transformed hmtx table with all flags bits set to 0"
 makeHmtxTransform3Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
 
+def makeGlyfIncorrectOrigLength(big=False):
+    header, directory, tableData = defaultTestData(flavor="ttf")
+    for entry in directory:
+        if entry["tag"] == "glyf":
+            numBytes = base128Size(entry["origLength"])
+            origLength = 128**(numBytes -1)
+            if big:
+                origLength *= 127
+            else:
+                origLength += 1
+            assert numBytes == base128Size(origLength)
+            entry["origLength"] = origLength
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
+    return data
+
+makeGlyfIncorrectOrigLength1Title = "Glyf OrigLength Too Small"
+makeGlyfIncorrectOrigLength1Description = "The origLength field of glyf table contains a too small incorrect value."
+makeGlyfIncorrectOrigLength1Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
+
+
+makeGlyfIncorrectOrigLength2Title = "Glyf OrigLength Too Big"
+makeGlyfIncorrectOrigLength2Description = "The origLength field of glyf table contains a too big incorrect value."
+makeGlyfIncorrectOrigLength2Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
+
 # -----------------------------------------
 # File Structure: Table Directory: Ordering
 # -----------------------------------------
