@@ -107,7 +107,7 @@ def _generateSFNTDisplayTestHTML(
         s = "\t\t<link rel=\"help\" href=\"%s\" />" % link
         html.append(s)
     ## reviewer
-    s = '<link rel="reviewer" title="Chris Lilley" href="mailto:chris@w3.org" />'
+    s = '\t\t<link rel="reviewer" title="Chris Lilley" href="mailto:chris@w3.org" />'
     html.append(s)
     ## flags
     if flags:
