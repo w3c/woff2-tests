@@ -2996,6 +2996,7 @@ available1 = """
 		<link rel="author" title="Chris Lilley" href="http://www.w3.org/People" />
 		<link rel="help" href="%s" />
 		<link rel="help" href="%s" />
+                <link rel="reviewer" title="Chris Lilley" href="mailto:chris@w3.org" />
 		<meta name="flags" content="font" />
 		<meta name="assert" content="Linked fonts are only available to the documents that reference them" />
 		<style type="text/css"><![CDATA[
@@ -3036,6 +3037,7 @@ available2 = """
 		<link rel="author" title="Chris Lilley" href="http://www.w3.org/People" />
 		<link rel="help" href="%s" />
 		<link rel="help" href="%s" />
+                <link rel="reviewer" title="Chris Lilley" href="mailto:chris@w3.org" />
 		<meta name="flags" content="font" />
 		<meta name="assert" content="Linked fonts are only available to the documents that reference them" />
 		<style type="text/css"><![CDATA[
@@ -3076,6 +3078,7 @@ available3 = """
 		<link rel="author" title="Chris Lilley" href="http://www.w3.org/People" />
 		<link rel="help" href="%s" />
 		<link rel="help" href="%s" />
+                <link rel="reviewer" title="Chris Lilley" href="mailto:chris@w3.org" />
 		<meta name="flags" content="font" />
 		<meta name="assert" content="Linked fonts are only available to the documents that reference them" />
 		<style type="text/css"><![CDATA[
