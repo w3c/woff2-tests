@@ -106,6 +106,9 @@ def _generateSFNTDisplayTestHTML(
     for link in specLinks:
         s = "\t\t<link rel=\"help\" href=\"%s\" />" % link
         html.append(s)
+    ## reviewer
+    s = '<link rel="reviewer" title="Chris Lilley" href="mailto:chris@w3.org" />'
+    html.append(s)
     ## flags
     if flags:
         s = "\t\t<meta name=\"flags\" content=\"%s\" />" % " ".join(flags)
