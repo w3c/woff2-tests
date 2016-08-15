@@ -182,18 +182,9 @@ def writeTest(identifier, title, description, data, specLink=None, credits=[], s
 # Valid SFNT Data
 # ---------------
 
-# CFF
-
-def makeValidSFNT1():
-    header, directory, tableData = defaultSFNTTestData()
-    data = packSFNT(header, directory, tableData)
-    return data
-
-# TTF
-
-def makeValidSFNT2():
-    header, directory, tableData = defaultSFNTTestData(flavor="TTF")
-    data = packSFNT(header, directory, tableData, flavor="TTF")
+def makeValidSFNT(flavor="CFF"):
+    header, directory, tableData = defaultSFNTTestData(flavor=flavor)
+    data = packSFNT(header, directory, tableData, flavor=flavor)
     return data
 
 # -----------
@@ -205,7 +196,7 @@ def makeValidSFNT2():
 # DSIG
 # ----
 
-def makeBitwiseIdenticalDSIG1(flavor="CFF"):
+def makeDSIG(flavor="CFF"):
     header, directory, tableData = defaultSFNTTestData(flavor=flavor)
     # adjust the header
     header["numTables"] += 1
@@ -240,7 +231,7 @@ writeTest(
     shouldConvert=True,
     credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
     specLink="#conform-mustRemoveDSIG",
-    data=makeBitwiseIdenticalDSIG1()
+    data=makeDSIG()
 )
 
 writeTest(
@@ -250,7 +241,7 @@ writeTest(
     shouldConvert=True,
     credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
     specLink="#conform-mustRemoveDSIG",
-    data=makeBitwiseIdenticalDSIG1(flavor="TTF"),
+    data=makeDSIG(flavor="TTF"),
     flavor="TTF"
 )
 
@@ -265,7 +256,7 @@ writeTest(
     shouldConvert=True,
     credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
     specLink="#conform-mustSetBit11",
-    data=makeValidSFNT1()
+    data=makeValidSFNT()
 )
 
 writeTest(
@@ -275,7 +266,7 @@ writeTest(
     shouldConvert=True,
     credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
     specLink="#conform-mustSetBit11",
-    data=makeValidSFNT2(),
+    data=makeValidSFNT(flavor="TTF"),
     flavor="TTF"
 )
 
