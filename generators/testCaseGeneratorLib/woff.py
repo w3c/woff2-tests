@@ -101,10 +101,7 @@ def transformTable(font, tag, glyphBBox="", alt255UInt16=False):
 
     return (origData, transformedData)
 
-alt255UInt16 = 0
-
-def pack255UInt16(n, alternate=True):
-    global alt255UInt16
+def pack255UInt16(n, alternate=0):
     if n < 253:
         ret = struct.pack(">B", n)
     elif n < 506:
@@ -112,14 +109,10 @@ def pack255UInt16(n, alternate=True):
     elif n < 762:
         if not alternate:
             ret = struct.pack(">BB", 254, n - 506)
-        else:
-            if alt255UInt16 == 0:
-                ret = struct.pack(">BB", 254, n - 506)
-            elif alt255UInt16 == 1 or n > 508:
-                ret = struct.pack(">BH", 253, n)
-            else:
-                ret = struct.pack(">BB", 255, n - 253)
-            alt255UInt16 += 1
+        elif alternate == 1 or n > 508:
+            ret = struct.pack(">BH", 253, n)
+        elif alternate == 2:
+            ret = struct.pack(">BB", 255, n - 253)
     else:
         ret = struct.pack(">BH", 253, n)
 
@@ -190,6 +183,8 @@ def transformGlyf(font, glyphBBox="", alt255UInt16=False):
         glyph = glyf[glyphName]
         glyphId = glyf.getGlyphID(glyphName)
 
+        alternate255UInt16 = 0
+
         # nContourStream
         nContourStream += struct.pack(">h", glyph.numberOfContours)
 
@@ -212,7 +207,18 @@ def transformGlyf(font, glyphBBox="", alt255UInt16=False):
             # nPointsStream
             lastPointIndex = 0
             for i in range(glyph.numberOfContours):
-                nPointsStream += pack255UInt16(glyph.endPtsOfContours[i] - lastPointIndex + (i == 0), alternate=alt255UInt16)
+                nPoints = glyph.endPtsOfContours[i] - lastPointIndex + (i == 0)
+                data = pack255UInt16(nPoints, alternate=alternate255UInt16)
+                if nPoints == 506 and alt255UInt16:
+                    num = [ord(v) for v in data]
+                    if alternate255UInt16 == 0:
+                        assert num == [254, 0]
+                    elif alternate255UInt16 == 1:
+                        assert num == [253, 1, 250]
+                    else:
+                        assert num == [255, 253]
+                    alternate255UInt16 += 1
+                nPointsStream += data
                 lastPointIndex = glyph.endPtsOfContours[i]
 
             # flagStream & glyphStream
