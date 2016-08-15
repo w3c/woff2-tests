@@ -79,19 +79,26 @@ transformedTables = ("glyf", "loca")
 def transformTable(font, tag, glyphBBox="", alt255UInt16=False):
     if tag == "head":
         font["head"].flags |= 1 << 11
+
     origData = font.getTableData(tag)
     transformedData = origData
-    if tag == "hmtx" and "glyf" in font:
-        transformedData = transformHmtx(font)
-    if tag in transformedTables:
+
+    transform = False
+    if (tag == "hmtx" and "glyf" in font) or (tag in transformedTables):
+        transform = True
+
+    if transform:
         if tag == "glyf":
             transformedData = transformGlyf(font, glyphBBox=glyphBBox, alt255UInt16=alt255UInt16)
         elif tag == "loca":
             transformedData = ""
+        elif tag == "hmtx":
+            transformedData = transformHmtx(font)
         else:
             assert False, "Unknown transformed table tag: %s" % tag
 
-    assert transformedData <= origData
+        #assert len(transformedData) < len(origData), (tag, len(transformedData), len(origData))
+
     return (origData, transformedData)
 
 alt255UInt16 = 0
