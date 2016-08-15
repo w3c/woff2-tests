@@ -313,7 +313,7 @@ writeFileStructureTest(
     assertion=makeValidWOFF1Description,
     credits=makeValidWOFF1Credits,
     shouldDisplaySFNT=True,
-    sfntDisplaySpecLink="#conform-metadata-noeffect #conform-private-noeffect",
+    sfntDisplaySpecLink="woff1:#conform-metadata-noeffect #conform-private-noeffect",
     data=makeValidWOFF1()
 )
 
@@ -324,7 +324,7 @@ writeFileStructureTest(
     credits=makeValidWOFF2Credits,
     shouldDisplaySFNT=True,
     metadataIsValid=True,
-    sfntDisplaySpecLink="#conform-metadata-noeffect #conform-private-noeffect",
+    sfntDisplaySpecLink="woff1:#conform-metadata-noeffect #conform-private-noeffect",
     data=makeValidWOFF2(),
     metadataToDisplay=testDataWOFFMetadata,
     metadataDisplaySpecLink="#conform-metadata-maydisplay"
@@ -335,7 +335,7 @@ writeFileStructureTest(
     title=makeValidWOFF3Title,
     assertion=makeValidWOFF3Description,
     credits=makeValidWOFF3Credits,
-    sfntDisplaySpecLink="#conform-metadata-noeffect #conform-private-noeffect",
+    sfntDisplaySpecLink="woff1:#conform-metadata-noeffect #conform-private-noeffect",
     shouldDisplaySFNT=True,
     data=makeValidWOFF3()
 )
@@ -347,7 +347,7 @@ writeFileStructureTest(
     credits=makeValidWOFF4Credits,
     shouldDisplaySFNT=True,
     metadataIsValid=True,
-    sfntDisplaySpecLink="#conform-metadata-noeffect #conform-private-noeffect",
+    sfntDisplaySpecLink="woff1:#conform-metadata-noeffect #conform-private-noeffect",
     data=makeValidWOFF4(),
     metadataToDisplay=testDataWOFFMetadata,
     metadataDisplaySpecLink="#conform-metadata-maydisplay"
@@ -361,7 +361,7 @@ writeFileStructureTest(
     title=makeValidWOFF5Title,
     assertion=makeValidWOFF5Description,
     credits=makeValidWOFF5Credits,
-    sfntDisplaySpecLink="#conform-metadata-noeffect #conform-private-noeffect",
+    sfntDisplaySpecLink="woff1:#conform-metadata-noeffect #conform-private-noeffect",
     shouldDisplaySFNT=True,
     data=makeValidWOFF5()
 )
@@ -374,7 +374,7 @@ writeFileStructureTest(
     credits=makeValidWOFF6Credits,
     shouldDisplaySFNT=True,
     metadataIsValid=True,
-    sfntDisplaySpecLink="#conform-metadata-noeffect #conform-private-noeffect",
+    sfntDisplaySpecLink="woff1:#conform-metadata-noeffect #conform-private-noeffect",
     data=makeValidWOFF6(),
     metadataToDisplay=testDataWOFFMetadata,
     metadataDisplaySpecLink="#conform-metadata-maydisplay"
@@ -387,7 +387,7 @@ writeFileStructureTest(
     assertion=makeValidWOFF7Description,
     credits=makeValidWOFF7Credits,
     shouldDisplaySFNT=True,
-    sfntDisplaySpecLink="#conform-metadata-noeffect #conform-private-noeffect",
+    sfntDisplaySpecLink="woff1:#conform-metadata-noeffect #conform-private-noeffect",
     data=makeValidWOFF7()
 )
 
@@ -399,7 +399,7 @@ writeFileStructureTest(
     credits=makeValidWOFF8Credits,
     shouldDisplaySFNT=True,
     metadataIsValid=True,
-    sfntDisplaySpecLink="#conform-metadata-noeffect #conform-private-noeffect",
+    sfntDisplaySpecLink="woff1:#conform-metadata-noeffect #conform-private-noeffect",
     data=makeValidWOFF8(),
     metadataToDisplay=testDataWOFFMetadata,
     metadataDisplaySpecLink="#conform-metadata-maydisplay"
@@ -1089,7 +1089,7 @@ writeFileStructureTest(
     assertion="The file has no metadata.",
     credits=[dict(title="Tal Leming", role="author", link="http://typesupply.com")],
     shouldDisplaySFNT=True,
-    sfntDisplaySpecLink="#conform-metadata-noeffect",
+    sfntDisplaySpecLink="woff1:#conform-metadata-noeffect",
     data=makeMetadataNoEffect1()
 )
 
@@ -1106,7 +1106,7 @@ writeFileStructureTest(
     assertion="The file has metadata.",
     credits=[dict(title="Tal Leming", role="author", link="http://typesupply.com")],
     shouldDisplaySFNT=True,
-    sfntDisplaySpecLink="#conform-metadata-noeffect",
+    sfntDisplaySpecLink="woff1:#conform-metadata-noeffect",
     metadataIsValid=True,
     metadataDisplaySpecLink="#conform-metadata-maydisplay",
     data=makeMetadataNoEffect2()
