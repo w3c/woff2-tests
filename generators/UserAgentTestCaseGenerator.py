@@ -1307,7 +1307,7 @@ writeFileStructureTest(
 
 writeMetadataSchemaValidityTest(
     identifier="metadatadisplay-well-formed-001",
-    metadataDisplaySpecLink="#conform-invalid-mustignore",
+    metadataDisplaySpecLink="woff1:#conform-invalid-mustignore",
     metadataIsValid=False,
 )
 
@@ -1315,7 +1315,7 @@ writeMetadataSchemaValidityTest(
 
 writeMetadataSchemaValidityTest(
     identifier="metadatadisplay-well-formed-002",
-    metadataDisplaySpecLink="#conform-invalid-mustignore",
+    metadataDisplaySpecLink="woff1:#conform-invalid-mustignore",
     metadataIsValid=False,
 )
 
@@ -1323,7 +1323,7 @@ writeMetadataSchemaValidityTest(
 
 writeMetadataSchemaValidityTest(
     identifier="metadatadisplay-well-formed-003",
-    metadataDisplaySpecLink="#conform-invalid-mustignore",
+    metadataDisplaySpecLink="woff1:#conform-invalid-mustignore",
     metadataIsValid=False,
 )
 
@@ -1331,7 +1331,7 @@ writeMetadataSchemaValidityTest(
 
 writeMetadataSchemaValidityTest(
     identifier="metadatadisplay-well-formed-004",
-    metadataDisplaySpecLink="#conform-invalid-mustignore",
+    metadataDisplaySpecLink="woff1:#conform-invalid-mustignore",
     metadataIsValid=False,
 )
 
@@ -1339,7 +1339,7 @@ writeMetadataSchemaValidityTest(
 
 writeMetadataSchemaValidityTest(
     identifier="metadatadisplay-well-formed-005",
-    metadataDisplaySpecLink="#conform-invalid-mustignore",
+    metadataDisplaySpecLink="woff1:#conform-invalid-mustignore",
     metadataIsValid=False,
 )
 
@@ -1347,7 +1347,7 @@ writeMetadataSchemaValidityTest(
 
 writeMetadataSchemaValidityTest(
     identifier="metadatadisplay-well-formed-006",
-    metadataDisplaySpecLink="#conform-invalid-mustignore",
+    metadataDisplaySpecLink="woff1:#conform-invalid-mustignore",
     metadataIsValid=False,
 )
 
@@ -1355,7 +1355,7 @@ writeMetadataSchemaValidityTest(
 
 writeMetadataSchemaValidityTest(
     identifier="metadatadisplay-well-formed-007",
-    metadataDisplaySpecLink="#conform-invalid-mustignore",
+    metadataDisplaySpecLink="woff1:#conform-invalid-mustignore",
     metadataIsValid=False,
 )
 
@@ -1379,7 +1379,7 @@ writeMetadataSchemaValidityTest(
 
 writeMetadataSchemaValidityTest(
     identifier="metadatadisplay-encoding-003",
-    metadataDisplaySpecLink="#conform-invalid-mustignore",
+    metadataDisplaySpecLink="woff1:#conform-invalid-mustignore",
     metadataIsValid=False,
 )
 
@@ -1401,7 +1401,7 @@ writeMetadataSchemaValidityTest(
 
 writeMetadataSchemaValidityTest(
     identifier="metadatadisplay-encoding-006",
-    metadataDisplaySpecLink="#conform-invalid-mustignore",
+    metadataDisplaySpecLink="woff1:#conform-invalid-mustignore",
     metadataIsValid=False,
 )
 
@@ -1480,7 +1480,7 @@ writeMetadataSchemaValidityTest(
 
 writeMetadataSchemaValidityTest(
     identifier="metadatadisplay-schema-uniqueid-004",
-    metadataDisplaySpecLink="#conform-metadata-id-required",
+    metadataDisplaySpecLink="woff1:#conform-metadata-id-required",
     metadataIsValid=False,
 )
 
