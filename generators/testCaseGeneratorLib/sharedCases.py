@@ -14,7 +14,7 @@ from testCaseGeneratorLib.woff import base128Size, packTestHeader, packTestDirec
     woffHeaderSize, transformTable, packTestCollectionHeader, packTestCollectionDirectory
 from testCaseGeneratorLib.defaultData import defaultTestData, testDataWOFFMetadata, testDataWOFFPrivateData,\
     sfntCFFTableData, testCFFDataWOFFDirectory
-from testCaseGeneratorLib.paths import sfntTTFSourcePath, sfntTTFCompositeSourcePath
+from testCaseGeneratorLib.paths import sfntTTFSourcePath, sfntTTFCompositeSourcePath, sfntTTFWithEmptyGlyphsSourcePath
 from testCaseGeneratorLib.utilities import calcPaddingLength, padData, calcTableChecksum, stripMetadata
 from testCaseGeneratorLib.sfnt import getSFNTData
 
@@ -648,6 +648,21 @@ makeGlyfIncorrectOrigLength1Credits = [dict(title="Khaled Hosny", role="author",
 makeGlyfIncorrectOrigLength2Title = "Glyf OrigLength Too Big"
 makeGlyfIncorrectOrigLength2Description = "The origLength field of glyf table contains a too big incorrect value."
 makeGlyfIncorrectOrigLength2Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
+
+def makeGlyfMismatchingOrigLength():
+    tableData, compressedData, tableOrder, tableChecksums = getSFNTData(sfntTTFWithEmptyGlyphsSourcePath)
+    directory = [dict(tag=tag, origLength=0, transformLength=0, transformFlag=0) for tag in tableOrder]
+    # The font was generated with a special version of FontTools that outputs
+    # empty glyphs.
+    # Make sure we are not modifying the compiled glyf table.
+    assert len(tableData["glyf"][0]) == 748
+    header, directory, tableData = defaultTestData(directory=directory, tableData=tableData, compressedData=compressedData, flavor="ttf")
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
+    return data
+
+makeGlyfMismatchingOrigLength1Title = "Glyf OrigLength Mismatching"
+makeGlyfMismatchingOrigLength1Description = "The origLength field of glyf table is larger than constructed table."
+makeGlyfMismatchingOrigLength1Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
 
 # -----------------------------------------
 # File Structure: Table Directory: Ordering

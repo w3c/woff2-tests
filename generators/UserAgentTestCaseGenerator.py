@@ -950,6 +950,16 @@ writeFileStructureTest(
     data=makeGlyfIncorrectOrigLength(True)
 )
 
+writeFileStructureTest(
+    identifier="tabledata-glyf-origlength-003",
+    title=makeGlyfMismatchingOrigLength1Title,
+    assertion=makeGlyfMismatchingOrigLength1Description,
+    credits=makeGlyfMismatchingOrigLength1Credits,
+    shouldDisplaySFNT=True,
+    sfntDisplaySpecLink="#conform-mustNotRejectGlyfSizeMismatch",
+    data=makeGlyfMismatchingOrigLength()
+)
+
 # --------------------------
 # File Structure: Data Types
 # --------------------------
