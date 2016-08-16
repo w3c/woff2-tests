@@ -8,8 +8,7 @@ import zlib
 import codecs
 import struct
 from copy import deepcopy
-from fontTools.misc import sstruct
-from fontTools.ttLib import TTFont, getTableModule
+from fontTools.ttLib import TTFont
 from fontTools.ttLib.sfnt import sfntDirectoryEntrySize
 from testCaseGeneratorLib.woff import base128Size, packTestHeader, packTestDirectory, packTestMetadata, packTestPrivateData,\
     woffHeaderSize, transformTable, packTestCollectionHeader, packTestCollectionDirectory
@@ -578,102 +577,6 @@ def makeGlyfBBox1():
 makeGlyfBBox1Title = "Composite Glyph Without Bounding Box"
 makeGlyfBBox1Description = "Valid TTF flavored WOFF with composite glyphs"
 makeGlyfBBox1Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
-
-def makeHmtxTransform1():
-    header, directory, tableData = defaultTestData(flavor="TTF")
-    for entry in directory:
-        if entry["tag"] == "hmtx":
-            assert entry["transformFlag"] == 1
-    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
-    return data
-
-makeHmtxTransform1Title = "Transformed Hmtx Table With Correct Flags"
-makeHmtxTransform1Description = "Valid TTF flavored WOFF with transformed hmtx table and correct flags field."
-makeHmtxTransform1Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
-
-def makeHmtxTransform2():
-    tableData, compressedData, tableOrder, tableChecksums = getSFNTData(sfntTTFSourcePath)
-    flags = struct.unpack(">B", tableData["hmtx"][1][0])[0]
-    for bit in range(2, 8):
-        flags |= 1 << bit
-    tableData["hmtx"] = (tableData["hmtx"][0], struct.pack(">B", flags) + tableData["hmtx"][1][1:])
-    totalData = "".join([tableData[tag][1] for tag in tableOrder])
-    compressedData = brotli.compress(totalData, brotli.MODE_FONT)
-    header, directory, tableData = defaultTestData(tableData=tableData, compressedData=compressedData, flavor="ttf")
-    for entry in directory:
-        if entry["tag"] == "hmtx":
-            assert entry["transformFlag"] == 1
-    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
-    return data
-
-makeHmtxTransform2Title = "Transformed Hmtx Table With Bad Flags 1"
-makeHmtxTransform2Description = "Invalid TTF flavored WOFF with transformed hmtx table with non-zero reserved bits of the flags field."
-makeHmtxTransform2Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
-
-def makeHmtxTransform3():
-    tableData, compressedData, tableOrder, tableChecksums = getSFNTData(sfntTTFSourcePath)
-    tableData["hmtx"] = (tableData["hmtx"][0], struct.pack(">B", 0) + tableData["hmtx"][1][1:])
-    totalData = "".join([tableData[tag][1] for tag in tableOrder])
-    compressedData = brotli.compress(totalData, brotli.MODE_FONT)
-    header, directory, tableData = defaultTestData(tableData=tableData, compressedData=compressedData, flavor="ttf")
-    for entry in directory:
-        if entry["tag"] == "hmtx":
-            assert entry["transformFlag"] == 1
-    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
-    return data
-
-makeHmtxTransform3Title = "Transformed Hmtx Table With Bad Flags 2"
-makeHmtxTransform3Description = "Invalid TTF flavored WOFF with transformed hmtx table with all flags bits set to 0"
-makeHmtxTransform3Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
-
-def makeGlyfIncorrectOrigLength(big=False):
-    header, directory, tableData = defaultTestData(flavor="ttf")
-    for entry in directory:
-        if entry["tag"] == "glyf":
-            numBytes = base128Size(entry["origLength"])
-            origLength = 128**(numBytes -1)
-            if big:
-                origLength *= 127
-            else:
-                origLength += 1
-            assert numBytes == base128Size(origLength)
-            entry["origLength"] = origLength
-    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
-    return data
-
-makeGlyfIncorrectOrigLength1Title = "Glyf OrigLength Too Small"
-makeGlyfIncorrectOrigLength1Description = "The origLength field of glyf table contains a too small incorrect value."
-makeGlyfIncorrectOrigLength1Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
-
-
-makeGlyfIncorrectOrigLength2Title = "Glyf OrigLength Too Big"
-makeGlyfIncorrectOrigLength2Description = "The origLength field of glyf table contains a too big incorrect value."
-makeGlyfIncorrectOrigLength2Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
-
-def makeGlyfMismatchingOrigLength():
-    font = TTFont(sfntTTFSourcePath, recalcBBoxes=False)
-    glyf = font["glyf"]
-    hmtx = font["hmtx"]
-
-    for i in range(5):
-        name = "empty%d" %i
-        glyph = getTableModule('glyf').Glyph()
-        glyph.numberOfContours = 0
-        glyph.xMin = glyph.xMax = glyph.yMin = glyph.yMax = 0
-        glyph.data = sstruct.pack(getTableModule('glyf').glyphHeaderFormat, glyph)
-        glyf.glyphs[name] = glyph
-        hmtx.metrics[name] = (0, 0)
-        glyf.glyphOrder.append(name)
-
-    tableData, compressedData, tableOrder, tableChecksums = getSFNTData(font)
-    directory = [dict(tag=tag, origLength=0, transformLength=0, transformFlag=0) for tag in tableOrder]
-    header, directory, tableData = defaultTestData(directory=directory, tableData=tableData, compressedData=compressedData, flavor="ttf")
-    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
-    return data
-
-makeGlyfMismatchingOrigLength1Title = "Glyf OrigLength Mismatching"
-makeGlyfMismatchingOrigLength1Description = "The origLength field of glyf table is larger than constructed table."
-makeGlyfMismatchingOrigLength1Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
 
 # -----------------------------------------
 # File Structure: Table Directory: Ordering
