@@ -338,7 +338,7 @@ writeTest(
     description="TTF flavored SFNT font containing glyphs with the calculated bounding box differing from the encoded one, the transformed glyf table in the output WOFF font must have bboxBitmap and bboxStream set with the encoded bounding boxes.",
     shouldConvert=True,
     credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
-    specLink="#conform-mustCalculateOmitBBoxValues",
+    specLink="#conform-mustCalculateSetBBoxValues",
     data=makeGlyfBBox1(False),
     flavor="TTF"
 )
@@ -349,7 +349,7 @@ writeTest(
     description="TTF flavored SFNT font containing glyphs with the calculated bounding box differing from the encoded one and a composite glyph, the transformed glyf table in the output WOFF font must have bboxBitmap and bboxStream set with the encoded bounding boxes.",
     shouldConvert=True,
     credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
-    specLink="#conform-mustCalculateOmitBBoxValues",
+    specLink="#conform-mustSetCompositeBBoxValues",
     data=makeGlyfBBox1(False, True),
     flavor="TTF"
 )
