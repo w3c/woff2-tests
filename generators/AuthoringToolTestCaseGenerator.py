@@ -385,6 +385,17 @@ writeTest(
     flavor="TTF"
 )
 
+writeTest(
+    identifier="tabledata-transform-007",
+    title="Invalid TTF SFNT With Empty Glyph BBox 2",
+    description="TTF flavored SFNT font containing a glyph with zero contours and zero bounding box values, the transformed glyf table in the output WOFF font must have bboxBitmap with all values as 0 and empty bboxStream.",
+    shouldConvert=True,
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    specLink="#conform-mustClearEmptyBBox",
+    data=makeGlyfBBox2(0),
+    flavor="TTF"
+)
+
 # -----------
 # Collections
 # -----------
