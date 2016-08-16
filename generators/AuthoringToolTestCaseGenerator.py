@@ -281,8 +281,8 @@ writeTest(
 # Transformations
 # ---------------
 
-def makeGlyfBBox1():
-    font = TTFont(sfntTTFSourcePath)
+def makeGlyfBBox1(calcBBoxes=True):
+    font = TTFont(sfntTTFSourcePath, recalcBBoxes=calcBBoxes)
     glyf = font["glyf"]
     hmtx = font["hmtx"]
     for name in ("bbox1", "bbox2"):
@@ -295,7 +295,11 @@ def makeGlyfBBox1():
         else:
             pen.qCurveTo((500, 750), (600, 500), (500, 250), (0, 0))
         pen.closePath()
-        glyf.glyphs[name] = pen.glyph()
+        glyph = pen.glyph()
+        if not calcBBoxes:
+            glyph.recalcBounds(glyf)
+            glyph.xMax -= 100
+        glyf.glyphs[name] = glyph
         hmtx.metrics[name] = (0, 0)
         glyf.glyphOrder.append(name)
 
@@ -306,12 +310,23 @@ def makeGlyfBBox1():
 
 writeTest(
     identifier="tabledata-transform-003",
-    title="Valid TTF SFNT For Glyph BBox Calculation",
+    title="Valid TTF SFNT For Glyph BBox Calculation 1",
     description="TTF flavored SFNT font containing glyphs with the calculated bounding box matches the encoded one, the transformed glyf table in the output WOFF font must have bboxBitmap with all values as 0 and empty bboxStream.",
     shouldConvert=True,
     credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
     specLink="#conform-mustCalculateOmitBBoxValues",
     data=makeGlyfBBox1(),
+    flavor="TTF"
+)
+
+writeTest(
+    identifier="tabledata-transform-004",
+    title="Valid TTF SFNT For Glyph BBox Calculation 2",
+    description="TTF flavored SFNT font containing glyphs with the calculated bounding box differing from the encoded one, the transformed glyf table in the output WOFF font must have bboxBitmap and bboxStream set with the encoded bounding boxes.",
+    shouldConvert=True,
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    specLink="#conform-mustCalculateOmitBBoxValues",
+    data=makeGlyfBBox1(False),
     flavor="TTF"
 )
 
