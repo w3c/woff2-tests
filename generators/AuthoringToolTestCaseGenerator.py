@@ -160,8 +160,14 @@ def writeTest(identifier, title, description, data, specLink=None, credits=[], s
     sfntPath = os.path.join(authoringToolTestDirectory, identifier)
     if flavor == "CFF":
         sfntPath += ".otf"
-    else:
+    elif flavor == "TTF":
         sfntPath += ".ttf"
+    elif flavor == "TTC":
+        sfntPath += ".ttc"
+    elif flavor == "OTC":
+        sfntPath += ".otc"
+    else:
+        assert False, "Unknown flavor: %s" % flavor
     f = open(sfntPath, "wb")
     f.write(data)
     f.close()
@@ -292,7 +298,7 @@ writeTest(
     credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
     specLink="#conform-mustNotDuplicateTables",
     data=makeCollectionSharing1(),
-    flavor="TTF"
+    flavor="TTC"
 )
 
 def makeCollectionSharing2():
@@ -308,7 +314,7 @@ writeTest(
     credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
     specLink="#conform-mustVerifyGlyfLocaShared",
     data=makeCollectionSharing2(),
-    flavor="TTF"
+    flavor="TTC"
 )
 
 def makeCollectionSharing3():
@@ -324,7 +330,7 @@ writeTest(
     credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
     specLink="#conform-mustNotDuplicateTables",
     data=makeCollectionSharing3(),
-    flavor="TTF"
+    flavor="TTC"
 )
 
 def makeCollectionSharing4():
@@ -340,7 +346,7 @@ writeTest(
     credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
     specLink="#conform-mustRejectSingleGlyfLocaShared",
     data=makeCollectionSharing4(),
-    flavor="TTF"
+    flavor="TTC"
 )
 
 def makeCollectionSharing5():
@@ -356,7 +362,7 @@ writeTest(
     credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
     specLink="#conform-mustRejectSingleGlyfLocaShared",
     data=makeCollectionSharing5(),
-    flavor="TTF"
+    flavor="TTC"
 )
 
 def makeCollectionSharing6():
@@ -372,7 +378,7 @@ writeTest(
     credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
     specLink="#conform-mustEmitSingleEntryDirectory",
     data=makeCollectionSharing6(),
-    flavor="TTF"
+    flavor="TTC"
 )
 
 def makeCollectionTransform1():
@@ -388,7 +394,7 @@ writeTest(
     credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
     specLink="#conform-mustTransformMultipleGlyfLoca",
     data=makeCollectionTransform1(),
-    flavor="TTF"
+    flavor="TTC"
 )
 
 def makeCollectionOrder1():
@@ -404,7 +410,7 @@ writeTest(
     credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
     specLink="#conform-mustPreserveFontOrder",
     data=makeCollectionOrder1(),
-    flavor="TTF"
+    flavor="TTC"
 )
 
 writeTest(
@@ -415,7 +421,7 @@ writeTest(
     credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
     specLink="#conform-mustRecordCollectionEntryIndex",
     data=makeCollectionSharing2(),
-    flavor="TTF"
+    flavor="TTC"
 )
 
 # ------------------
@@ -444,10 +450,10 @@ if os.path.exists(zipPath):
 
 allBinariesZip = zipfile.ZipFile(zipPath, "w")
 
-pattern = os.path.join(authoringToolTestDirectory, "*.*tf")
+pattern = os.path.join(authoringToolTestDirectory, "*.?t?")
 for path in glob.glob(pattern):
     ext = os.path.splitext(path)[1]
-    assert ext in (".otf", ".ttf")
+    assert ext in (".otf", ".ttf", ".otc", ".ttc")
     allBinariesZip.write(path, os.path.basename(path))
 
 allBinariesZip.close()
@@ -495,7 +501,9 @@ f.close()
 
 otfPattern = os.path.join(authoringToolTestDirectory, "*.otf")
 ttfPattern = os.path.join(authoringToolTestDirectory, "*.ttf")
-filesOnDisk = glob.glob(otfPattern) + glob.glob(ttfPattern)
+otcPattern = os.path.join(authoringToolTestDirectory, "*.otc")
+ttcPattern = os.path.join(authoringToolTestDirectory, "*.ttc")
+filesOnDisk = glob.glob(otfPattern) + glob.glob(ttfPattern) + glob.glob(otcPattern) + glob.glob(ttcPattern)
 
 for path in filesOnDisk:
     identifier = os.path.basename(path)
