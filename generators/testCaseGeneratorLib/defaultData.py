@@ -322,7 +322,7 @@ def defaultTestData(header=None, directory=None, collectionHeader=None, collecti
 # Default SFNT Data Creator
 # -------------------------
 
-def defaultSFNTTestData(flavor="cff"):
+def defaultSFNTTestData(tableData=None, flavor="cff"):
     parts = []
     # setup the header
     header = deepcopy(testDataSFNTHeader)
@@ -334,10 +334,11 @@ def defaultSFNTTestData(flavor="cff"):
         directory = deepcopy(testTTFDataSFNTDirectory)
     parts.append(directory)
     # setup the table data
-    if flavor == "cff":
-        tableData = deepcopy(sfntCFFTableData)
-    else:
-        tableData = deepcopy(sfntTTFTableData)
+    if tableData is None:
+        if flavor == "cff":
+            tableData = deepcopy(sfntCFFTableData)
+        else:
+            tableData = deepcopy(sfntTTFTableData)
     for tag, (data, transformData) in tableData.items():
         tableData[tag] = data
     parts.append(tableData)

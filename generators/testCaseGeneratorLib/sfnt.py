@@ -18,7 +18,10 @@ from woff import packTestCollectionDirectory, packTestDirectory, packTestCollect
 # ---------
 
 def getSFNTData(pathOrFile, unsortGlyfLoca=False, glyphBBox="", alt255UInt16=False):
-    font = TTFont(pathOrFile)
+    if isinstance(pathOrFile, TTFont):
+        font = pathOrFile
+    else:
+        font = TTFont(pathOrFile)
     tableChecksums = {}
     tableData = {}
     tableOrder = [i for i in sorted(font.keys()) if len(i) == 4]

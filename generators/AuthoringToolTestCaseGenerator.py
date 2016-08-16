@@ -22,10 +22,11 @@ import shutil
 import glob
 import struct
 import zipfile
-from fontTools.ttLib import getSearchRange
+from fontTools.pens.ttGlyphPen import TTGlyphPen
+from fontTools.ttLib import TTFont, getSearchRange
 from fontTools.ttLib.sfnt import sfntDirectorySize, sfntDirectoryEntrySize
 from testCaseGeneratorLib.defaultData import defaultSFNTTestData
-from testCaseGeneratorLib.sfnt import packSFNT, getSFNTCollectionData
+from testCaseGeneratorLib.sfnt import packSFNT, getSFNTData, getSFNTCollectionData
 from testCaseGeneratorLib.paths import resourcesDirectory, authoringToolDirectory, authoringToolTestDirectory,\
                                        authoringToolResourcesDirectory, sfntTTFSourcePath, sfntTTFCompositeSourcePath
 from testCaseGeneratorLib.html import generateAuthoringToolIndexHTML, expandSpecLinks
@@ -280,6 +281,39 @@ writeTest(
 # Transformations
 # ---------------
 
+def makeGlyfBBox1():
+    font = TTFont(sfntTTFSourcePath)
+    glyf = font["glyf"]
+    hmtx = font["hmtx"]
+    for name in ("bbox1", "bbox2"):
+        pen = TTGlyphPen(None)
+        pen.moveTo((0, 0))
+        if name == "bbox1":
+            pen.lineTo((0, 1000))
+            pen.lineTo((1000, 1000))
+            pen.lineTo((1000, 0))
+        else:
+            pen.qCurveTo((500, 750), (600, 500), (500, 250), (0, 0))
+        pen.closePath()
+        glyf.glyphs[name] = pen.glyph()
+        hmtx.metrics[name] = (0, 0)
+        glyf.glyphOrder.append(name)
+
+    tableData = getSFNTData(font)[0]
+    header, directory, tableData = defaultSFNTTestData(tableData=tableData, flavor="TTF")
+    data = packSFNT(header, directory, tableData, flavor="TTF")
+    return data
+
+writeTest(
+    identifier="tabledata-transform-003",
+    title="Valid TTF SFNT For Glyph BBox Calculation",
+    description="TTF flavored SFNT font containing glyphs with the calculated bounding box matches the encoded one, the transformed glyf table in the output WOFF font must have bboxBitmap with all values as 0 and empty bboxStream.",
+    shouldConvert=True,
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    specLink="#conform-mustCalculateOmitBBoxValues",
+    data=makeGlyfBBox1(),
+    flavor="TTF"
+)
 
 # -----------
 # Collections
