@@ -30,6 +30,7 @@ import shutil
 import struct
 import glob
 from fontTools.misc import sstruct
+from fontTools.pens.ttGlyphPen import TTGlyphPen
 from fontTools.ttLib import TTFont, getTableModule
 from testCaseGeneratorLib.woff import packTestHeader, packTestDirectory, packTestMetadata, packTestPrivateData, base128Size, transformedTables, woffHeaderSize
 from testCaseGeneratorLib.defaultData import defaultTestData, testDataWOFFMetadata, testDataWOFFPrivateData
@@ -1037,6 +1038,26 @@ writeFileStructureTest(
 # File Structure: Data Types
 # --------------------------
 def make255UInt16Alt1():
+    font = TTFont(sfntTTFSourcePath, recalcBBoxes=False)
+    glyf = font["glyf"]
+    hmtx = font["hmtx"]
+
+    name = "506"
+    pen = TTGlyphPen(None)
+    for i in range(3):
+        pen.moveTo((0, 0))
+        for j in range(506):
+            pen.lineTo((0, 0))
+        pen.closePath()
+    glyph = pen.glyph()
+    glyph.xMin, glyph.xMax, glyph.yMin, glyph.yMax = (0, 1260, 0, 1250)
+    glyf.glyphs[name] = glyph
+    hmtx.metrics[name] = (0, 0)
+    glyf.glyphOrder.append(name)
+
+    assert glyph.numberOfContours == 3
+    assert len(glyph.coordinates) / 3.0 == 506
+
     tableData, compressedData, tableOrder, tableChecksums = getSFNTData(sfntTTFSourcePath, alt255UInt16=True)
     header, directory, tableData = defaultTestData(tableData=tableData, compressedData=compressedData, flavor="ttf")
     data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
