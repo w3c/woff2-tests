@@ -74,14 +74,6 @@ any access to the "input font" as defined in the WOFF specification,
 so the bitwise identical tests should be skipped.
 """.strip()
 
-validNote = """
-These files are valid SFNTs that should be converted to WOFF.
-""".strip()
-
-invalidSFNTNote = """
-These files are invalid SFNTs that should not be converted to WOFF.
-""".strip()
-
 tableDataNote = """
 These files are valid SFNTs that excercise conversion of the table data.
 """.strip()
@@ -90,16 +82,8 @@ tableDirectoryNote = """
 These files are valid SFNTs that excercise conversion of the table directory.
 """.strip()
 
-bitwiseNote = """
-These files are provided as test cases for checking that the
-result of converting to WOFF and back to SFNT results in a file
-that is bitwise identical to the original SFNT.
-""".strip()
-
 groupDefinitions = [
     # identifier, title, spec section, category note
-    ("validsfnt", "Valid SFNTs", None, validNote),
-    ("invalidsfnt", "Invalid SFNT Tests", expandSpecLinks("#conform-incorrect-reject"), invalidSFNTNote),
     ("tabledata", "SFNT Table Data Tests", expandSpecLinks("#DataTables"), tableDataNote),
     ("tabledirectory", "SFNT Table Directory Tests", expandSpecLinks("#DataTables"), tableDirectoryNote),
 ]
