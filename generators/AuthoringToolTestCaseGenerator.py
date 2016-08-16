@@ -387,7 +387,7 @@ def makeCollectionTransform1():
     return data
 
 writeTest(
-    identifier="tabledata-transform-002",
+    identifier="tabledata-transform-001",
     title="Valid Font Collection With Multiple Glyf/Loca",
     description="TTF flavored SFNT collection with multiple unshared glyf and loca tables, all of them must be transformed in the output WOFF font.",
     shouldConvert=True,
