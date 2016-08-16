@@ -15,7 +15,7 @@ from testCaseGeneratorLib.woff import base128Size, packTestHeader, packTestDirec
     woffHeaderSize, transformTable, packTestCollectionHeader, packTestCollectionDirectory
 from testCaseGeneratorLib.defaultData import defaultTestData, testDataWOFFMetadata, testDataWOFFPrivateData,\
     sfntCFFTableData, testCFFDataWOFFDirectory
-from testCaseGeneratorLib.paths import sfntTTFSourcePath, sfntTTFCompositeSourcePath, sfntTTFWithEmptyGlyphsSourcePath
+from testCaseGeneratorLib.paths import sfntTTFSourcePath, sfntTTFCompositeSourcePath
 from testCaseGeneratorLib.utilities import calcPaddingLength, padData, calcTableChecksum, stripMetadata
 from testCaseGeneratorLib.sfnt import getSFNTData
 
