@@ -8,7 +8,8 @@ import zlib
 import codecs
 import struct
 from copy import deepcopy
-from fontTools.ttLib import TTFont
+from fontTools.misc import sstruct
+from fontTools.ttLib import TTFont, getTableModule
 from fontTools.ttLib.sfnt import sfntDirectoryEntrySize
 from testCaseGeneratorLib.woff import base128Size, packTestHeader, packTestDirectory, packTestMetadata, packTestPrivateData,\
     woffHeaderSize, transformTable, packTestCollectionHeader, packTestCollectionDirectory
@@ -650,12 +651,22 @@ makeGlyfIncorrectOrigLength2Description = "The origLength field of glyf table co
 makeGlyfIncorrectOrigLength2Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
 
 def makeGlyfMismatchingOrigLength():
-    tableData, compressedData, tableOrder, tableChecksums = getSFNTData(sfntTTFWithEmptyGlyphsSourcePath)
+    font = TTFont(sfntTTFSourcePath, recalcBBoxes=False)
+    glyf = font["glyf"]
+    hmtx = font["hmtx"]
+
+    for i in range(5):
+        name = "empty%d" %i
+        glyph = getTableModule('glyf').Glyph()
+        glyph.numberOfContours = 0
+        glyph.xMin = glyph.xMax = glyph.yMin = glyph.yMax = 0
+        glyph.data = sstruct.pack(getTableModule('glyf').glyphHeaderFormat, glyph)
+        glyf.glyphs[name] = glyph
+        hmtx.metrics[name] = (0, 0)
+        glyf.glyphOrder.append(name)
+
+    tableData, compressedData, tableOrder, tableChecksums = getSFNTData(font)
     directory = [dict(tag=tag, origLength=0, transformLength=0, transformFlag=0) for tag in tableOrder]
-    # The font was generated with a special version of FontTools that outputs
-    # empty glyphs.
-    # Make sure we are not modifying the compiled glyf table.
-    assert len(tableData["glyf"][0]) == 748
     header, directory, tableData = defaultTestData(directory=directory, tableData=tableData, compressedData=compressedData, flavor="ttf")
     data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
     return data
