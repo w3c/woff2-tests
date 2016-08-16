@@ -327,7 +327,7 @@ writeFileStructureTest(
     sfntDisplaySpecLink="woff1:#conform-metadata-noeffect #conform-private-noeffect",
     data=makeValidWOFF2(),
     metadataToDisplay=testDataWOFFMetadata,
-    metadataDisplaySpecLink="#conform-metadata-maydisplay"
+    metadataDisplaySpecLink="woff1:#conform-metadata-maydisplay"
 )
 
 writeFileStructureTest(
@@ -350,7 +350,7 @@ writeFileStructureTest(
     sfntDisplaySpecLink="woff1:#conform-metadata-noeffect #conform-private-noeffect",
     data=makeValidWOFF4(),
     metadataToDisplay=testDataWOFFMetadata,
-    metadataDisplaySpecLink="#conform-metadata-maydisplay"
+    metadataDisplaySpecLink="woff1:#conform-metadata-maydisplay"
 )
 
 # TTF
@@ -377,7 +377,7 @@ writeFileStructureTest(
     sfntDisplaySpecLink="woff1:#conform-metadata-noeffect #conform-private-noeffect",
     data=makeValidWOFF6(),
     metadataToDisplay=testDataWOFFMetadata,
-    metadataDisplaySpecLink="#conform-metadata-maydisplay"
+    metadataDisplaySpecLink="woff1:#conform-metadata-maydisplay"
 )
 
 writeFileStructureTest(
@@ -402,7 +402,7 @@ writeFileStructureTest(
     sfntDisplaySpecLink="woff1:#conform-metadata-noeffect #conform-private-noeffect",
     data=makeValidWOFF8(),
     metadataToDisplay=testDataWOFFMetadata,
-    metadataDisplaySpecLink="#conform-metadata-maydisplay"
+    metadataDisplaySpecLink="woff1:#conform-metadata-maydisplay"
 )
 
 def makeValidOFF():
@@ -1108,7 +1108,7 @@ writeFileStructureTest(
     shouldDisplaySFNT=True,
     sfntDisplaySpecLink="woff1:#conform-metadata-noeffect",
     metadataIsValid=True,
-    metadataDisplaySpecLink="#conform-metadata-maydisplay",
+    metadataDisplaySpecLink="woff1:#conform-metadata-maydisplay",
     data=makeMetadataNoEffect2()
 )
 
@@ -1249,7 +1249,7 @@ writeFileStructureTest(
     shouldDisplaySFNT=True,
     metadataIsValid=True,
     metadataToDisplay=metadataAuthoritativeXML,
-    metadataDisplaySpecLink="#conform-metadata-authoritative",
+    metadataDisplaySpecLink="woff1:#conform-metadata-authoritative",
     data=makeMetadataAuthoritativeTest1(),
     extraMetadataNotes=["The Extended Metadata Block test fails if the word FAIL appears in the metadata display."]
 )
@@ -1265,7 +1265,7 @@ writeFileStructureTest(
     credits=makeMetadataCompression1Credits,
     shouldDisplaySFNT=True,
     metadataIsValid=False,
-    metadataDisplaySpecLink="#conform-metadata-alwayscompress",
+    metadataDisplaySpecLink="woff1:#conform-metadata-alwayscompress",
     data=makeMetadataCompression1(),
 )
 
@@ -1282,7 +1282,7 @@ writeFileStructureTest(
     credits=makeMetaOrigLengthTest1Credits,
     shouldDisplaySFNT=True,
     metadataIsValid=False,
-    sfntDisplaySpecLink="#conform-metaOrigLength",
+    sfntDisplaySpecLink="woff1:#conform-metaOrigLength",
     data=makeMetaOrigLengthTest1()
 )
 
@@ -1295,7 +1295,7 @@ writeFileStructureTest(
     credits=makeMetaOrigLengthTest2Credits,
     shouldDisplaySFNT=True,
     metadataIsValid=False,
-    sfntDisplaySpecLink="#conform-metaOrigLength",
+    sfntDisplaySpecLink="woff1:#conform-metaOrigLength",
     data=makeMetaOrigLengthTest2()
 )
 
@@ -1539,7 +1539,7 @@ writeMetadataSchemaValidityTest(
 
 writeMetadataSchemaValidityTest(
     identifier="metadatadisplay-schema-vendor-005",
-    metadataDisplaySpecLink="#conform-metadata-vendor-required",
+    metadataDisplaySpecLink="woff1:#conform-metadata-vendor-required",
     metadataIsValid=False,
 )
 

@@ -894,7 +894,7 @@ writeTest(
     credits=makeMetadataCompression1Credits,
     valid=False,
     data=makeMetadataCompression1(),
-    specLink="#conform-metadata-alwayscompress"
+    specLink="woff1:#conform-metadata-alwayscompress"
 )
 
 writeTest(
@@ -919,7 +919,7 @@ writeTest(
     description=makeMetaOrigLengthTest1Description,
     credits=makeMetaOrigLengthTest1Credits,
     valid=False,
-    specLink="#conform-metaOrigLength",
+    specLink="woff1:#conform-metaOrigLength",
     data=makeMetaOrigLengthTest1()
 )
 
@@ -931,7 +931,7 @@ writeTest(
     description=makeMetaOrigLengthTest2Description,
     credits=makeMetaOrigLengthTest2Credits,
     valid=False,
-    specLink="#conform-metaOrigLength",
+    specLink="woff1:#conform-metaOrigLength",
     data=makeMetaOrigLengthTest2()
 )
 
@@ -943,7 +943,7 @@ writeTest(
 
 writeMetadataTest(
     identifier="metadata-well-formed-001",
-    specLink="#conform-metaOrigLength",
+    specLink="woff1:#conform-metaOrigLength",
     valid=False,
 )
 
@@ -951,7 +951,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-well-formed-002",
-    specLink="#conform-metaOrigLength",
+    specLink="woff1:#conform-metaOrigLength",
     valid=False,
 )
 
@@ -959,7 +959,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-well-formed-003",
-    specLink="#conform-metaOrigLength",
+    specLink="woff1:#conform-metaOrigLength",
     valid=False,
 )
 
@@ -967,7 +967,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-well-formed-004",
-    specLink="#conform-metaOrigLength",
+    specLink="woff1:#conform-metaOrigLength",
     valid=False,
 )
 
@@ -975,7 +975,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-well-formed-005",
-    specLink="#conform-metaOrigLength",
+    specLink="woff1:#conform-metaOrigLength",
     valid=False,
 )
 
@@ -983,7 +983,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-well-formed-006",
-    specLink="#conform-metaOrigLength",
+    specLink="woff1:#conform-metaOrigLength",
     valid=False,
 )
 
@@ -991,7 +991,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-well-formed-007",
-    specLink="#conform-metaOrigLength",
+    specLink="woff1:#conform-metaOrigLength",
     valid=False,
 )
 
@@ -1193,7 +1193,7 @@ writeMetadataTest(
 
 writeMetadataTest(
     identifier="metadata-schema-vendor-005",
-    specLink="#conform-metadata-vendor-required",
+    specLink="woff1:#conform-metadata-vendor-required",
     valid=False,
 )
 
