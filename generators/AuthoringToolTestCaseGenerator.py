@@ -22,8 +22,9 @@ import shutil
 import glob
 import struct
 import zipfile
+from fontTools.misc import sstruct
 from fontTools.pens.ttGlyphPen import TTGlyphPen
-from fontTools.ttLib import TTFont, getSearchRange
+from fontTools.ttLib import TTFont, getSearchRange, getTableModule
 from fontTools.ttLib.sfnt import sfntDirectorySize, sfntDirectoryEntrySize
 from testCaseGeneratorLib.defaultData import defaultSFNTTestData
 from testCaseGeneratorLib.sfnt import packSFNT, getSFNTData, getSFNTCollectionData
@@ -351,6 +352,36 @@ writeTest(
     credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
     specLink="#conform-mustSetCompositeBBoxValues",
     data=makeGlyfBBox1(False, True),
+    flavor="TTF"
+)
+
+def makeGlyfBBox2(bbox):
+    font = TTFont(sfntTTFSourcePath, recalcBBoxes=False)
+    glyf = font["glyf"]
+    hmtx = font["hmtx"]
+
+    name = "bbox1"
+    glyph = getTableModule('glyf').Glyph()
+    glyph.numberOfContours = 0
+    glyph.xMin = glyph.xMax = glyph.yMin = glyph.yMax = bbox
+    glyph.data = sstruct.pack(getTableModule('glyf').glyphHeaderFormat, glyph)
+    glyf.glyphs[name] = glyph
+    hmtx.metrics[name] = (0, 0)
+    glyf.glyphOrder.append(name)
+
+    tableData = getSFNTData(font)[0]
+    header, directory, tableData = defaultSFNTTestData(tableData=tableData, flavor="TTF")
+    data = packSFNT(header, directory, tableData, flavor="TTF")
+    return data
+
+writeTest(
+    identifier="tabledata-transform-006",
+    title="Invalid TTF SFNT With Empty Glyph BBox 1",
+    description="TTF flavored SFNT font containing a glyph with zero contours and non-zero bounding box values.",
+    shouldConvert=False,
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    specLink="#conform-mustRejectNonEmptyBBox",
+    data=makeGlyfBBox2(10),
     flavor="TTF"
 )
 
