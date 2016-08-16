@@ -397,6 +397,17 @@ writeTest(
     flavor="TTC"
 )
 
+writeTest(
+    identifier="tabledata-transform-002",
+    title="Valid Font Collection With Glyf/Loca Pairs",
+    description="TTF flavored SFNT collection with multiple unshared glyf and loca tables, glyf and loca tables from each font must be paired in the output WOFF font.",
+    shouldConvert=True,
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    specLink="#conform-mustReorderGlyfLoca",
+    data=makeCollectionTransform1(),
+    flavor="TTC"
+)
+
 def makeCollectionOrder1():
     data = getSFNTCollectionData([sfntTTFSourcePath, sfntTTFSourcePath, sfntTTFSourcePath], reverseNames=True)
 
