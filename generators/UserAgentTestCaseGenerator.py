@@ -1281,10 +1281,7 @@ metadataAuthoritativeXML = """
 
 def makeMetadataAuthoritativeTest1():
     from cStringIO import StringIO
-    from fontTools.ttLib import TTFont
-    from fontTools.ttLib.tables._n_a_m_e import NameRecord
     from testCaseGeneratorLib.paths import sfntCFFSourcePath
-    from testCaseGeneratorLib.sfnt import getSFNTData
     from testCaseGeneratorLib.defaultData import sfntCFFTableOrder
     setToFAIL = [
         0,  # copyright
@@ -1310,7 +1307,7 @@ def makeMetadataAuthoritativeTest1():
     string = "FAIL".encode("utf8")
     for nameID in setToFAIL:
         for platformID, platEncID, langID in [(1, 0, 0), (3, 1, 1033)]:
-            record = NameRecord()
+            record = getTableModule("name").NameRecord()
             record.nameID = nameID
             record.platformID = platformID
             record.platEncID = platEncID
