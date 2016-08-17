@@ -1058,7 +1058,7 @@ def make255UInt16Alt1():
     assert glyph.numberOfContours == 3
     assert len(glyph.coordinates) / 3.0 == 506
 
-    tableData, compressedData, tableOrder, tableChecksums = getSFNTData(sfntTTFSourcePath, alt255UInt16=True)
+    tableData, compressedData, tableOrder, tableChecksums = getSFNTData(font, alt255UInt16=True)
     header, directory, tableData = defaultTestData(tableData=tableData, compressedData=compressedData, flavor="ttf")
     data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
     return data
