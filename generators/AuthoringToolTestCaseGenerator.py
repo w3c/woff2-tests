@@ -22,11 +22,12 @@ import shutil
 import glob
 import struct
 import zipfile
+import brotli
 from fontTools.misc import sstruct
 from fontTools.pens.ttGlyphPen import TTGlyphPen
 from fontTools.ttLib import TTFont, getSearchRange, getTableModule
 from fontTools.ttLib.sfnt import sfntDirectorySize, sfntDirectoryEntrySize
-from testCaseGeneratorLib.defaultData import defaultSFNTTestData
+from testCaseGeneratorLib.defaultData import defaultTestData, defaultSFNTTestData
 from testCaseGeneratorLib.sfnt import packSFNT, getSFNTData, getSFNTCollectionData
 from testCaseGeneratorLib.paths import resourcesDirectory, authoringToolDirectory, authoringToolTestDirectory,\
                                        authoringToolResourcesDirectory, sfntTTFSourcePath, sfntTTFCompositeSourcePath
@@ -377,6 +378,32 @@ writeTest(
     credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
     specLink="#conform-mustClearEmptyBBox",
     data=makeGlyfBBox2(0),
+    flavor="TTF"
+)
+
+def makeLSB1():
+    woffHeader, woffDirectory, woffCompressedTableData = defaultTestData(flavor="TTF")
+    woffTableData = brotli.decompress(woffCompressedTableData)
+    offset = 0
+    for entry in woffDirectory:
+        if entry["tag"] == "hmtx":
+            assert entry["transformFlag"] == 1
+            flags = ord(woffTableData[offset])
+            assert flags & (1 << 0)
+            assert flags & (1 << 1)
+        offset += entry["transformLength"]
+    header, directory, tableData = defaultSFNTTestData(flavor="TTF")
+    data = packSFNT(header, directory, tableData, flavor="TTF")
+    return data
+
+writeTest(
+    identifier="tabledata-transform-008",
+    title="Valid TTF SFNT For Glyph LSB Elemination 1",
+    description="TTF flavored SFNT font containing two proportional and two monospaced glyphs with left side bearings matching the Xmin values of each corresponding glyph bonding box. The hmtx table must be transformed with version 1 transform, eliminating both lsb[] and leftSideBearing[] arrays with corresponding Flags bits set.",
+    shouldConvert=True,
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    specLink="#conform-mustEliminateLSBs",
+    data=makeLSB1(),
     flavor="TTF"
 )
 
