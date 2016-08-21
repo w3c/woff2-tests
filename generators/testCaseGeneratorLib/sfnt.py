@@ -37,8 +37,9 @@ def getSFNTData(pathOrFile, unsortGlyfLoca=False, glyphBBox="", alt255UInt16=Fal
     compData = brotli.compress(totalData, brotli.MODE_FONT)
     if len(compData) >= len(totalData):
         compData = totalData
-    font.close()
-    del font
+    if not isinstance(pathOrFile, TTFont):
+        font.close()
+        del font
     return tableData, compData, tableOrder, tableChecksums
 
 def getSFNTCollectionData(pathOrFiles, modifyNames=True, reverseNames=False, DSIG=False, duplicates=[], shared=[]):
