@@ -83,10 +83,15 @@ tableDirectoryNote = """
 These files are valid SFNTs that excercise conversion of the table directory.
 """.strip()
 
+collectionNote = """
+These files are valid SFNTs that excercise conversion of font collections.
+""".strip()
+
 groupDefinitions = [
     # identifier, title, spec section, category note
     ("tabledata", "SFNT Table Data Tests", expandSpecLinks("#DataTables"), tableDataNote),
     ("tabledirectory", "SFNT Table Directory Tests", expandSpecLinks("#DataTables"), tableDirectoryNote),
+    ("collection", "SFNT Collection Tests", expandSpecLinks("#DataTables"), collectionNote),
 ]
 
 testRegistry = {}
@@ -310,7 +315,7 @@ def makeGlyfBBox1(calcBBoxes=True, composite=False):
     return data
 
 writeTest(
-    identifier="tabledata-transform-003",
+    identifier="tabledata-transform-glyf-001",
     title="Valid TTF SFNT For Glyph BBox Calculation 1",
     description="TTF flavored SFNT font containing glyphs with the calculated bounding box matches the encoded one, the transformed glyf table in the output WOFF font must have bboxBitmap with all values as 0 and empty bboxStream.",
     shouldConvert=True,
@@ -321,7 +326,7 @@ writeTest(
 )
 
 writeTest(
-    identifier="tabledata-transform-004",
+    identifier="tabledata-transform-glyf-002",
     title="Valid TTF SFNT For Glyph BBox Calculation 2",
     description="TTF flavored SFNT font containing glyphs with the calculated bounding box differing from the encoded one, the transformed glyf table in the output WOFF font must have bboxBitmap and bboxStream set with the encoded bounding boxes.",
     shouldConvert=True,
@@ -332,7 +337,7 @@ writeTest(
 )
 
 writeTest(
-    identifier="tabledata-transform-005",
+    identifier="tabledata-transform-glyf-003",
     title="Valid TTF SFNT For Glyph BBox Calculation 3",
     description="TTF flavored SFNT font containing glyphs with the calculated bounding box differing from the encoded one and a composite glyph, the transformed glyf table in the output WOFF font must have bboxBitmap and bboxStream set with the encoded bounding boxes.",
     shouldConvert=True,
@@ -365,7 +370,7 @@ def makeGlyfBBox2(bbox):
     return data
 
 writeTest(
-    identifier="tabledata-transform-006",
+    identifier="tabledata-transform-glyf-004",
     title="Invalid TTF SFNT With Empty Glyph BBox 1",
     description="TTF flavored SFNT font containing a glyph with zero contours and non-zero bounding box values.",
     shouldConvert=False,
@@ -376,7 +381,7 @@ writeTest(
 )
 
 writeTest(
-    identifier="tabledata-transform-007",
+    identifier="tabledata-transform-glyf-005",
     title="Invalid TTF SFNT With Empty Glyph BBox 2",
     description="TTF flavored SFNT font containing a glyph with zero contours and zero bounding box values, the transformed glyf table in the output WOFF font must have bboxBitmap with all values as 0 and empty bboxStream.",
     shouldConvert=True,
@@ -402,7 +407,7 @@ def makeLSB1():
     return data
 
 writeTest(
-    identifier="tabledata-transform-008",
+    identifier="tabledata-transform-hmtx-001",
     title="Valid TTF SFNT For Glyph LSB Elemination 1",
     description="TTF flavored SFNT font containing two proportional and two monospaced glyphs with left side bearings matching the Xmin values of each corresponding glyph bonding box. The hmtx table must be transformed with version 1 transform, eliminating both lsb[] and leftSideBearing[] arrays with corresponding Flags bits set.",
     shouldConvert=True,
@@ -422,7 +427,7 @@ def makeCollectionSharing1():
     return data
 
 writeTest(
-    identifier="tabledata-sharing-001",
+    identifier="collection-sharing-001",
     title="Valid Font Collection With No Duplicate Tables",
     description="TTF flavored SFNT collection with all tables being shared, output WOFF font must not contain any duplicate tables.",
     shouldConvert=True,
@@ -438,7 +443,7 @@ def makeCollectionSharing2():
     return data
 
 writeTest(
-    identifier="tabledata-sharing-002",
+    identifier="collection-sharing-002",
     title="Valid Font Collection With Shared Glyf/Loca",
     description="TTF flavored SFNT collection containing two fonts sharing the same glyf and loca tables.",
     shouldConvert=True,
@@ -454,7 +459,7 @@ def makeCollectionSharing3():
     return data
 
 writeTest(
-    identifier="tabledata-sharing-003",
+    identifier="collection-sharing-003",
     title="Valid Font Collection With Shared And Unshared Glyf/Loca",
     description="TTF flavored SFNT collection containing three fonts, two of them sharing the same glyf and loca tables and the third using different glyf and loca tables.",
     shouldConvert=True,
@@ -470,7 +475,7 @@ def makeCollectionSharing4():
     return data
 
 writeTest(
-    identifier="tabledata-sharing-004",
+    identifier="collection-sharing-004",
     title="Invalid Font Collection With Unshared Loca",
     description="An invalid TTF flavored SFNT collection containing two fonts sharing glyf but not loca table.",
     shouldConvert=False,
@@ -486,7 +491,7 @@ def makeCollectionSharing5():
     return data
 
 writeTest(
-    identifier="tabledata-sharing-005",
+    identifier="collection-sharing-005",
     title="Invalid Font Collection With Unshared Glyf",
     description="An invalid TTF flavored SFNT collection containing two fonts sharing loca but not glyf table.",
     shouldConvert=False,
@@ -502,7 +507,7 @@ def makeCollectionSharing6():
     return data
 
 writeTest(
-    identifier="tabledata-sharing-006",
+    identifier="collection-sharing-006",
     title="Font Collection With Single Shared Table",
     description="A valid TTF flavored SFNT collection containing two fonts sharing only the cmap table.",
     shouldConvert=True,
@@ -518,7 +523,7 @@ def makeCollectionTransform1():
     return data
 
 writeTest(
-    identifier="tabledata-transform-001",
+    identifier="collection-transform-glyf-001",
     title="Valid Font Collection With Multiple Glyf/Loca",
     description="TTF flavored SFNT collection with multiple unshared glyf and loca tables, all of them must be transformed in the output WOFF font.",
     shouldConvert=True,
@@ -529,7 +534,7 @@ writeTest(
 )
 
 writeTest(
-    identifier="tabledata-transform-002",
+    identifier="collection-pairing-001",
     title="Valid Font Collection With Glyf/Loca Pairs",
     description="TTF flavored SFNT collection with multiple unshared glyf and loca tables, glyf and loca tables from each font must be paired in the output WOFF font.",
     shouldConvert=True,
