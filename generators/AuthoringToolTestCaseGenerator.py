@@ -89,8 +89,8 @@ These files are valid SFNTs that excercise conversion of font collections.
 
 groupDefinitions = [
     # identifier, title, spec section, category note
-    ("tabledata", "SFNT Table Data Tests", expandSpecLinks("#DataTables"), tableDataNote),
     ("tabledirectory", "SFNT Table Directory Tests", expandSpecLinks("#DataTables"), tableDirectoryNote),
+    ("tabledata", "SFNT Table Data Tests", expandSpecLinks("#DataTables"), tableDataNote),
     ("collection", "SFNT Collection Tests", expandSpecLinks("#DataTables"), collectionNote),
 ]
 
