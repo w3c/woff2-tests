@@ -25,14 +25,14 @@ import zipfile
 import brotli
 from fontTools.misc import sstruct
 from fontTools.pens.ttGlyphPen import TTGlyphPen
-from fontTools.ttLib import TTFont, getSearchRange, getTableModule
-from fontTools.ttLib.sfnt import sfntDirectorySize, sfntDirectoryEntrySize
+from fontTools.ttLib import TTFont, getTableModule
+from fontTools.ttLib.sfnt import sfntDirectoryEntrySize
 from testCaseGeneratorLib.defaultData import defaultTestData, defaultSFNTTestData
 from testCaseGeneratorLib.sfnt import packSFNT, getSFNTData, getSFNTCollectionData
 from testCaseGeneratorLib.paths import resourcesDirectory, authoringToolDirectory, authoringToolTestDirectory,\
                                        authoringToolResourcesDirectory, sfntTTFSourcePath, sfntTTFCompositeSourcePath
 from testCaseGeneratorLib.html import generateAuthoringToolIndexHTML, expandSpecLinks
-from testCaseGeneratorLib.utilities import padData, calcPaddingLength, calcTableChecksum
+from testCaseGeneratorLib.utilities import calcPaddingLength, calcTableChecksum
 
 # ------------------
 # Directory Creation
