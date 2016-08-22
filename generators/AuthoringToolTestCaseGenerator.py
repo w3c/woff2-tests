@@ -303,6 +303,8 @@ def makeGlyfBBox1(calcBBoxes=True, composite=False):
         glyf.glyphOrder.append(name)
 
     tableData = getSFNTData(font)[0]
+    font.close()
+    del font
     header, directory, tableData = defaultSFNTTestData(tableData=tableData, flavor="TTF")
     data = packSFNT(header, directory, tableData, flavor="TTF")
     return data
@@ -355,6 +357,9 @@ def makeGlyfBBox2(bbox):
     glyf.glyphOrder.append(name)
 
     tableData = getSFNTData(font)[0]
+    font.close()
+    del font
+
     header, directory, tableData = defaultSFNTTestData(tableData=tableData, flavor="TTF")
     data = packSFNT(header, directory, tableData, flavor="TTF")
     return data

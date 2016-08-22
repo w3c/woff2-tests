@@ -568,7 +568,6 @@ makeValidLoca2Description = "Valid TTF flavored WOFF with simple composite glyph
 makeValidLoca2Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
 
 def makeGlyfBBox1():
-    from testCaseGeneratorLib.sfnt import getSFNTData
     tableData, compressedData, tableOrder, tableChecksums = getSFNTData(sfntTTFCompositeSourcePath)
     header, directory, tableData = defaultTestData(tableData=tableData, compressedData=compressedData, flavor="ttf")
     data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)

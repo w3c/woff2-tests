@@ -1019,6 +1019,8 @@ def makeGlyfMismatchingOrigLength():
         glyf.glyphOrder.append(name)
 
     tableData, compressedData, tableOrder, tableChecksums = getSFNTData(font)
+    font.close()
+    del font
     directory = [dict(tag=tag, origLength=0, transformLength=0, transformFlag=0) for tag in tableOrder]
     header, directory, tableData = defaultTestData(directory=directory, tableData=tableData, compressedData=compressedData, flavor="ttf")
     data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
@@ -1059,6 +1061,8 @@ def make255UInt16Alt1():
     assert len(glyph.coordinates) / 3.0 == 506
 
     tableData, compressedData, tableOrder, tableChecksums = getSFNTData(font, alt255UInt16=True)
+    font.close()
+    del font
     header, directory, tableData = defaultTestData(tableData=tableData, compressedData=compressedData, flavor="ttf")
     data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
     return data
@@ -1280,7 +1284,6 @@ metadataAuthoritativeXML = """
 """.strip().replace("    ", "\t")
 
 def makeMetadataAuthoritativeTest1():
-    from cStringIO import StringIO
     from testCaseGeneratorLib.paths import sfntCFFSourcePath
     from testCaseGeneratorLib.defaultData import sfntCFFTableOrder
     setToFAIL = [
@@ -1319,12 +1322,8 @@ def makeMetadataAuthoritativeTest1():
             newNames.append(record)
     newNames.sort()
     nameTable.names = newNames
-    # save the SFNT
-    f = StringIO()
-    font.save(f, reorderTables=False)
-    f.seek(0)
     # load the table data
-    tableData, compressedData, tableOrder, tableChecksums = getSFNTData(f)
+    tableData, compressedData, tableOrder, tableChecksums = getSFNTData(font)
     # make sure that the table order is the same as the original
     assert tableOrder == sfntCFFTableOrder
     # compile the WOFF
