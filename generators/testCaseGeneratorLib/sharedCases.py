@@ -12,11 +12,11 @@ from fontTools.ttLib import TTFont
 from fontTools.ttLib.sfnt import sfntDirectoryEntrySize
 from testCaseGeneratorLib.woff import base128Size, packTestHeader, packTestDirectory, packTestMetadata, packTestPrivateData,\
     woffHeaderSize, transformTable, packTestCollectionHeader, packTestCollectionDirectory
-from testCaseGeneratorLib.defaultData import defaultTestData, testDataWOFFMetadata, testDataWOFFPrivateData,\
+from testCaseGeneratorLib.defaultData import defaultTestData, defaultSFNTTestData, testDataWOFFMetadata, testDataWOFFPrivateData,\
     sfntCFFTableData, testCFFDataWOFFDirectory
 from testCaseGeneratorLib.paths import sfntTTFSourcePath, sfntTTFCompositeSourcePath
 from testCaseGeneratorLib.utilities import calcPaddingLength, padData, calcTableChecksum, stripMetadata
-from testCaseGeneratorLib.sfnt import getSFNTData
+from testCaseGeneratorLib.sfnt import getSFNTData, packSFNT
 
 def makeMetadataTest(metadata):
     """
@@ -576,6 +576,21 @@ def makeGlyfBBox1():
 makeGlyfBBox1Title = "Composite Glyph Without Bounding Box"
 makeGlyfBBox1Description = "Valid TTF flavored WOFF with composite glyphs"
 makeGlyfBBox1Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
+
+def makeLSB1():
+    woffHeader, woffDirectory, woffCompressedTableData = defaultTestData(flavor="TTF")
+    woffTableData = brotli.decompress(woffCompressedTableData)
+    offset = 0
+    for entry in woffDirectory:
+        if entry["tag"] == "hmtx":
+            assert entry["transformFlag"] == 1
+            flags = ord(woffTableData[offset])
+            assert flags & (1 << 0)
+            assert flags & (1 << 1)
+        offset += entry["transformLength"]
+    header, directory, tableData = defaultSFNTTestData(flavor="TTF")
+    data = packSFNT(header, directory, tableData, flavor="TTF")
+    return data
 
 def makeHmtxTransform1():
     header, directory, tableData = defaultTestData(flavor="TTF")

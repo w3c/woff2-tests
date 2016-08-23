@@ -33,6 +33,7 @@ from testCaseGeneratorLib.paths import resourcesDirectory, authoringToolDirector
                                        authoringToolResourcesDirectory, sfntTTFSourcePath, sfntTTFCompositeSourcePath
 from testCaseGeneratorLib.html import generateAuthoringToolIndexHTML, expandSpecLinks
 from testCaseGeneratorLib.utilities import calcPaddingLength, calcTableChecksum
+from testCaseGeneratorLib.sharedCases import makeLSB1
 
 # ------------------
 # Directory Creation
@@ -390,21 +391,6 @@ writeTest(
     data=makeGlyfBBox2(0),
     flavor="TTF"
 )
-
-def makeLSB1():
-    woffHeader, woffDirectory, woffCompressedTableData = defaultTestData(flavor="TTF")
-    woffTableData = brotli.decompress(woffCompressedTableData)
-    offset = 0
-    for entry in woffDirectory:
-        if entry["tag"] == "hmtx":
-            assert entry["transformFlag"] == 1
-            flags = ord(woffTableData[offset])
-            assert flags & (1 << 0)
-            assert flags & (1 << 1)
-        offset += entry["transformLength"]
-    header, directory, tableData = defaultSFNTTestData(flavor="TTF")
-    data = packSFNT(header, directory, tableData, flavor="TTF")
-    return data
 
 writeTest(
     identifier="tabledata-transform-hmtx-001",
