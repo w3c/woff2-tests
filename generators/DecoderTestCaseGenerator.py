@@ -285,6 +285,23 @@ writeTest(
     data=makeCollectionOrder1()
 )
 
+def makeHmtxLSB1():
+    woffdata = makeHmtxTransform1()
+    sfntdata = makeLSB1()
+
+    return woffdata, sfntdata
+
+writeTest(
+    identifier="roundtrip-hmtx-lsb-001",
+    title="Font With Hmtx Table",
+    description="TTF flavored font with hmtx table. The encoder/decoder must keep he same 'hmtx' table entries as it was encoded in the original input file.",
+    roundTrip=True,
+    flavor="TTF",
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    specLink="#conform-mustReconstructLSBs",
+    data=makeHmtxLSB1(),
+)
+
 writeTest(
     identifier="validation-loca-format-001",
     title=makeValidLoca1Title,
