@@ -587,6 +587,62 @@ writeTest(
     flavor="TTC"
 )
 
+def makeCollectionHmtxTransform2():
+    fonts = [TTFont(sfntTTFSourcePath), TTFont(sfntTTFSourcePath)]
+    for i, font in enumerate(fonts):
+        glyf = font["glyf"]
+        hmtx = font["hmtx"]
+        maxp = font["maxp"]
+        for name in glyf.glyphs:
+            glyph = glyf.glyphs[name]
+            glyph.expand(glyf)
+            if hasattr(glyph, "xMin"):
+                metrics = hmtx.metrics[name]
+                if i == 0:
+                    # Move the glyph so that xMin is 0
+                    pen = TTGlyphPen(None)
+                    glyph.draw(pen, glyf, -glyph.xMin)
+                    glyph = pen.glyph()
+                    glyph.recalcBounds(glyf)
+                    assert glyph.xMin == 0
+                    glyf.glyphs[name] = glyph
+                hmtx.metrics[name] = (metrics[0], 0)
+
+        # Build a unique glyph for each font, but with the same advance and LSB
+        name = "box"
+        pen = TTGlyphPen(None)
+        pen.moveTo([0, 0])
+        pen.lineTo([0, 1000])
+        if i > 0:
+            pen.lineTo([0, 2000])
+            pen.lineTo([1000, 2000])
+        pen.lineTo([1000, 1000])
+        pen.lineTo([1000, 0])
+        pen.closePath()
+        glyph = pen.glyph()
+        glyph.recalcBounds(glyf)
+        glyf.glyphs[name] = glyph
+        hmtx.metrics[name] = (glyph.xMax, glyph.xMin)
+        glyf.glyphOrder.append(name)
+        maxp.recalc(font)
+        data = hmtx.compile(font)
+        hmtx.decompile(data, font)
+
+    data = getSFNTCollectionData(fonts, shared=["hmtx"])
+
+    return data
+
+writeTest(
+    identifier="collection-transform-hmtx-002",
+    title="Valid Font Collection With Unshared Glyf And Shared Hmtx 2",
+    description="TTF flavored SFNT collection with multiple unshared glyf tanles and one shared hmtx table where LSB of all glyphs is 0, but xMin in some glyphs in the second glyf table is not 0.",
+    shouldConvert=True,
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    specLink="#conform-mustNotApplyLSBTransformForOTC",
+    data=makeCollectionHmtxTransform2(),
+    flavor="TTC"
+)
+
 writeTest(
     identifier="collection-pairing-001",
     title="Valid Font Collection With Glyf/Loca Pairs",
