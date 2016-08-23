@@ -595,6 +595,34 @@ makeHmtxTransform1Title = "Transformed Hmtx Table"
 makeHmtxTransform1Description = "Valid TTF flavored WOFF with transformed hmtx table."
 makeHmtxTransform1Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
 
+def makeHmtxTransform2():
+    header, directory, tableData = defaultTestData(flavor="TTF")
+    decompressedTableData = brotli.decompress(tableData)
+    offset = 0
+    for entry in directory:
+        if entry["tag"] == "hmtx":
+            assert entry["transformFlag"] == 1
+            flags = ord(decompressedTableData[offset])
+            for bit in range(2, 8):
+                flags |= 1 << bit
+            decompressedTableData = decompressedTableData[:offset] + struct.pack(">B", flags) + decompressedTableData[offset+1:]
+            flags = ord(decompressedTableData[offset])
+            assert flags == 255
+        offset += entry["transformLength"]
+
+    tableData = brotli.compress(decompressedTableData, brotli.MODE_FONT)
+
+    header["length"] = woffHeaderSize + len(packTestDirectory(directory)) + len(tableData)
+    header["length"] += calcPaddingLength(header["length"])
+    header["totalCompressedSize"] = len(tableData)
+
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
+    return data
+
+makeHmtxTransform2Title = "Transformed Hmtx Table With All Flags Set"
+makeHmtxTransform2Description = "Invalid TTF flavored WOFF with transformed hmtx table that has all flags bits (including reserved bits) set."
+makeHmtxTransform2Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
+
 def makeHmtxTransform3():
     header, directory, tableData = defaultTestData(flavor="TTF")
     decompressedTableData = brotli.decompress(tableData)
