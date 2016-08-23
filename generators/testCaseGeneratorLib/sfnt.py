@@ -46,7 +46,10 @@ def getSFNTCollectionData(pathOrFiles, modifyNames=True, reverseNames=False, DSI
     tables = []
     offsets = {}
 
-    fonts = [TTFont(pathOrFile) for pathOrFile in pathOrFiles]
+    if isinstance(pathOrFiles[0], TTFont):
+        fonts = pathOrFiles
+    else:
+        fonts = [TTFont(pathOrFile) for pathOrFile in pathOrFiles]
     numFonts = len(fonts)
 
     header = dict(
@@ -128,8 +131,10 @@ def getSFNTCollectionData(pathOrFiles, modifyNames=True, reverseNames=False, DSI
     for table in tables:
         fontData += padData(table)
 
-    for font in fonts:
-        font.close()
+    if not isinstance(pathOrFiles[0], TTFont):
+        for font in fonts:
+            font.close()
+            del font
 
     return fontData
 
