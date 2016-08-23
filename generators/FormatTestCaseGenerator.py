@@ -866,6 +866,16 @@ writeTest(
     data=makeHmtxTransform3()
 )
 
+writeTest(
+    identifier="tabledata-hmtx-transform-003",
+    title=makeHmtxTransform2Title,
+    description=makeHmtxTransform2Description,
+    credits=makeHmtxTransform2Credits,
+    valid=False,
+    specLink="#conform-reservedFlagsMustBeZero",
+    data=makeHmtxTransform2()
+)
+
 # composite glyph with bbox
 writeTest(
     identifier="tabledata-glyf-composite-bbox-001",
