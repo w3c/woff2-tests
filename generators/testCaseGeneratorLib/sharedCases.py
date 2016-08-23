@@ -577,6 +577,18 @@ makeGlyfBBox1Title = "Composite Glyph Without Bounding Box"
 makeGlyfBBox1Description = "Valid TTF flavored WOFF with composite glyphs"
 makeGlyfBBox1Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
 
+def makeHmtxTransform1():
+    header, directory, tableData = defaultTestData(flavor="TTF")
+    for entry in directory:
+        if entry["tag"] == "hmtx":
+            assert entry["transformFlag"] == 1
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
+    return data
+
+makeHmtxTransform1Title = "Transformed Hmtx Table"
+makeHmtxTransform1Description = "Valid TTF flavored WOFF with transformed hmtx table."
+makeHmtxTransform1Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
+
 # -----------------------------------------
 # File Structure: Table Directory: Ordering
 # -----------------------------------------
