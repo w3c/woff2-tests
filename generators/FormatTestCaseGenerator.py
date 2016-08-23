@@ -846,6 +846,26 @@ writeTest(
     data=makeLocaSizeTest3()
 )
 
+writeTest(
+    identifier="tabledata-hmtx-transform-001",
+    title=makeHmtxTransform1Title,
+    description=makeHmtxTransform1Description,
+    credits=makeHmtxTransform1Credits,
+    valid=True,
+    specLink="#conform-transformFlagsMustBeSet",
+    data=makeHmtxTransform1()
+)
+
+writeTest(
+    identifier="tabledata-hmtx-transform-002",
+    title=makeHmtxTransform2Title,
+    description=makeHmtxTransform2Description,
+    credits=makeHmtxTransform2Credits,
+    valid=False,
+    specLink="#conform-transformFlagsMustBeSet",
+    data=makeHmtxTransform2()
+)
+
 # composite glyph with bbox
 writeTest(
     identifier="tabledata-glyf-composite-bbox-001",

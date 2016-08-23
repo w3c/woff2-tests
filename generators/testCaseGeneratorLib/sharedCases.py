@@ -579,15 +579,46 @@ makeGlyfBBox1Credits = [dict(title="Khaled Hosny", role="author", link="http://k
 
 def makeHmtxTransform1():
     header, directory, tableData = defaultTestData(flavor="TTF")
+    decompressedTableData = brotli.decompress(tableData)
+    offset = 0
     for entry in directory:
         if entry["tag"] == "hmtx":
             assert entry["transformFlag"] == 1
+            flags = ord(decompressedTableData[offset])
+            assert flags & (1 << 0)
+            assert flags & (1 << 1)
+        offset += entry["transformLength"]
     data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
     return data
 
 makeHmtxTransform1Title = "Transformed Hmtx Table"
 makeHmtxTransform1Description = "Valid TTF flavored WOFF with transformed hmtx table."
 makeHmtxTransform1Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
+
+def makeHmtxTransform2():
+    header, directory, tableData = defaultTestData(flavor="TTF")
+    decompressedTableData = brotli.decompress(tableData)
+    offset = 0
+    for entry in directory:
+        if entry["tag"] == "hmtx":
+            assert entry["transformFlag"] == 1
+            decompressedTableData = decompressedTableData[:offset] + "\0" + decompressedTableData[offset+1:]
+            flags = ord(decompressedTableData[offset])
+            assert flags == 0
+        offset += entry["transformLength"]
+
+    tableData = brotli.compress(decompressedTableData, brotli.MODE_FONT)
+
+    header["length"] = woffHeaderSize + len(packTestDirectory(directory)) + len(tableData)
+    header["length"] += calcPaddingLength(header["length"])
+    header["totalCompressedSize"] = len(tableData)
+
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
+    return data
+
+makeHmtxTransform2Title = "Null Transformed Hmtx Table"
+makeHmtxTransform2Description = "Invalid TTF flavored WOFF with null transformed hmtx table."
+makeHmtxTransform2Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
 
 # -----------------------------------------
 # File Structure: Table Directory: Ordering
