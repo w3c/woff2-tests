@@ -937,24 +937,12 @@ writeFileStructureTest(
     data=makeHmtxTransform2()
 )
 
-def makeHmtxTransform3():
-    tableData, compressedData, tableOrder, tableChecksums = getSFNTData(sfntTTFSourcePath)
-    tableData["hmtx"] = (tableData["hmtx"][0], struct.pack(">B", 0) + tableData["hmtx"][1][1:])
-    totalData = "".join([tableData[tag][1] for tag in tableOrder])
-    compressedData = brotli.compress(totalData, brotli.MODE_FONT)
-    header, directory, tableData = defaultTestData(tableData=tableData, compressedData=compressedData, flavor="ttf")
-    for entry in directory:
-        if entry["tag"] == "hmtx":
-            assert entry["transformFlag"] == 1
-    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
-    return data
-
 writeFileStructureTest(
     identifier="tabledata-transform-hmtx-004",
     flavor="TTF",
-    title="Transformed Hmtx Table With Bad Flags 2",
-    assertion="Invalid TTF flavored WOFF with transformed hmtx table with all flags bits set to 0",
-    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    title=makeHmtxTransform3Title,
+    assertion=makeHmtxTransform3Description,
+    credits=makeHmtxTransform3Credits,
     sfntDisplaySpecLink="#conform-mustCheckLSBFlags",
     shouldDisplaySFNT=False,
     data=makeHmtxTransform3()

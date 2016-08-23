@@ -595,7 +595,7 @@ makeHmtxTransform1Title = "Transformed Hmtx Table"
 makeHmtxTransform1Description = "Valid TTF flavored WOFF with transformed hmtx table."
 makeHmtxTransform1Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
 
-def makeHmtxTransform2():
+def makeHmtxTransform3():
     header, directory, tableData = defaultTestData(flavor="TTF")
     decompressedTableData = brotli.decompress(tableData)
     offset = 0
@@ -616,9 +616,9 @@ def makeHmtxTransform2():
     data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
     return data
 
-makeHmtxTransform2Title = "Null Transformed Hmtx Table"
-makeHmtxTransform2Description = "Invalid TTF flavored WOFF with null transformed hmtx table."
-makeHmtxTransform2Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
+makeHmtxTransform3Title = "Transformed Hmtx Table With 0 Flags"
+makeHmtxTransform3Description = "Invalid TTF flavored WOFF with transformed hmtx table that has 0 flags (null transform)."
+makeHmtxTransform3Credits = [dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")]
 
 # -----------------------------------------
 # File Structure: Table Directory: Ordering

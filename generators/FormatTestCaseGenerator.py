@@ -858,12 +858,12 @@ writeTest(
 
 writeTest(
     identifier="tabledata-hmtx-transform-002",
-    title=makeHmtxTransform2Title,
-    description=makeHmtxTransform2Description,
-    credits=makeHmtxTransform2Credits,
+    title=makeHmtxTransform3Title,
+    description=makeHmtxTransform3Description,
+    credits=makeHmtxTransform3Credits,
     valid=False,
     specLink="#conform-transformFlagsMustBeSet",
-    data=makeHmtxTransform2()
+    data=makeHmtxTransform3()
 )
 
 # composite glyph with bbox
