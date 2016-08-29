@@ -408,23 +408,6 @@ writeFileStructureTest(
     metadataDisplaySpecLink="woff1:#conform-metadata-maydisplay"
 )
 
-def makeValidOFF():
-    tableData, compressedData, tableOrder, tableChecksums = getSFNTData(sfntTTFCompositeSourcePath)
-    header, directory, tableData = defaultTestData(tableData=tableData, compressedData=compressedData, flavor="ttf")
-    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
-    return data
-
-writeFileStructureTest(
-    identifier="valid-009",
-    flavor="TTF",
-    title="Valid WOFF 9",
-    assertion="Valid TTF flavored WOFF with simple and composite glyphs",
-    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
-    sfntDisplaySpecLink="#conform-mustProduceOFF",
-    shouldDisplaySFNT=True,
-    data=makeValidOFF()
-)
-
 # ---------------------------------
 # File Structure: Header: signature
 # ---------------------------------
@@ -1310,51 +1293,6 @@ writeFileStructureTest(
 )
 
 # -----------------------------
-# Metadata Display: Compression
-# -----------------------------
-
-writeFileStructureTest(
-    identifier="metadatadisplay-compression-001",
-    title=makeMetadataCompression1Title,
-    assertion=makeMetadataCompression1Description,
-    credits=makeMetadataCompression1Credits,
-    shouldDisplaySFNT=True,
-    metadataIsValid=False,
-    metadataDisplaySpecLink="woff1:#conform-metadata-alwayscompress",
-    data=makeMetadataCompression1(),
-)
-
-# --------------------------------
-# Metadata Display: metaOrigLength
-# --------------------------------
-
-# <
-
-writeFileStructureTest(
-    identifier="metadatadisplay-metaOrigLength-001",
-    title=makeMetaOrigLengthTest1Title,
-    assertion=makeMetaOrigLengthTest1Description,
-    credits=makeMetaOrigLengthTest1Credits,
-    shouldDisplaySFNT=True,
-    metadataIsValid=False,
-    sfntDisplaySpecLink="woff1:#conform-metaOrigLength",
-    data=makeMetaOrigLengthTest1()
-)
-
-# >
-
-writeFileStructureTest(
-    identifier="metadatadisplay-metaOrigLength-002",
-    title=makeMetaOrigLengthTest2Title,
-    assertion=makeMetaOrigLengthTest2Description,
-    credits=makeMetaOrigLengthTest2Credits,
-    shouldDisplaySFNT=True,
-    metadataIsValid=False,
-    sfntDisplaySpecLink="woff1:#conform-metaOrigLength",
-    data=makeMetaOrigLengthTest2()
-)
-
-# -----------------------------
 # Metadata Display: Well-Formed
 # -----------------------------
 
@@ -1531,14 +1469,6 @@ writeMetadataSchemaValidityTest(
     metadataIsValid=False,
 )
 
-# missing id attribute
-
-writeMetadataSchemaValidityTest(
-    identifier="metadatadisplay-schema-uniqueid-004",
-    metadataDisplaySpecLink="woff1:#conform-metadata-id-required",
-    metadataIsValid=False,
-)
-
 # unknown attribute
 
 writeMetadataSchemaValidityTest(
@@ -1587,14 +1517,6 @@ writeMetadataSchemaValidityTest(
 
 writeMetadataSchemaValidityTest(
     identifier="metadatadisplay-schema-vendor-004",
-    metadataIsValid=False,
-)
-
-# missing name attribute
-
-writeMetadataSchemaValidityTest(
-    identifier="metadatadisplay-schema-vendor-005",
-    metadataDisplaySpecLink="woff1:#conform-metadata-vendor-required",
     metadataIsValid=False,
 )
 
