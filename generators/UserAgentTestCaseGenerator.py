@@ -846,7 +846,7 @@ writeFileStructureTest(
     title="Empty Glyph With Bounding Box",
     assertion="Invalid TTF flavored WOFF due to empty glyph with bounding box",
     credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
-    sfntDisplaySpecLink="#conform-mustRejectNonEmptyBBox",
+    sfntDisplaySpecLink="#conform-mustRejectNonEmptyBBox2",
     shouldDisplaySFNT=False,
     data=makeGlyfBBox3()
 )
