@@ -398,7 +398,7 @@ writeTest(
     description="TTF flavored SFNT font containing two proportional and two monospaced glyphs with left side bearings matching the Xmin values of each corresponding glyph bonding box. The hmtx table must be transformed with version 1 transform, eliminating both lsb[] and leftSideBearing[] arrays with corresponding Flags bits set.",
     shouldConvert=True,
     credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
-    specLink="#conform-mustEliminateLSBs",
+    specLink="#conform-mustEliminateLSBs #conform-mustCheckLeftSideBearings",
     data=makeLSB1(),
     flavor="TTF"
 )
