@@ -647,6 +647,26 @@ writeTest(
     data=makeMetadataPadding1()
 )
 
+writeTest(
+    identifier="blocks-metadata-padding-002",
+    title="Metadata Has No Padding",
+    description="The metadata block is not padded and there is no private data.",
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    valid=True,
+    specLink="#conform-metadata-noprivatepad",
+    data=makeValidWOFF2()
+)
+
+writeTest(
+    identifier="blocks-metadata-padding-003",
+    title="Metadata Has Correct Padding",
+    description="The metadata block is padded to a four-byte boundary and there is private data.",
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    valid=True,
+    specLink="#conform-metadata-noprivatepad",
+    data=makeValidWOFF4()
+)
+
 def makeMetadataPadding2():
     header, directory, tableData, metadata = defaultTestData(metadata=testDataWOFFMetadata)
     metadata = packTestMetadata(metadata)
@@ -656,7 +676,7 @@ def makeMetadataPadding2():
     return data
 
 writeTest(
-    identifier="blocks-metadata-padding-002",
+    identifier="blocks-metadata-padding-004",
     title="Metadata Beginning Has No Padding",
     description="The beginning of the metadata block is not padded.",
     credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
