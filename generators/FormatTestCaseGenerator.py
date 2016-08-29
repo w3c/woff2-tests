@@ -493,7 +493,7 @@ writeTest(
     description=makeExtraneousData8Description,
     credits=makeExtraneousData8Credits,
     valid=False,
-    specLink="#conform-mustRejectExtraData",
+    specLink="#conform-noExtraData",
     data=makeExtraneousData8()
 )
 
