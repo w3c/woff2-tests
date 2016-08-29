@@ -627,7 +627,7 @@ writeTest(
 
 # padding after metadata but no private data
 
-def makeMetadataPadding():
+def makeMetadataPadding1():
     header, directory, tableData, metadata = defaultTestData(metadata=testDataWOFFMetadata)
     metadata = packTestMetadata(metadata)
     paddingLength = calcPaddingLength(len(metadata))
@@ -644,7 +644,25 @@ writeTest(
     credits=[dict(title="Tal Leming", role="author", link="http://typesupply.com")],
     valid=False,
     specLink="#conform-metadata-noprivatepad",
-    data=makeMetadataPadding()
+    data=makeMetadataPadding1()
+)
+
+def makeMetadataPadding2():
+    header, directory, tableData, metadata = defaultTestData(metadata=testDataWOFFMetadata)
+    metadata = packTestMetadata(metadata)
+    data = packTestHeader(header) + packTestDirectory(directory) + tableData
+    assert calcPaddingLength(len(data)) != 0
+    data += metadata
+    return data
+
+writeTest(
+    identifier="blocks-metadata-padding-002",
+    title="Metadata Beginning Has No Padding",
+    description="The beginning of the metadata block is not padded.",
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    valid=False,
+    specLink="#conform-metadata-padalign",
+    data=makeMetadataPadding2()
 )
 
 # -------------------------------------
