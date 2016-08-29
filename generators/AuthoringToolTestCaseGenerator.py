@@ -667,6 +667,74 @@ writeTest(
     flavor="TTC"
 )
 
+def makeKnownTables():
+    from testCaseGeneratorLib.woff import knownTableTags
+
+    header, directory, tableData = defaultSFNTTestData(flavor="TTF")
+
+    tags = [e["tag"] for e in directory]
+    assert set(tags) < set(knownTableTags)
+
+    data = packSFNT(header, directory, tableData, flavor="TTF")
+    return data
+
+writeTest(
+    identifier="tabledirectory-knowntags-001",
+    title="Valid TTF SFNT With All Tables Known",
+    description="TTF flavored SFNT font with all tables known. Output WOFF2 table directory must use known table flag for all tables in the font.",
+    shouldConvert=True,
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    specLink="#conform-mustUseKnownTags",
+    data=makeKnownTables(),
+    flavor="TTF"
+)
+
+dummyTables = ("ZZZA", "ZZZB", "ZZZC")
+
+def makeUnknownTables():
+    from testCaseGeneratorLib.woff import knownTableTags
+
+    header, directory, tableData = defaultSFNTTestData(flavor="TTF")
+    # adjust the header
+    header["numTables"] += len(dummyTables)
+    # adjust the offsets
+    shift = len(dummyTables) * sfntDirectoryEntrySize
+    for entry in directory:
+        entry["offset"] += shift
+    # store the data
+    sorter = [(entry["offset"], entry["length"]) for entry in directory]
+    offset, length = max(sorter)
+    offset = offset + length
+    data = "\0" * 4
+    checksum = calcTableChecksum(None, data)
+    for tag in dummyTables:
+        tableData[tag] = data
+        entry = dict(
+            tag=tag,
+            offset=offset,
+            length=4,
+            checksum=checksum
+        )
+        directory.append(entry)
+        offset += 4
+
+    tags = [e["tag"] for e in directory]
+    assert not set(tags) < set(knownTableTags)
+
+    data = packSFNT(header, directory, tableData, flavor="TTF")
+    return data
+
+writeTest(
+    identifier="tabledirectory-knowntags-002",
+    title="Valid TTF SFNT With Some Tables Unknown",
+    description="TTF flavored SFNT font with some tables unknown. Output WOFF2 table directory must use known table flag for known tables.",
+    shouldConvert=True,
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    specLink="#conform-mustUseKnownTags",
+    data=makeUnknownTables(),
+    flavor="TTF"
+)
+
 # ------------------
 # Generate the Index
 # ------------------
