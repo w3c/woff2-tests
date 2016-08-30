@@ -6,7 +6,7 @@ import brotli
 from copy import deepcopy
 from fontTools.ttLib.sfnt import sfntDirectoryFormat, sfntDirectorySize, sfntDirectoryEntryFormat, sfntDirectoryEntrySize
 from sfnt import getSFNTData
-from woff import packTestDirectory, packTestCollectionHeader, packTestCollectionDirectory, woffHeaderSize
+from woff import packTestDirectory, packTestCollectionHeader, packTestCollectionDirectory, woffHeaderSize, knownTableTags
 from paths import sfntCFFSourcePath, sfntTTFSourcePath
 from utilities import calcPaddingLength, calcTableChecksum
 
@@ -223,7 +223,7 @@ for tag in sfntCFFTableOrder:
 # Default Data Creator
 # --------------------
 
-def defaultTestData(header=None, directory=None, collectionHeader=None, collectionDirectory=None, tableData=None, compressedData=None, metadata=None, privateData=None, flavor="cff", Base128Bug=False):
+def defaultTestData(header=None, directory=None, collectionHeader=None, collectionDirectory=None, tableData=None, compressedData=None, metadata=None, privateData=None, flavor="cff", Base128Bug=False, knownTags=knownTableTags):
     isCollection = collectionDirectory is not None
     parts = []
     # setup the header
@@ -288,7 +288,7 @@ def defaultTestData(header=None, directory=None, collectionHeader=None, collecti
             entry["transformFlag"] = 1
         header["totalSfntSize"] += entry["origLength"]
         header["totalSfntSize"] += calcPaddingLength(header["totalSfntSize"])
-    header["length"] = woffHeaderSize + len(packTestDirectory(directory, Base128Bug=Base128Bug))
+    header["length"] = woffHeaderSize + len(packTestDirectory(directory, knownTags=knownTags, Base128Bug=Base128Bug))
     if isCollection:
         header["length"] += len(packTestCollectionHeader(collectionHeader))
         header["length"] += len(packTestCollectionDirectory(collectionDirectory))

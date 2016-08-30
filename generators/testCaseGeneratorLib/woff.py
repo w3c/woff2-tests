@@ -378,7 +378,7 @@ def _setTransformBits(flag, tranasform):
         flag |= 1 << 6 | 1 << 7
     return flag
 
-def packTestDirectory(directory, isCollection=False, unsortGlyfLoca=False, Base128Bug=False):
+def packTestDirectory(directory, knownTags=knownTableTags, isCollection=False, unsortGlyfLoca=False, Base128Bug=False):
     data = ""
     directory = [(entry["tag"], entry) for entry in directory]
     if not isCollection:
@@ -395,9 +395,10 @@ def packTestDirectory(directory, isCollection=False, unsortGlyfLoca=False, Base1
     for tag, table in directory:
         transformFlag = table["transformFlag"]
         assert transformFlag <= 3
-        if tag in knownTableTags:
+        if tag in knownTags:
             data += struct.pack(">B", _setTransformBits(knownTableTags.index(tag), transformFlag))
         else:
+            print tag
             data += struct.pack(">B", _setTransformBits(unknownTableTagFlag, transformFlag))
             data += struct.pack(">4s", tag)
         data += packBase128(table["origLength"], bug=Base128Bug)

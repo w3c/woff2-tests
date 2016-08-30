@@ -498,6 +498,29 @@ writeFileStructureTest(
     data=makeHeaderIncorrectTotalSfntSize(True)
 )
 
+# -------------------------------
+# File Structure: Table Directory
+# -------------------------------
+
+def makeCustomTagForKnownTable():
+    from testCaseGeneratorLib.woff import knownTableTags
+    knownTags = [tag for tag in knownTableTags if tag not in ("cmap", "name")]
+    assert "cmap" not in knownTags
+    assert "name" not in knownTags
+    header, directory, tableData = defaultTestData(flavor="ttf", knownTags=knownTags)
+    data = padData(packTestHeader(header) + packTestDirectory(directory, knownTags=knownTags) + tableData)
+    return data
+
+writeFileStructureTest(
+    identifier="directory-knowntags-001",
+    title="Valid SFNT With Cutsom Tag For Known Table",
+    assertion="Valid TTF flavored SFNT font with table directory using custom tag instead of known table flag for some know tables.",
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    shouldDisplaySFNT=True,
+    sfntDisplaySpecLink="#conform-mayAcceptKnownTagsAsCustom",
+    data=makeCustomTagForKnownTable()
+)
+
 # --------------------------------------------
 # File Structure: Data Blocks: Extraneous Data
 # --------------------------------------------
