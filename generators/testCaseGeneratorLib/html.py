@@ -497,8 +497,17 @@ def generateAuthoringToolIndexHTML(directory=None, testCases=[], note=None):
             html.append("\t\t\t\t\t<p>%s</p>" % string)
             # documentation
             if specLink is not None:
-                string = "\t\t\t\t\t<p><a href=\"%s\">Documentation</a></p>" % specLink
-                html.append(string)
+                links = specLink.split(' ')
+
+                html.append("\t\t\t\t\t<p>")
+                for link in links:
+                    name = 'Documentation'
+                    if '#' in link:
+                        name = link.split('#')[1]
+                    string = "\t\t\t\t\t\t<a href=\"%s\">%s</a> " % (link, name)
+                    html.append(string)
+                html.append("\t\t\t\t\t</p>")
+
             # close the details div
             html.append("\t\t\t</div>")
             # close the test case div
