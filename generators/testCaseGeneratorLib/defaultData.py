@@ -223,7 +223,7 @@ for tag in sfntCFFTableOrder:
 # Default Data Creator
 # --------------------
 
-def defaultTestData(header=None, directory=None, collectionHeader=None, collectionDirectory=None, tableData=None, compressedData=None, metadata=None, privateData=None, flavor="cff", Base128Bug=False, knownTags=knownTableTags):
+def defaultTestData(header=None, directory=None, collectionHeader=None, collectionDirectory=None, tableData=None, compressedData=None, metadata=None, privateData=None, flavor="cff", Base128Bug=False, knownTags=knownTableTags, skipTransformLength=False):
     isCollection = collectionDirectory is not None
     parts = []
     # setup the header
@@ -288,7 +288,7 @@ def defaultTestData(header=None, directory=None, collectionHeader=None, collecti
             entry["transformFlag"] = 1
         header["totalSfntSize"] += entry["origLength"]
         header["totalSfntSize"] += calcPaddingLength(header["totalSfntSize"])
-    header["length"] = woffHeaderSize + len(packTestDirectory(directory, knownTags=knownTags, Base128Bug=Base128Bug))
+    header["length"] = woffHeaderSize + len(packTestDirectory(directory, knownTags=knownTags, skipTransformLength=skipTransformLength, Base128Bug=Base128Bug))
     if isCollection:
         header["length"] += len(packTestCollectionHeader(collectionHeader))
         header["length"] += len(packTestCollectionDirectory(collectionDirectory))

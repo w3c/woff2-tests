@@ -744,13 +744,28 @@ writeTest(
 # loca's transformLength is not zero
 
 writeTest(
-    identifier="tabledata-non-zero-loca-001",
+    identifier="tabledata-transform-length-001",
     title=makeTableNonZeroLocaTest1Title,
     description=makeTableNonZeroLocaTest1Description,
     credits=makeTableNonZeroLocaTest1Credits,
     valid=False,
     specLink="#conform-transformedLocaMustBeZero",
     data=makeTableNonZeroLocaTest1()
+)
+
+def makeNoTransformLength():
+    header, directory, tableData = defaultTestData(flavor="ttf", skipTransformLength=True)
+    data = padData(packTestHeader(header) + packTestDirectory(directory, skipTransformLength=True) + tableData)
+    return data
+
+writeTest(
+    identifier="tabledata-transform-length-002",
+    title="Transform Length Is Not Set",
+    description="The transformed tables does not have transformLength set.",
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    valid=False,
+    specLink="#conform-mustIncludeTransformLength",
+    data=makeNoTransformLength()
 )
 
 writeTest(
