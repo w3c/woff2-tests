@@ -409,9 +409,9 @@ def generateFormatIndexHTML(directory=None, testCases=[]):
                     name = 'Documentation'
                     if '#' in link:
                         name = link.split('#')[1]
-                    string = "<a href=\"%s\">%s</a> " % (link, name)
+                    string = "\t\t\t\t\t\t<a href=\"%s\">%s</a> " % (link, name)
                     html.append(string)
-                html.append("</p>")
+                html.append("\t\t\t\t\t</p>")
 
             # close the details div
             html.append("\t\t\t</div>")
