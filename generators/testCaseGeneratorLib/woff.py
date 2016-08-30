@@ -398,7 +398,6 @@ def packTestDirectory(directory, knownTags=knownTableTags, isCollection=False, u
         if tag in knownTags:
             data += struct.pack(">B", _setTransformBits(knownTableTags.index(tag), transformFlag))
         else:
-            print tag
             data += struct.pack(">B", _setTransformBits(unknownTableTagFlag, transformFlag))
             data += struct.pack(">4s", tag)
         data += packBase128(table["origLength"], bug=Base128Bug)
