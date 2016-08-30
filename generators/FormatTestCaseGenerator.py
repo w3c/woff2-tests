@@ -828,6 +828,48 @@ writeTest(
     data=makeHmtxTransform2()
 )
 
+def makeMismatchedLocaGlyfTransform(tag):
+    tableData, compressedData, tableOrder, tableChecksums = getSFNTData(sfntTTFSourcePath)
+    tagData = tableData[tag]
+    header, directory, tableData = defaultTestData(flavor="ttf")
+    decompressedTableData = brotli.decompress(tableData)
+    offset = 0
+    for entry in directory:
+        if entry["tag"] == tag:
+            decompressedTableData = decompressedTableData[:offset] + tagData[0] + decompressedTableData[offset:]
+            entry["transformLength"] = entry["origLength"]
+            entry["transformFlag"] = 3
+        offset += entry["transformLength"]
+
+    tableData = brotli.compress(decompressedTableData, brotli.MODE_FONT)
+
+    header["length"] = woffHeaderSize + len(packTestDirectory(directory)) + len(tableData)
+    header["length"] += calcPaddingLength(header["length"])
+    header["totalCompressedSize"] = len(tableData)
+
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
+    return data
+
+writeTest(
+    identifier="tabledata-transform-glyf-loca-001",
+    title="Transformed Glyf With Unransformed Loca",
+    description="The glyf table is transformed while loca table is not.",
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    valid=False,
+    specLink="#conform-transformedLocaMustAccompanyGlyf",
+    data=makeMismatchedLocaGlyfTransform("loca")
+)
+
+writeTest(
+    identifier="tabledata-transform-glyf-loca-002",
+    title="Transformed Loca With Unransformed Glyf",
+    description="The glyf table is not transformed while loca table is transformed.",
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    valid=False,
+    specLink="#conform-transformedLocaMustAccompanyGlyf",
+    data=makeMismatchedLocaGlyfTransform("glyf")
+)
+
 # composite glyph with bbox
 writeTest(
     identifier="tabledata-glyf-composite-bbox-001",

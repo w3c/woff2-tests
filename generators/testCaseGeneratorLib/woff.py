@@ -401,7 +401,15 @@ def packTestDirectory(directory, knownTags=knownTableTags, skipTransformLength=F
             data += struct.pack(">B", _setTransformBits(unknownTableTagFlag, transformFlag))
             data += struct.pack(">4s", tag)
         data += packBase128(table["origLength"], bug=Base128Bug)
-        if (tag in transformedTables or transformFlag != 0) and not skipTransformLength:
+        transformed = False
+        if tag in transformedTables:
+            transformed = True
+            if transformFlag == 3:
+                transformed = False
+        else:
+            transformed = transformFlag != 0
+
+        if transformed and not skipTransformLength:
             data += packBase128(table["transformLength"], bug=Base128Bug)
     return data
 
