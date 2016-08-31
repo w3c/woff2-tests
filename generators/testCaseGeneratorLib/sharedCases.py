@@ -11,7 +11,7 @@ from copy import deepcopy
 from fontTools.ttLib import TTFont
 from fontTools.ttLib.sfnt import sfntDirectoryEntrySize
 from testCaseGeneratorLib.woff import base128Size, packTestHeader, packTestDirectory, packTestMetadata, packTestPrivateData,\
-    woffHeaderSize, transformTable, packTestCollectionHeader, packTestCollectionDirectory
+    woffHeaderSize, transformTable
 from testCaseGeneratorLib.defaultData import defaultTestData, defaultSFNTTestData, testDataWOFFMetadata, testDataWOFFPrivateData,\
     sfntCFFTableData, testCFFDataWOFFDirectory
 from testCaseGeneratorLib.paths import sfntTTFSourcePath, sfntTTFCompositeSourcePath
