@@ -3004,11 +3004,11 @@ available1 = """
 		<meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
 		<title>WOFF Test: Font access</title>
 		<link rel="author" title="Chris Lilley" href="http://www.w3.org/People" />
+		<link rel="reviewer" title="Chris Lilley" href="mailto:chris@w3.org" />
 		<link rel="help" href="%s" />
 		<link rel="help" href="%s" />
-                <link rel="reviewer" title="Chris Lilley" href="mailto:chris@w3.org" />
 		<meta name="flags" content="font" />
-		<meta name="assert" content="Linked fonts are only available to the documents that reference them" />
+		<meta name="assert" content="Linked fonts are only available to the documents that reference them." />
 		<style type="text/css"><![CDATA[
 			body {
 				font-size: 20px;
@@ -3037,7 +3037,7 @@ f = open(p, "wb")
 f.write(available1)
 f.close()
 
-available2 = """
+available1a = """
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
@@ -3045,11 +3045,11 @@ available2 = """
 		<title>WOFF Test: Font access</title>
 		<link rel="author" title="Tal Leming" href="http://typesupply.com" />
 		<link rel="author" title="Chris Lilley" href="http://www.w3.org/People" />
+		<link rel="reviewer" title="Chris Lilley" href="mailto:chris@w3.org" />
 		<link rel="help" href="%s" />
 		<link rel="help" href="%s" />
-                <link rel="reviewer" title="Chris Lilley" href="mailto:chris@w3.org" />
 		<meta name="flags" content="font" />
-		<meta name="assert" content="Linked fonts are only available to the documents that reference them" />
+		<meta name="assert" content="Linked fonts are only available to the documents that reference them." />
 		<style type="text/css"><![CDATA[
 			@font-face {
 				font-family: "WOFF Test";
@@ -3075,10 +3075,10 @@ available2 = """
 """.strip() % (expandSpecLinks("#General"), expandSpecLinks("#conform-css3font-available"))
 p = os.path.join(userAgentTestDirectory, "available-001a.xht")
 f = open(p, "wb")
-f.write(available2)
+f.write(available1a)
 f.close()
 
-available3 = """
+available1b = """
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
@@ -3086,11 +3086,11 @@ available3 = """
 		<title>WOFF Test: Font access</title>
 		<link rel="author" title="Tal Leming" href="http://typesupply.com" />
 		<link rel="author" title="Chris Lilley" href="http://www.w3.org/People" />
+		<link rel="reviewer" title="Chris Lilley" href="mailto:chris@w3.org" />
 		<link rel="help" href="%s" />
 		<link rel="help" href="%s" />
-                <link rel="reviewer" title="Chris Lilley" href="mailto:chris@w3.org" />
 		<meta name="flags" content="font" />
-		<meta name="assert" content="Linked fonts are only available to the documents that reference them" />
+		<meta name="assert" content="Linked fonts are only available to the documents that reference them." />
 		<style type="text/css"><![CDATA[
 			body {
 				font-size: 20px;
@@ -3112,19 +3112,19 @@ available3 = """
 """.strip() % (expandSpecLinks("#General"), expandSpecLinks("#conform-css3font-available"))
 p = os.path.join(userAgentTestDirectory, "available-001b.xht")
 f = open(p, "wb")
-f.write(available3)
+f.write(available1b)
 f.close()
 
-identifier = "available-001"
-title = "Font access"
-assertion = "Linked fonts are only available to the documents that reference them"
+identifier1 = "available-001"
+title1 = "Font access"
+assertion1 = "Linked fonts are only available to the documents that reference them."
 
 testRegistry[tag].append(
     dict(
-        identifier=identifier,
+        identifier=identifier1,
         flags=["font"],
-        title=title,
-        assertion=assertion,
+        title=title1,
+        assertion=assertion1,
         sfntExpectation=True,
         sfntURL=[expandSpecLinks("#General"), expandSpecLinks("#conform-css3font-available")],
         metadataExpectation=None,
@@ -3133,9 +3133,9 @@ testRegistry[tag].append(
         hasReferenceRendering=False
     )
 )
-registeredIdentifiers.add(identifier)
-registeredTitles.add(title)
-registeredAssertions.add(assertion)
+registeredIdentifiers.add(identifier1)
+registeredTitles.add(title1)
+registeredAssertions.add(assertion1)
 
 # ------------------
 # Generate the Index
