@@ -143,8 +143,14 @@ def getWOFFCollectionData(pathOrFiles, MismatchGlyfLoca=False, reverseNames=Fals
     tableOrder = []
     collectionDirectory = []
     locaIndices = []
+    fonts = []
 
-    fonts = [TTFont(pathOrFile) for pathOrFile in pathOrFiles]
+    for pathOrFile in pathOrFiles:
+        if isinstance(pathOrFile, TTFont):
+            fonts.append(pathOrFile)
+        else:
+            fonts.append(TTFont(pathOrFile))
+
     for i, font in enumerate(fonts):
         index = i
         if reverseNames:

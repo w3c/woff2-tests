@@ -37,7 +37,7 @@ from testCaseGeneratorLib.defaultData import defaultTestData, testDataWOFFMetada
 from testCaseGeneratorLib.html import generateSFNTDisplayTestHTML, generateSFNTDisplayRefHTML, generateSFNTDisplayIndexHTML, expandSpecLinks
 from testCaseGeneratorLib.paths import resourcesDirectory, userAgentDirectory, userAgentTestDirectory, userAgentTestResourcesDirectory, userAgentFontsToInstallDirectory, sfntTTFCompositeSourcePath
 from testCaseGeneratorLib import sharedCases
-from testCaseGeneratorLib.sfnt import getSFNTData
+from testCaseGeneratorLib.sfnt import getSFNTData, getWOFFCollectionData
 from testCaseGeneratorLib.sharedCases import *
 
 # ------------------
@@ -1100,8 +1100,6 @@ writeFileStructureTest(
 # ---------------------------
 
 def makeMismatchedCollection1():
-    from testCaseGeneratorLib.sfnt import getWOFFCollectionData
-
     data = getWOFFCollectionData([sfntTTFSourcePath, sfntTTFSourcePath], MismatchGlyfLoca=True)
 
     return data
@@ -3137,6 +3135,165 @@ registeredIdentifiers.add(identifier1)
 registeredTitles.add(title1)
 registeredAssertions.add(assertion1)
 
+available2 = """
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
+		<title>WOFF Test: Font access</title>
+		<link rel="author" title="Khaled Hosny" href="http://khaledhosny.org" />
+		<link rel="reviewer" title="Chris Lilley" href="mailto:chris@w3.org" />
+		<link rel="help" href="%s" />
+		<meta name="flags" content="font" />
+		<meta name="assert" content="Fonts must be loaded from font collections." />
+		<style type="text/css"><![CDATA[
+			body {
+				font-size: 20px;
+			}
+			pre {
+				font-size: 12px;
+			}
+			iframe {
+				width: 24em;
+				height: 300px;
+				border: thin solid green
+			}
+		]]></style>
+	</head>
+	<body>
+		<p><a href="../../FontsToInstall">Test fonts</a> must be installed for this test. The WOFF being tested will be loaded over the network so please wait until the download is complete before determing the success of this test.</p>
+		<p>Test passes if the word PASS appears <em>twice</em> below, and the second one is condensed.</p>
+		<iframe src="available-002a.xht" />
+		<iframe src="available-002b.xht" />
+
+	</body>
+</html>
+""".strip() % expandSpecLinks("#conform-mustLoadFontCollection")
+p = os.path.join(userAgentTestDirectory, "available-002.xht")
+f = open(p, "wb")
+f.write(available2)
+f.close()
+
+available2a = """
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
+		<title>WOFF Test: Font access</title>
+		<link rel="author" title="Khaled Hosny" href="http://khaledhosny.org" />
+		<link rel="reviewer" title="Chris Lilley" href="mailto:chris@w3.org" />
+		<link rel="help" href="%s" />
+		<meta name="flags" content="font" />
+		<meta name="assert" content="Fonts must be loaded from font collections." />
+		<style type="text/css"><![CDATA[
+			@font-face {
+				font-family: "WOFF Test";
+				src: url("resources/available-002.woff2#1") format("woff2");
+			}
+			body {
+				font-size: 20px;
+			}
+			pre {
+				font-size: 12px;
+			}
+			.test {
+				font-family: "WOFF Test", "WOFF Test CFF Fallback";
+				font-size: 200px;
+				margin-top: 50px;
+			}
+		]]></style>
+	</head>
+	<body>
+		<div class="test">P</div>
+	</body>
+</html>
+""".strip() % expandSpecLinks("#conform-mustLoadFontCollection")
+p = os.path.join(userAgentTestDirectory, "available-002a.xht")
+f = open(p, "wb")
+f.write(available2a)
+f.close()
+
+available2b = """
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
+		<title>WOFF Test: Font access</title>
+		<link rel="author" title="Khaled Hosny" href="http://khaledhosny.org" />
+		<link rel="reviewer" title="Chris Lilley" href="mailto:chris@w3.org" />
+		<link rel="help" href="%s" />
+		<meta name="flags" content="font" />
+		<meta name="assert" content="Fonts must be loaded from font collections." />
+		<style type="text/css"><![CDATA[
+			@font-face {
+				font-family: "WOFF Test";
+				src: url("resources/available-002.woff2#2") format("woff2");
+			}
+			body {
+				font-size: 20px;
+			}
+			pre {
+				font-size: 12px;
+			}
+			.test {
+				font-family: "WOFF Test", "WOFF Test CFF Fallback";
+				font-size: 200px;
+				margin-top: 50px;
+			}
+		]]></style>
+	</head>
+	<body>
+		<div class="test">P</div>
+	</body>
+</html>
+""".strip() % expandSpecLinks("#conform-mustLoadFontCollection")
+p = os.path.join(userAgentTestDirectory, "available-002b.xht")
+f = open(p, "wb")
+f.write(available2b)
+f.close()
+
+identifier2 = "available-002"
+title2 = "Loading font collections"
+assertion2 = "Fonts must be loaded from font collections."
+
+def makeValidCollection():
+    from fontTools.pens.transformPen import TransformPen
+    font = TTFont(sfntTTFSourcePath)
+    glyf = font["glyf"]
+
+    # Condense the P glyph to make sure we are loading the second font
+    glyph = glyf["P"]
+    pen = TTGlyphPen(None)
+    glyph.draw(TransformPen(pen, [0.5, 0, 0, 1, 0, 0]), glyf)
+    glyf["P"] = pen.glyph()
+
+    data = getWOFFCollectionData([sfntTTFSourcePath, font])
+
+    return data
+
+woffPath = os.path.join(userAgentTestResourcesDirectory, identifier2) + ".woff2"
+f = open(woffPath, "wb")
+f.write(makeValidCollection())
+f.close()
+
+testRegistry[tag].append(
+    dict(
+        identifier=identifier2,
+        flags=["font"],
+        title=title2,
+        assertion=assertion2,
+        sfntExpectation=True,
+        sfntURL=[expandSpecLinks("#conform-mustLoadFontCollection")],
+        metadataExpectation=None,
+        metadataURL=None,
+        credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+        hasReferenceRendering=False
+    )
+)
+registeredIdentifiers.add(identifier2)
+registeredTitles.add(title2)
+registeredAssertions.add(assertion2)
+
 # ------------------
 # Generate the Index
 # ------------------
@@ -3205,7 +3362,7 @@ f.close()
 # Check for Unknown Files
 # -----------------------
 
-skip = "testcaseindex available-001a available-001b".split(" ")
+skip = "testcaseindex available-001a available-001b available-002a available-002b".split(" ")
 
 xhtPattern = os.path.join(userAgentTestDirectory, "*.xht")
 woffPattern = os.path.join(userAgentTestResourcesDirectory, "*.woff2")
