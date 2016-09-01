@@ -119,6 +119,8 @@ def pack255UInt16(n, alternate=0):
     return ret
 
 def packTriplet(x, y, onCurve):
+    x = int(round(x))
+    y = int(round(y))
     absX = abs(x)
     absY = abs(y)
     onCurveBit = 0
