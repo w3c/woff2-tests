@@ -13,6 +13,9 @@ from fontTools.ttLib.sfnt import \
 from utilities import padData, calcPaddingLength, calcHeadCheckSumAdjustmentSFNT, calcTableChecksum
 from woff import packTestCollectionDirectory, packTestDirectory, packTestCollectionHeader, packTestHeader, transformTable
 
+def getTTFont(path, **kwargs):
+    return TTFont(path, recalcTimestamp=False, **kwargs)
+
 # ---------
 # Unpacking
 # ---------
@@ -21,7 +24,7 @@ def getSFNTData(pathOrFile, unsortGlyfLoca=False, glyphBBox="", alt255UInt16=Fal
     if isinstance(pathOrFile, TTFont):
         font = pathOrFile
     else:
-        font = TTFont(pathOrFile)
+        font = getTTFont(pathOrFile)
     tableChecksums = {}
     tableData = {}
     tableOrder = [i for i in sorted(font.keys()) if len(i) == 4]
@@ -51,7 +54,7 @@ def getSFNTCollectionData(pathOrFiles, modifyNames=True, reverseNames=False, DSI
         if isinstance(pathOrFile, TTFont):
             fonts.append(pathOrFile)
         else:
-            fonts.append(TTFont(pathOrFile))
+            fonts.append(getTTFont(pathOrFile))
     numFonts = len(fonts)
 
     header = dict(
@@ -149,7 +152,7 @@ def getWOFFCollectionData(pathOrFiles, MismatchGlyfLoca=False, reverseNames=Fals
         if isinstance(pathOrFile, TTFont):
             fonts.append(pathOrFile)
         else:
-            fonts.append(TTFont(pathOrFile))
+            fonts.append(getTTFont(pathOrFile))
 
     for i, font in enumerate(fonts):
         index = i

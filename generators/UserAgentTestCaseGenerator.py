@@ -37,7 +37,7 @@ from testCaseGeneratorLib.defaultData import defaultTestData, testDataWOFFMetada
 from testCaseGeneratorLib.html import generateSFNTDisplayTestHTML, generateSFNTDisplayRefHTML, generateSFNTDisplayIndexHTML, expandSpecLinks
 from testCaseGeneratorLib.paths import resourcesDirectory, userAgentDirectory, userAgentTestDirectory, userAgentTestResourcesDirectory, userAgentFontsToInstallDirectory, sfntTTFCompositeSourcePath
 from testCaseGeneratorLib import sharedCases
-from testCaseGeneratorLib.sfnt import getSFNTData, getWOFFCollectionData
+from testCaseGeneratorLib.sfnt import getSFNTData, getWOFFCollectionData, getTTFont
 from testCaseGeneratorLib.sharedCases import *
 
 # ------------------
@@ -975,7 +975,7 @@ writeFileStructureTest(
 )
 
 def makeGlyfMismatchingOrigLength():
-    font = TTFont(sfntTTFSourcePath, recalcBBoxes=False)
+    font = getTTFont(sfntTTFSourcePath, recalcBBoxes=False)
     glyf = font["glyf"]
     hmtx = font["hmtx"]
 
@@ -1011,7 +1011,7 @@ writeFileStructureTest(
 # File Structure: Data Types
 # --------------------------
 def make255UInt16Alt1():
-    font = TTFont(sfntTTFSourcePath, recalcBBoxes=False)
+    font = getTTFont(sfntTTFSourcePath, recalcBBoxes=False)
     glyf = font["glyf"]
     hmtx = font["hmtx"]
 
@@ -1268,7 +1268,7 @@ def makeMetadataAuthoritativeTest1():
         14  # license url
     ]
     # open the SFNT
-    font = TTFont(sfntCFFSourcePath)
+    font = getTTFont(sfntCFFSourcePath)
     # overwrite parts of the name table that overlap the metadata
     nameTable = font["name"]
     newNames = []
@@ -3258,7 +3258,7 @@ assertion2 = "Fonts must be loaded from font collections."
 
 def makeValidCollection():
     from fontTools.pens.transformPen import TransformPen
-    font = TTFont(sfntTTFSourcePath)
+    font = getTTFont(sfntTTFSourcePath)
     glyf = font["glyf"]
 
     # Condense the P glyph to make sure we are loading the second font

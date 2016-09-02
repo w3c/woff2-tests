@@ -28,7 +28,7 @@ from fontTools.pens.ttGlyphPen import TTGlyphPen
 from fontTools.ttLib import TTFont, getTableModule
 from fontTools.ttLib.sfnt import sfntDirectoryEntrySize
 from testCaseGeneratorLib.defaultData import defaultTestData, defaultSFNTTestData
-from testCaseGeneratorLib.sfnt import packSFNT, getSFNTData, getSFNTCollectionData
+from testCaseGeneratorLib.sfnt import packSFNT, getSFNTData, getSFNTCollectionData, getTTFont
 from testCaseGeneratorLib.paths import resourcesDirectory, authoringToolDirectory, authoringToolTestDirectory,\
                                        authoringToolResourcesDirectory, sfntTTFSourcePath, sfntTTFCompositeSourcePath
 from testCaseGeneratorLib.html import generateAuthoringToolIndexHTML, expandSpecLinks
@@ -274,7 +274,7 @@ writeTest(
 # ---------------
 
 def makeGlyfBBox1(calcBBoxes=True, composite=False):
-    font = TTFont(sfntTTFSourcePath, recalcBBoxes=calcBBoxes)
+    font = getTTFont(sfntTTFSourcePath, recalcBBoxes=calcBBoxes)
     glyf = font["glyf"]
     hmtx = font["hmtx"]
     for name in ("bbox1", "bbox2"):
@@ -349,7 +349,7 @@ writeTest(
 )
 
 def makeGlyfBBox2(bbox):
-    font = TTFont(sfntTTFSourcePath, recalcBBoxes=False)
+    font = getTTFont(sfntTTFSourcePath, recalcBBoxes=False)
     glyf = font["glyf"]
     hmtx = font["hmtx"]
 
@@ -520,7 +520,7 @@ writeTest(
 )
 
 def makeCollectionHmtxTransform1():
-    fonts = [TTFont(sfntTTFSourcePath), TTFont(sfntTTFSourcePath)]
+    fonts = [getTTFont(sfntTTFSourcePath), getTTFont(sfntTTFSourcePath)]
     for i, font in enumerate(fonts):
         glyf = font["glyf"]
         hmtx = font["hmtx"]
@@ -574,7 +574,7 @@ writeTest(
 )
 
 def makeCollectionHmtxTransform2():
-    fonts = [TTFont(sfntTTFSourcePath), TTFont(sfntTTFSourcePath)]
+    fonts = [getTTFont(sfntTTFSourcePath), getTTFont(sfntTTFSourcePath)]
     for i, font in enumerate(fonts):
         glyf = font["glyf"]
         hmtx = font["hmtx"]
