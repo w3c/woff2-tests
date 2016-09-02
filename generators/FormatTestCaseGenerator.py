@@ -2845,6 +2845,7 @@ allBinariesZip.close()
 print "Compiling manifest..."
 
 manifest = []
+expectations = []
 
 for tag, title, url in groupDefinitions:
     for testCase in testRegistry[tag]:
@@ -2852,6 +2853,7 @@ for tag, title, url in groupDefinitions:
         title = testCase["title"]
         assertion = testCase["description"]
         links = "#" + testCase["specLink"].split("#")[-1]
+        valid = testCase["valid"]
         flags = ""
         credits = ""
         # format the line
@@ -2867,6 +2869,7 @@ for tag, title, url in groupDefinitions:
         )
         # store
         manifest.append(line)
+        expectations.append('%s, %s, %r' % (identifier, testCase["specLink"], valid))
 
 path = os.path.join(formatDirectory, "manifest.txt")
 if os.path.exists(path):
@@ -2874,6 +2877,16 @@ if os.path.exists(path):
 f = open(path, "wb")
 f.write("\n".join(manifest))
 f.close()
+
+# ---------------------
+# Generate a list of tests, their files, and expectations for them
+# ---------------------
+print "Compiling test expectations..."
+path = os.path.join(formatDirectory, "expectations.txt")
+if os.path.exists(path):
+    os.remove(path)
+with open(path, "wb") as f:
+    f.write("\n".join(expectations))
 
 # -----------------------
 # Check for Unknown Files
