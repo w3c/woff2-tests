@@ -11,7 +11,7 @@ That directory will have the structure:
             testcaseindex.xht - index of all test cases
             test-case-name-number.xht - individual test case
             test-case-name-number-ref - reference that uses locally installed fonts for rendering comparison
-            /resources
+            /support
                 index.css - index CSS file
                 test-case-name-number.woff2 - individual WOFF test case
 
@@ -3051,7 +3051,7 @@ available1a = """
 		<style type="text/css"><![CDATA[
 			@font-face {
 				font-family: "WOFF Test";
-				src: url("resources/valid-001.woff2") format("woff2");
+				src: url("%s/valid-001.woff2") format("woff2");
 			}
 			body {
 				font-size: 20px;
@@ -3070,7 +3070,7 @@ available1a = """
 		<div class="test">P</div>
 	</body>
 </html>
-""".strip() % (expandSpecLinks("#General"), expandSpecLinks("#conform-css3font-available"))
+""".strip() % (expandSpecLinks("#General"), expandSpecLinks("#conform-css3font-available"), os.path.basename(userAgentTestResourcesDirectory))
 p = os.path.join(userAgentTestDirectory, "available-001a.xht")
 f = open(p, "wb")
 f.write(available1a)
@@ -3188,7 +3188,7 @@ available2a = """
 		<style type="text/css"><![CDATA[
 			@font-face {
 				font-family: "WOFF Test";
-				src: url("resources/available-002.woff2#1") format("woff2");
+				src: url("%s/available-002.woff2#1") format("woff2");
 			}
 			body {
 				font-size: 20px;
@@ -3207,7 +3207,7 @@ available2a = """
 		<div class="test">P</div>
 	</body>
 </html>
-""".strip() % expandSpecLinks("#conform-mustLoadFontCollection")
+""".strip() % (expandSpecLinks("#conform-mustLoadFontCollection"), os.path.basename(userAgentTestResourcesDirectory))
 p = os.path.join(userAgentTestDirectory, "available-002a.xht")
 f = open(p, "wb")
 f.write(available2a)
@@ -3227,7 +3227,7 @@ available2b = """
 		<style type="text/css"><![CDATA[
 			@font-face {
 				font-family: "WOFF Test";
-				src: url("resources/available-002.woff2#2") format("woff2");
+				src: url("%s/available-002.woff2#2") format("woff2");
 			}
 			body {
 				font-size: 20px;
@@ -3246,7 +3246,7 @@ available2b = """
 		<div class="test">P</div>
 	</body>
 </html>
-""".strip() % expandSpecLinks("#conform-mustLoadFontCollection")
+""".strip() % (expandSpecLinks("#conform-mustLoadFontCollection"), os.path.basename(userAgentTestResourcesDirectory))
 p = os.path.join(userAgentTestDirectory, "available-002b.xht")
 f = open(p, "wb")
 f.write(available2b)

@@ -5,6 +5,8 @@ Test case HTML generator.
 import os
 import cgi
 
+from paths import userAgentTestResourcesDirectory
+
 # ------------------------
 # Specification URLs
 # This is used frequently.
@@ -24,7 +26,7 @@ refPassCharacter = testPassCharacter
 testCSS = """
 @font-face {
 	font-family: "WOFF Test";
-	src: url("resources/%s.woff2") format("woff2");
+	src: url("%s/%s.woff2") format("woff2");
 }
 body {
 	font-size: 20px;
@@ -175,7 +177,8 @@ def generateSFNTDisplayTestHTML(
     bodyCharacter = testFailCharacter
     if shouldDisplay:
         bodyCharacter = testPassCharacter
-    css = testCSS % (fileName, flavor)
+    dirName = os.path.basename(userAgentTestResourcesDirectory)
+    css = testCSS % (dirName, fileName, flavor)
     specLinks = []
     if sfntDisplaySpecLink:
         specLinks += sfntDisplaySpecLink
@@ -246,7 +249,7 @@ def generateSFNTDisplayIndexHTML(directory=None, testCases=[]):
         "\t<head>",
         "\t\t<title>WOFF 2.0: User Agent Test Suite</title>",
         "\t\t<style type=\"text/css\">",
-        "\t\t\t@import \"resources/index.css\";",
+        "\t\t\t@import \"%s/index.css\";" % os.path.basename(userAgentTestResourcesDirectory),
         "\t\t</style>",
         "\t</head>",
         "\t<body>",
