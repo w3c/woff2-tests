@@ -80,7 +80,7 @@ that is functionaly equivalent to the original SFNT.
 validationNote = """
 These files are provided as test cases for checking that the
 result of converting WOFF back to SFNT results in a file
-that confirms the OFF structure validity..
+that confirms the OFF structure validity.
 """.strip()
 
 groupDefinitions = [
@@ -417,7 +417,7 @@ for identifier in metadata:
 writeTestCollection(
     identifier="validation-off",
     title="Valid WOFF File",
-    description="Valid WOFF file from the fire format tests, the decoded file should run through a font validator to confirm the OFF structure validity.",
+    description="Valid WOFF file from the file format tests, the decoded file should run through a font validator to confirm the OFF structure validity.",
     credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
     specLink="#conform-mustProduceOFF",
     data=OFFData
