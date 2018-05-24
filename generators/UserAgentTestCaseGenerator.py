@@ -4,16 +4,15 @@ one level up from the directory containing this script called "UserAgent".
 That directory will have the structure:
 
     /UserAgent
-        README.txt - information about how the tests were generated and how they should be modified
-        /FontsToInstall
-            fonts that must be installed locally
-        /Tests
+        manifest.txt - information about how the tests were generated and how they should be modified
+        /WOFF2
             testcaseindex.xht - index of all test cases
             test-case-name-number.xht - individual test case
             test-case-name-number-ref - reference that uses locally installed fonts for rendering comparison
             /support
                 index.css - index CSS file
                 test-case-name-number.woff2 - individual WOFF test case
+                *.otf, *.ttf - fallback and reference fonts
 
 The individual test cases follow the CSS Test Format
 (http://wiki.csswg.org/test/css2.1/format).
@@ -35,7 +34,7 @@ from fontTools.ttLib import TTFont, getTableModule
 from testCaseGeneratorLib.woff import packTestHeader, packTestDirectory, packTestMetadata, packTestPrivateData, base128Size, transformedTables, woffHeaderSize
 from testCaseGeneratorLib.defaultData import defaultTestData, testDataWOFFMetadata, testDataWOFFPrivateData
 from testCaseGeneratorLib.html import generateSFNTDisplayTestHTML, generateSFNTDisplayRefHTML, generateSFNTDisplayIndexHTML, expandSpecLinks
-from testCaseGeneratorLib.paths import resourcesDirectory, userAgentDirectory, userAgentTestDirectory, userAgentTestResourcesDirectory, userAgentFontsToInstallDirectory, sfntTTFCompositeSourcePath
+from testCaseGeneratorLib.paths import resourcesDirectory, userAgentDirectory, userAgentTestDirectory, userAgentTestResourcesDirectory, sfntTTFCompositeSourcePath
 from testCaseGeneratorLib import sharedCases
 from testCaseGeneratorLib.sfnt import getSFNTData, getWOFFCollectionData, getTTFont
 from testCaseGeneratorLib.sharedCases import *
@@ -58,26 +57,26 @@ if not os.path.exists(userAgentTestResourcesDirectory):
 # Move Fonts To Install
 # ---------------------
 
-if not os.path.exists(userAgentFontsToInstallDirectory):
-    os.mkdir(userAgentFontsToInstallDirectory)
+if not os.path.exists(userAgentTestResourcesDirectory):
+    os.mkdir(userAgentTestResourcesDirectory)
 
 # CFF Reference
-destPath = os.path.join(userAgentFontsToInstallDirectory, "SFNT-CFF-Reference.otf")
+destPath = os.path.join(userAgentTestResourcesDirectory, "SFNT-CFF-Reference.otf")
 if os.path.exists(destPath):
     os.remove(destPath)
 shutil.copy(os.path.join(resourcesDirectory, "SFNT-CFF-Reference.otf"), os.path.join(destPath))
 # CFF Fallback
-destPath = os.path.join(userAgentFontsToInstallDirectory, "SFNT-CFF-Fallback.otf")
+destPath = os.path.join(userAgentTestResourcesDirectory, "SFNT-CFF-Fallback.otf")
 if os.path.exists(destPath):
     os.remove(destPath)
 shutil.copy(os.path.join(resourcesDirectory, "SFNT-CFF-Fallback.otf"), os.path.join(destPath))
 # TTF Reference
-destPath = os.path.join(userAgentFontsToInstallDirectory, "SFNT-TTF-Reference.ttf")
+destPath = os.path.join(userAgentTestResourcesDirectory, "SFNT-TTF-Reference.ttf")
 if os.path.exists(destPath):
     os.remove(destPath)
 shutil.copy(os.path.join(resourcesDirectory, "SFNT-TTF-Reference.ttf"), os.path.join(destPath))
 # TTF Fallback
-destPath = os.path.join(userAgentFontsToInstallDirectory, "SFNT-TTF-Fallback.ttf")
+destPath = os.path.join(userAgentTestResourcesDirectory, "SFNT-TTF-Fallback.ttf")
 if os.path.exists(destPath):
     os.remove(destPath)
 shutil.copy(os.path.join(resourcesDirectory, "SFNT-TTF-Fallback.ttf"), os.path.join(destPath))

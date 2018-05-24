@@ -32,9 +32,8 @@ sfntTTFCompositeSourcePath = os.path.join(resourcesDirectory, "SFNT-TTF-Composit
 
 # directories for test output
 userAgentDirectory = os.path.join(mainDirectory, "UserAgent")
-userAgentTestDirectory = os.path.join(userAgentDirectory, "Tests", "xhtml1")
+userAgentTestDirectory = os.path.join(userAgentDirectory, "WOFF2")
 userAgentTestResourcesDirectory = os.path.join(userAgentTestDirectory, "support")
-userAgentFontsToInstallDirectory = os.path.join(userAgentDirectory, "FontsToInstall")
 
 formatDirectory = os.path.join(mainDirectory, "Format")
 formatTestDirectory = os.path.join(formatDirectory, "Tests", "xhtml1")
