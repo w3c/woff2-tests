@@ -11,6 +11,7 @@ That directory will have the structure:
             test-case-name-number-ref - reference that uses locally installed fonts for rendering comparison
             /support
                 index.css - index CSS file
+                test-fonts.css - CSS file for @font-face rules
                 test-case-name-number.woff2 - individual WOFF test case
                 *.otf, *.ttf - fallback and reference fonts
 
@@ -90,6 +91,12 @@ destPath = os.path.join(userAgentTestResourcesDirectory, "index.css")
 if os.path.exists(destPath):
     os.remove(destPath)
 shutil.copy(os.path.join(resourcesDirectory, "index.css"), destPath)
+
+# test-fonts css
+destPath = os.path.join(userAgentTestResourcesDirectory, "test-fonts.css")
+if os.path.exists(destPath):
+    os.remove(destPath)
+shutil.copy(os.path.join(resourcesDirectory, "test-fonts.css"), destPath)
 
 # ---------------
 # Test Case Index
@@ -198,7 +205,6 @@ def writeFileStructureTest(identifier, flavor="CFF",
     if metadataDisplaySpecLink is not None:
         metadataDisplaySpecLink = expandSpecLinks(metadataDisplaySpecLink)
     flags = list(flags)
-    flags += ["font"] # fonts must be installed for all of these tests
 
     tag = identifier.split("-")[0]
 
@@ -957,7 +963,7 @@ writeFileStructureTest(
     identifier="tabledata-glyf-origlength-001",
     title="Glyf OrigLength Too Small",
     assertion="The origLength field of glyf table contains a too small incorrect value.",
-    credits=[dict(title="khaled hosny", role="author", link="http://khaledhosny.org")],
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
     shouldDisplaySFNT=True,
     sfntDisplaySpecLink="#conform-mustNotRejectGlyfSizeMismatch",
     data=makeGlyfIncorrectOrigLength()
@@ -967,7 +973,7 @@ writeFileStructureTest(
     identifier="tabledata-glyf-origlength-002",
     title="Glyf OrigLength Too Big",
     assertion="The origLength field of glyf table contains a too big incorrect value.",
-    credits=[dict(title="khaled hosny", role="author", link="http://khaledhosny.org")],
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
     shouldDisplaySFNT=True,
     sfntDisplaySpecLink="#conform-mustNotRejectGlyfSizeMismatch",
     data=makeGlyfIncorrectOrigLength(True)
@@ -1000,7 +1006,7 @@ writeFileStructureTest(
     identifier="tabledata-glyf-origlength-003",
     title="Glyf OrigLength Mismatching",
     assertion="The origLength field of glyf table is larger than constructed table.",
-    credits=[dict(title="khaled hosny", role="author", link="http://khaledhosny.org")],
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
     shouldDisplaySFNT=True,
     sfntDisplaySpecLink="#conform-mustNotRejectGlyfSizeMismatch",
     data=makeGlyfMismatchingOrigLength()
@@ -3004,7 +3010,6 @@ available1 = """
 		<link rel="reviewer" title="Chris Lilley" href="mailto:chris@w3.org" />
 		<link rel="help" href="%s" />
 		<link rel="help" href="%s" />
-		<meta name="flags" content="font" />
 		<meta name="assert" content="Linked fonts are only available to the documents that reference them." />
 		<style type="text/css"><![CDATA[
 			body {
@@ -3021,7 +3026,6 @@ available1 = """
 		]]></style>
 	</head>
 	<body>
-		<p><a href="../../FontsToInstall">Test fonts</a> must be installed for this test. The WOFF being tested will be loaded over the network so please wait until the download is complete before determing the success of this test.</p>
 		<p>Test passes if the word PASS appears <em>twice</em> below.</p>
 		<iframe src="available-001a.xht" />
 		<iframe src="available-001b.xht" />
@@ -3143,7 +3147,6 @@ available2 = """
 		<link rel="author" title="Khaled Hosny" href="http://khaledhosny.org" />
 		<link rel="reviewer" title="Chris Lilley" href="mailto:chris@w3.org" />
 		<link rel="help" href="%s" />
-		<meta name="flags" content="font" />
 		<meta name="assert" content="Fonts must be loaded from font collections." />
 		<style type="text/css"><![CDATA[
 			body {
@@ -3160,7 +3163,6 @@ available2 = """
 		]]></style>
 	</head>
 	<body>
-		<p><a href="../../FontsToInstall">Test fonts</a> must be installed for this test. The WOFF being tested will be loaded over the network so please wait until the download is complete before determing the success of this test.</p>
 		<p>Test passes if the word PASS appears <em>twice</em> below, and the second one is condensed.</p>
 		<iframe src="available-002a.xht" />
 		<iframe src="available-002b.xht" />
