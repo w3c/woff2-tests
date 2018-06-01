@@ -24,6 +24,7 @@ testFailCharacter = "F"
 refPassCharacter = testPassCharacter
 
 testCSS = """
+@import url("support/test-fonts.css");
 @font-face {
 	font-family: "WOFF Test";
 	src: url("%s/%s.woff2") format("woff2");
@@ -42,6 +43,7 @@ pre {
 """.strip()
 
 refCSS = """
+@import url("support/test-fonts.css");
 body {
 	font-size: 20px;
 }
@@ -66,7 +68,7 @@ def escapeAttributeText(text):
 
 def _generateSFNTDisplayTestHTML(
     css, bodyCharacter,
-    fileName=None, flavor=None,
+    fileName=None, refFileName=None, flavor=None,
     title=None, specLinks=[], assertion=None,
     credits=[], flags=[],
     metadataIsValid=None,
@@ -111,6 +113,10 @@ def _generateSFNTDisplayTestHTML(
     ## reviewer
     s = '\t\t<link rel="reviewer" title="Chris Lilley" href="mailto:chris@w3.org" />'
     html.append(s)
+    # matching reference
+    if refFileName:
+        s = '\t\t<link rel="match" href="%s" />' % refFileName
+        html.append(s)
     ## flags
     if flags:
         s = "\t\t<meta name=\"flags\" content=\"%s\" />" % " ".join(flags)
@@ -127,9 +133,6 @@ def _generateSFNTDisplayTestHTML(
     html.append("\t</head>")
     # body
     html.append("\t<body>")
-    ## install fonts note
-    s = "\t\t<p><a href=\"../../FontsToInstall\">Test fonts</a> must be installed for this test. The WOFF being tested will be loaded over the network so please wait until the download is complete before determing the success of this test.</p>"
-    html.append(s)
     ## note
     if metadataIsValid is None:
         s = "\t\t<p>Test passes if the word PASS appears below.</p>"
@@ -186,7 +189,9 @@ def generateSFNTDisplayTestHTML(
         specLinks.append(metadataDisplaySpecLink)
     html = _generateSFNTDisplayTestHTML(
         css, bodyCharacter,
-        fileName=fileName, flavor=flavor,
+        fileName=fileName,
+        refFileName='%s-ref.xht' % fileName,
+        flavor=flavor,
         title=title,
         specLinks=specLinks,
         assertion=assertion,
