@@ -258,8 +258,7 @@ def generateSFNTDisplayIndexHTML(directory=None, testCases=[]):
         "\t\t</style>",
         "\t</head>",
         "\t<body>",
-        "\t\t<h1>WOFF 2.0: User Agent Test Suite (%d tests)</h1>" % testCount,
-        "\t\t<p class=\"installFontsNote\">All of these tests require special fonts to be installed. The fonts can be obtained <a href=\"../../FontsToInstall\">here</a>.</p>"
+        "\t\t<h1>WOFF 2.0: User Agent Test Suite (%d tests)</h1>" % testCount
     ]
     # add the test groups
     for group in testCases:
