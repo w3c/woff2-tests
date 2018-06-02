@@ -15,6 +15,12 @@ from paths import userAgentTestResourcesDirectory
 specificationURL = "http://dev.w3.org/webfonts/WOFF2/spec/"
 woff1SpecificationURL = "http://www.w3.org/TR/WOFF/"
 
+# -------------------
+# Do not edit warning
+# -------------------
+
+doNotEditWarning = "<!-- THIS FILE WAS AUTOMATICALLY GENERATED, DO NOT EDIT. -->"
+
 # ------------------
 # SFNT Display Tests
 # ------------------
@@ -83,6 +89,7 @@ def _generateSFNTDisplayTestHTML(
     assert assertion is not None
     html = [
         "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">",
+        doNotEditWarning,
         "<html xmlns=\"http://www.w3.org/1999/xhtml\">"
     ]
     # head
@@ -250,6 +257,7 @@ def generateSFNTDisplayIndexHTML(directory=None, testCases=[]):
     testCount = sum([len(group["testCases"]) for group in testCases])
     html = [
         "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">",
+        doNotEditWarning,
         "<html xmlns=\"http://www.w3.org/1999/xhtml\">",
         "\t<head>",
         "\t\t<title>WOFF 2.0: User Agent Test Suite</title>",
@@ -359,6 +367,7 @@ def generateFormatIndexHTML(directory=None, testCases=[]):
     testCount = sum([len(group["testCases"]) for group in testCases])
     html = [
         "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">",
+        doNotEditWarning,
         "<html xmlns=\"http://www.w3.org/1999/xhtml\">",
         "\t<head>",
         "\t\t<title>WOFF 2.0: Format Test Suite</title>",
@@ -441,6 +450,7 @@ def generateAuthoringToolIndexHTML(directory=None, testCases=[], note=None):
     testCount = sum([len(group["testCases"]) for group in testCases])
     html = [
         "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">",
+        doNotEditWarning,
         "<html xmlns=\"http://www.w3.org/1999/xhtml\">",
         "\t<head>",
         "\t\t<title>WOFF 2.0: Authoring Tool Test Suite</title>",
@@ -536,6 +546,7 @@ def generateDecoderIndexHTML(directory=None, testCases=[], note=None):
     testCount = sum([len(group["testCases"]) for group in testCases])
     html = [
         "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">",
+        doNotEditWarning,
         "<html xmlns=\"http://www.w3.org/1999/xhtml\">",
         "\t<head>",
         "\t\t<title>WOFF 2.0: Decoder Test Suite</title>",
