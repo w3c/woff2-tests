@@ -14,6 +14,7 @@ That directory will have the structure:
                 test-fonts.css - CSS file for @font-face rules
                 test-case-name-number.woff2 - individual WOFF test case
                 *.otf, *.ttf - fallback and reference fonts
+                *.xht - support pages for tests with iframes.
 
 The individual test cases follow the CSS Test Format
 (http://wiki.csswg.org/test/css2.1/format).
@@ -3027,8 +3028,8 @@ available1 = """
 	</head>
 	<body>
 		<p>Test passes if the word PASS appears <em>twice</em> below.</p>
-		<iframe src="available-001a.xht" />
-		<iframe src="available-001b.xht" />
+		<iframe src="support/available-001a.xht" />
+		<iframe src="support/available-001b.xht" />
 
 	</body>
 </html>
@@ -3049,12 +3050,13 @@ available1a = """
 		<link rel="reviewer" title="Chris Lilley" href="mailto:chris@w3.org" />
 		<link rel="help" href="%s" />
 		<link rel="help" href="%s" />
-		<meta name="flags" content="font" />
+		<meta name="flags" content="interact" />
 		<meta name="assert" content="Linked fonts are only available to the documents that reference them." />
 		<style type="text/css"><![CDATA[
+			@import url("test-fonts.css");
 			@font-face {
 				font-family: "WOFF Test";
-				src: url("%s/valid-001.woff2") format("woff2");
+				src: url("valid-001.woff2") format("woff2");
 			}
 			body {
 				font-size: 20px;
@@ -3073,8 +3075,8 @@ available1a = """
 		<div class="test">P</div>
 	</body>
 </html>
-""".strip() % (expandSpecLinks("#General"), expandSpecLinks("#conform-css3font-available"), os.path.basename(userAgentTestResourcesDirectory))
-p = os.path.join(userAgentTestDirectory, "available-001a.xht")
+""".strip() % (expandSpecLinks("#General"), expandSpecLinks("#conform-css3font-available"))
+p = os.path.join(userAgentTestResourcesDirectory, "available-001a.xht")
 f = open(p, "wb")
 f.write(available1a)
 f.close()
@@ -3090,9 +3092,10 @@ available1b = """
 		<link rel="reviewer" title="Chris Lilley" href="mailto:chris@w3.org" />
 		<link rel="help" href="%s" />
 		<link rel="help" href="%s" />
-		<meta name="flags" content="font" />
+		<meta name="flags" content="interact" />
 		<meta name="assert" content="Linked fonts are only available to the documents that reference them." />
 		<style type="text/css"><![CDATA[
+			@import url("test-fonts.css");
 			body {
 				font-size: 20px;
 			}
@@ -3111,7 +3114,7 @@ available1b = """
 	</body>
 </html>
 """.strip() % (expandSpecLinks("#General"), expandSpecLinks("#conform-css3font-available"))
-p = os.path.join(userAgentTestDirectory, "available-001b.xht")
+p = os.path.join(userAgentTestResourcesDirectory, "available-001b.xht")
 f = open(p, "wb")
 f.write(available1b)
 f.close()
@@ -3164,8 +3167,8 @@ available2 = """
 	</head>
 	<body>
 		<p>Test passes if the word PASS appears <em>twice</em> below, and the second one is condensed.</p>
-		<iframe src="available-002a.xht" />
-		<iframe src="available-002b.xht" />
+		<iframe src="support/available-002a.xht" />
+		<iframe src="support/available-002b.xht" />
 
 	</body>
 </html>
@@ -3184,9 +3187,10 @@ available2a = """
 		<link rel="author" title="Khaled Hosny" href="http://khaledhosny.org" />
 		<link rel="reviewer" title="Chris Lilley" href="mailto:chris@w3.org" />
 		<link rel="help" href="%s" />
-		<meta name="flags" content="font" />
+		<meta name="flags" content="interact" />
 		<meta name="assert" content="Fonts must be loaded from font collections." />
 		<style type="text/css"><![CDATA[
+			@import url("test-fonts.css");
 			@font-face {
 				font-family: "WOFF Test";
 				src: url("%s/available-002.woff2#1") format("woff2");
@@ -3209,7 +3213,7 @@ available2a = """
 	</body>
 </html>
 """.strip() % (expandSpecLinks("#conform-mustLoadFontCollection"), os.path.basename(userAgentTestResourcesDirectory))
-p = os.path.join(userAgentTestDirectory, "available-002a.xht")
+p = os.path.join(userAgentTestResourcesDirectory, "available-002a.xht")
 f = open(p, "wb")
 f.write(available2a)
 f.close()
@@ -3226,9 +3230,10 @@ available2b = """
 		<meta name="flags" content="font" />
 		<meta name="assert" content="Fonts must be loaded from font collections." />
 		<style type="text/css"><![CDATA[
+			@import url("test-fonts.css");
 			@font-face {
 				font-family: "WOFF Test";
-				src: url("%s/available-002.woff2#2") format("woff2");
+				src: url("available-002.woff2#2") format("woff2");
 			}
 			body {
 				font-size: 20px;
@@ -3247,8 +3252,8 @@ available2b = """
 		<div class="test">P</div>
 	</body>
 </html>
-""".strip() % (expandSpecLinks("#conform-mustLoadFontCollection"), os.path.basename(userAgentTestResourcesDirectory))
-p = os.path.join(userAgentTestDirectory, "available-002b.xht")
+""".strip() % (expandSpecLinks("#conform-mustLoadFontCollection"))
+p = os.path.join(userAgentTestResourcesDirectory, "available-002b.xht")
 f = open(p, "wb")
 f.write(available2b)
 f.close()
