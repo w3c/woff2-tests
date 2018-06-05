@@ -35,7 +35,7 @@ from fontTools.pens.ttGlyphPen import TTGlyphPen
 from fontTools.ttLib import TTFont, getTableModule
 from testCaseGeneratorLib.woff import packTestHeader, packTestDirectory, packTestMetadata, packTestPrivateData, base128Size, transformedTables, woffHeaderSize
 from testCaseGeneratorLib.defaultData import defaultTestData, testDataWOFFMetadata, testDataWOFFPrivateData
-from testCaseGeneratorLib.html import generateSFNTDisplayTestHTML, generateSFNTDisplayRefHTML, generateSFNTDisplayIndexHTML, expandSpecLinks
+from testCaseGeneratorLib.html import generateSFNTDisplayTestHTML, generateSFNTDisplayRefHTML, generateSFNTDisplayIndexHTML, expandSpecLinks, doNotEditWarning
 from testCaseGeneratorLib.paths import resourcesDirectory, userAgentDirectory, userAgentTestDirectory, userAgentTestResourcesDirectory, sfntTTFCompositeSourcePath
 from testCaseGeneratorLib import sharedCases
 from testCaseGeneratorLib.sfnt import getSFNTData, getWOFFCollectionData, getTTFont
@@ -3003,6 +3003,7 @@ writeMetadataSchemaValidityTest(
 
 available1 = """
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+%s
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
@@ -3033,7 +3034,7 @@ available1 = """
 
 	</body>
 </html>
-""".strip() % (expandSpecLinks("#General"), expandSpecLinks("#conform-css3font-available"))
+""".strip() % (doNotEditWarning, expandSpecLinks("#General"), expandSpecLinks("#conform-css3font-available"))
 p = os.path.join(userAgentTestDirectory, "available-001.xht")
 f = open(p, "wb")
 f.write(available1)
@@ -3041,6 +3042,7 @@ f.close()
 
 available1a = """
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+%s
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
@@ -3075,7 +3077,7 @@ available1a = """
 		<div class="test">P</div>
 	</body>
 </html>
-""".strip() % (expandSpecLinks("#General"), expandSpecLinks("#conform-css3font-available"))
+""".strip() % (doNotEditWarning, expandSpecLinks("#General"), expandSpecLinks("#conform-css3font-available"))
 p = os.path.join(userAgentTestResourcesDirectory, "available-001a.xht")
 f = open(p, "wb")
 f.write(available1a)
@@ -3083,6 +3085,7 @@ f.close()
 
 available1b = """
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+%s
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
@@ -3113,7 +3116,7 @@ available1b = """
 		<div class="test">F</div>
 	</body>
 </html>
-""".strip() % (expandSpecLinks("#General"), expandSpecLinks("#conform-css3font-available"))
+""".strip() % (doNotEditWarning, expandSpecLinks("#General"), expandSpecLinks("#conform-css3font-available"))
 p = os.path.join(userAgentTestResourcesDirectory, "available-001b.xht")
 f = open(p, "wb")
 f.write(available1b)
@@ -3143,6 +3146,7 @@ registeredAssertions.add(assertion1)
 
 available2 = """
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+%s
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
@@ -3172,7 +3176,7 @@ available2 = """
 
 	</body>
 </html>
-""".strip() % expandSpecLinks("#conform-mustLoadFontCollection")
+""".strip() % (doNotEditWarning, expandSpecLinks("#conform-mustLoadFontCollection"))
 p = os.path.join(userAgentTestDirectory, "available-002.xht")
 f = open(p, "wb")
 f.write(available2)
@@ -3180,6 +3184,7 @@ f.close()
 
 available2a = """
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+%s
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
@@ -3212,7 +3217,7 @@ available2a = """
 		<div class="test">P</div>
 	</body>
 </html>
-""".strip() % (expandSpecLinks("#conform-mustLoadFontCollection"), os.path.basename(userAgentTestResourcesDirectory))
+""".strip() % (doNotEditWarning, expandSpecLinks("#conform-mustLoadFontCollection"), os.path.basename(userAgentTestResourcesDirectory))
 p = os.path.join(userAgentTestResourcesDirectory, "available-002a.xht")
 f = open(p, "wb")
 f.write(available2a)
@@ -3220,6 +3225,7 @@ f.close()
 
 available2b = """
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+%s
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
@@ -3252,7 +3258,7 @@ available2b = """
 		<div class="test">P</div>
 	</body>
 </html>
-""".strip() % (expandSpecLinks("#conform-mustLoadFontCollection"))
+""".strip() % (doNotEditWarning, expandSpecLinks("#conform-mustLoadFontCollection"))
 p = os.path.join(userAgentTestResourcesDirectory, "available-002b.xht")
 f = open(p, "wb")
 f.write(available2b)
