@@ -10,8 +10,8 @@ from fontTools.ttLib import TTFont, getSearchRange
 from fontTools.ttLib.sfnt import \
     SFNTDirectoryEntry, sfntDirectoryFormat, sfntDirectorySize, sfntDirectoryEntryFormat, sfntDirectoryEntrySize, \
     ttcHeaderFormat, ttcHeaderSize
-from utilities import padData, calcPaddingLength, calcHeadCheckSumAdjustmentSFNT, calcTableChecksum
-from woff import packTestCollectionDirectory, packTestDirectory, packTestCollectionHeader, packTestHeader, transformTable
+from testCaseGeneratorLib.utilities import padData, calcPaddingLength, calcHeadCheckSumAdjustmentSFNT, calcTableChecksum
+from testCaseGeneratorLib.woff import packTestCollectionDirectory, packTestDirectory, packTestCollectionHeader, packTestHeader, transformTable
 
 def getTTFont(path, **kwargs):
     return TTFont(path, recalcTimestamp=False, **kwargs)
@@ -36,7 +36,7 @@ def getSFNTData(pathOrFile, unsortGlyfLoca=False, glyphBBox="", alt255UInt16=Fal
     for tag in tableOrder:
         tableChecksums[tag] = font.reader.tables[tag].checkSum
         tableData[tag] = transformTable(font, tag, glyphBBox=glyphBBox, alt255UInt16=alt255UInt16)
-    totalData = "".join([tableData[tag][1] for tag in tableOrder])
+    totalData = b"".join([tableData[tag][1] for tag in tableOrder])
     compData = brotli.compress(totalData, brotli.MODE_FONT)
     if len(compData) >= len(totalData):
         compData = totalData

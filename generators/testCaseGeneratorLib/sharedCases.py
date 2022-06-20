@@ -584,7 +584,7 @@ def makeLSB1():
     for entry in woffDirectory:
         if entry["tag"] == "hmtx":
             assert entry["transformFlag"] == 1
-            flags = ord(woffTableData[offset])
+            flags = woffTableData[offset]
             assert flags & (1 << 0)
             assert flags & (1 << 1)
         offset += entry["transformLength"]
@@ -599,7 +599,7 @@ def makeHmtxTransform1():
     for entry in directory:
         if entry["tag"] == "hmtx":
             assert entry["transformFlag"] == 1
-            flags = ord(decompressedTableData[offset])
+            flags = decompressedTableData[offset]
             assert flags & (1 << 0)
             assert flags & (1 << 1)
         offset += entry["transformLength"]
@@ -882,7 +882,7 @@ metadataEncoding2Metadata = """
 </metadata>
 """.strip().replace("    ", "\t").encode("utf-16")
 if metadataEncoding2Metadata.startswith(codecs.BOM_UTF16):
-    metadataEncoding2Metadata = metadataEncoding2Metadata.replace(codecs.BOM_UTF16, "")
+    metadataEncoding2Metadata = metadataEncoding2Metadata.replace(codecs.BOM_UTF16, b"")
 metadataEncoding2Title = "Invalid Encoding: UTF-16"
 metadataEncoding2Description = "The xml encoding is set to UTF-16."
 metadataEncoding2Credits = [dict(title="Tal Leming", role="author", link="http://typesupply.com")]

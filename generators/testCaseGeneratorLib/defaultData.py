@@ -5,10 +5,10 @@ Default data for the test cases.
 import brotli
 from copy import deepcopy
 from fontTools.ttLib.sfnt import sfntDirectoryFormat, sfntDirectorySize, sfntDirectoryEntryFormat, sfntDirectoryEntrySize
-from sfnt import getSFNTData
-from woff import packTestDirectory, packTestCollectionHeader, packTestCollectionDirectory, woffHeaderSize, knownTableTags
-from paths import sfntCFFSourcePath, sfntTTFSourcePath
-from utilities import calcPaddingLength, calcTableChecksum
+from testCaseGeneratorLib.sfnt import getSFNTData
+from testCaseGeneratorLib.woff import packTestDirectory, packTestCollectionHeader, packTestCollectionDirectory, woffHeaderSize, knownTableTags
+from testCaseGeneratorLib.paths import sfntCFFSourcePath, sfntTTFSourcePath
+from testCaseGeneratorLib.utilities import calcPaddingLength, calcTableChecksum
 
 # ---------
 # SFNT Data
@@ -144,7 +144,7 @@ testDataWOFFMetadata = """
 # Private Data
 # ------------
 
-testDataWOFFPrivateData = "\0" * 100
+testDataWOFFPrivateData = b"\0" * 100
 
 # -----------------------
 # Default Data Structures
