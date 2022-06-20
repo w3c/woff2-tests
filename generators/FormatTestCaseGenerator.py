@@ -289,7 +289,7 @@ writeTest(
 
 def makeHeaderInvalidFlavor1():
     header, directory, tableData = defaultTestData()
-    header["flavor"] = "\000\001\000\000"
+    header["flavor"] = b"\000\001\000\000"
     data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
     return data
 
@@ -307,7 +307,7 @@ writeTest(
 
 def makeHeaderInvalidFlavor2():
     header, directory, tableData = defaultTestData(flavor="ttf")
-    header["flavor"] = "OTTO"
+    header["flavor"] = b"OTTO"
     data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
     return data
 

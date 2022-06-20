@@ -484,14 +484,14 @@ def getModifiedSFNTData(path=sfntTTFSourcePath, noTransform=False, nonZeroLoca=F
     for tag in tableOrder:
         tableChecksums[tag] = font.reader.tables[tag].checkSum
         if nonZeroLoca and tag == "loca":
-            tableData[tag] = (font.getTableData(tag), "\0" * 4)
+            tableData[tag] = (font.getTableData(tag), b"\0" * 4)
         elif longLoca and tag == "loca":
-            tableData[tag] = ("\0" * len(loca) * 4, "")
+            tableData[tag] = (b"\0" * len(loca) * 4, b"")
         elif noTransform:
             tableData[tag] = (font.getTableData(tag), font.getTableData(tag))
         else:
             tableData[tag] = transformTable(font, tag)
-    totalData = "".join([tableData[tag][1] for tag in tableOrder])
+    totalData = b"".join([tableData[tag][1] for tag in tableOrder])
     compData = brotli.compress(totalData, brotli.MODE_FONT)
     if len(compData) >= len(totalData):
         compData = totalData

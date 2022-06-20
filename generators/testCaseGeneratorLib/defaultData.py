@@ -192,7 +192,7 @@ for tag in sfntCFFTableOrder:
 # SFNT
 
 testDataSFNTHeader = dict(
-    sfntVersion="OTTO",
+    sfntVersion=b"OTTO",
     numTables=0,
     searchRange=0,
     entrySelector=0,
@@ -261,11 +261,11 @@ def defaultTestData(header=None, directory=None, collectionHeader=None, collecti
     # apply the directory data to the header
     header["numTables"] = len(directory)
     if isCollection:
-        header["flavor"] = "ttcf"
+        header["flavor"] = b"ttcf"
     elif "CFF " in tableData:
-        header["flavor"] = "OTTO"
+        header["flavor"] = b"OTTO"
     else:
-        header["flavor"] = "\000\001\000\000"
+        header["flavor"] = b"\000\001\000\000"
     # apply the table data to the directory and the header
     if isCollection:
         # TTC header
@@ -301,7 +301,7 @@ def defaultTestData(header=None, directory=None, collectionHeader=None, collecti
         else:
             compMetadata = None
         if compMetadata is None:
-            compMetadata = brotli.compress(metadata, brotli.MODE_TEXT)
+            compMetadata = brotli.compress(bytes(metadata, "utf-8"), brotli.MODE_TEXT)
         header["metaOffset"] = header["length"]
         header["metaLength"] = len(compMetadata)
         header["metaOrigLength"] = len(metadata)
@@ -348,9 +348,9 @@ def defaultSFNTTestData(tableData=None, flavor="cff"):
     # apply the directory data to the header
     header["numTables"] = len(directory)
     if flavor == "cff":
-        header["flavor"] = "OTTO"
+        header["flavor"] = b"OTTO"
     else:
-        header["flavor"] = "\000\001\000\000"
+        header["flavor"] = b"\000\001\000\000"
     # apply the table data to the directory and the header
     offset = sfntDirectorySize + (len(directory) * sfntDirectoryEntrySize)
     for entry in directory:

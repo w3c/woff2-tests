@@ -94,7 +94,7 @@ def calcHeadCheckSumAdjustmentSFNT(directory, tableData, flavor=None):
             if entry["tag"] == "CFF ":
                 flavor = "OTTO"
                 break
-    assert flavor in ("OTTO", "\000\001\000\000")
+    assert flavor in (b"OTTO", b"\000\001\000\000")
     # make the sfnt header
     searchRange, entrySelector, rangeShift = getSearchRange(len(directory), 16)
     sfntHeaderData = dict(

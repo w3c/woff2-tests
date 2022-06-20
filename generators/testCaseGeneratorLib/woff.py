@@ -419,7 +419,7 @@ def packTestCollectionHeader(header):
     return struct.pack(">L", header["version"]) + pack255UInt16(header["numFonts"])
 
 def packTestCollectionDirectory(directory):
-    data = ""
+    data = b""
     for entry in directory:
         data += pack255UInt16(entry["numTables"])
         data += struct.pack(">4s", entry["flavor"])

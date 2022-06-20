@@ -633,7 +633,7 @@ def generateDecoderIndexHTML(directory=None, testCases=[], note=None):
     html_string = "\n".join(html_string)
     # write
     path = os.path.join(directory, "testcaseindex.xht")
-    f = open(path, "wb")
+    f = open(path, "w")
     f.write(html_string)
     f.close()
 
