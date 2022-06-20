@@ -194,7 +194,7 @@ def writeFileStructureTest(identifier, flavor="CFF",
     extraMetadataNotes: Additional notes about the metadata that should be
     displayed in the HTML.
     """
-    print "Compiling %s..." % identifier
+    print("Compiling %s..." % identifier)
     assert identifier not in registeredIdentifiers, "Duplicate identifier! %s" % identifier
     assert title not in registeredTitles, "Duplicate title! %s" % title
     assert assertion not in registeredAssertions, "Duplicate assertion! %s" % assertion
@@ -1282,7 +1282,7 @@ def makeMetadataAuthoritativeTest1():
         if record.nameID in setToFAIL:
             continue
         newNames.append(record)
-    string = "FAIL".encode("utf8")
+    string = "FAIL"
     for nameID in setToFAIL:
         for platformID, platEncID, langID in [(1, 0, 0), (3, 1, 1033)]:
             record = getTableModule("name").NameRecord()
@@ -1291,9 +1291,9 @@ def makeMetadataAuthoritativeTest1():
             record.platEncID = platEncID
             record.langID = langID
             if record.platformID == 0 or (record.platformID == 3 and record.platEncID in (0, 1)):
-                record.string = string.encode("utf_16_be")
+                record.string = bytes(string, "utf_16_be")
             else:
-                record.string = string.encode("latin1")
+                record.string = bytes(string, "latin1")
             newNames.append(record)
     newNames.sort()
     nameTable.names = newNames
@@ -3036,7 +3036,7 @@ available1 = """
 </html>
 """.strip() % (doNotEditWarning, expandSpecLinks("#General"), expandSpecLinks("#conform-css3font-available"))
 p = os.path.join(userAgentTestDirectory, "available-001.xht")
-f = open(p, "wb")
+f = open(p, "w")
 f.write(available1)
 f.close()
 
@@ -3079,7 +3079,7 @@ available1a = """
 </html>
 """.strip() % (doNotEditWarning, expandSpecLinks("#General"), expandSpecLinks("#conform-css3font-available"))
 p = os.path.join(userAgentTestResourcesDirectory, "available-001a.xht")
-f = open(p, "wb")
+f = open(p, "w")
 f.write(available1a)
 f.close()
 
@@ -3118,7 +3118,7 @@ available1b = """
 </html>
 """.strip() % (doNotEditWarning, expandSpecLinks("#General"), expandSpecLinks("#conform-css3font-available"))
 p = os.path.join(userAgentTestResourcesDirectory, "available-001b.xht")
-f = open(p, "wb")
+f = open(p, "w")
 f.write(available1b)
 f.close()
 
@@ -3178,7 +3178,7 @@ available2 = """
 </html>
 """.strip() % (doNotEditWarning, expandSpecLinks("#conform-mustLoadFontCollection"))
 p = os.path.join(userAgentTestDirectory, "available-002.xht")
-f = open(p, "wb")
+f = open(p, "w")
 f.write(available2)
 f.close()
 
@@ -3219,7 +3219,7 @@ available2a = """
 </html>
 """.strip() % (doNotEditWarning, expandSpecLinks("#conform-mustLoadFontCollection"), os.path.basename(userAgentTestResourcesDirectory))
 p = os.path.join(userAgentTestResourcesDirectory, "available-002a.xht")
-f = open(p, "wb")
+f = open(p, "w")
 f.write(available2a)
 f.close()
 
@@ -3260,7 +3260,7 @@ available2b = """
 </html>
 """.strip() % (doNotEditWarning, expandSpecLinks("#conform-mustLoadFontCollection"))
 p = os.path.join(userAgentTestResourcesDirectory, "available-002b.xht")
-f = open(p, "wb")
+f = open(p, "w")
 f.write(available2b)
 f.close()
 
@@ -3310,7 +3310,7 @@ registeredAssertions.add(assertion2)
 # Generate the Index
 # ------------------
 
-print "Compiling index..."
+print("Compiling index...")
 
 testGroups = []
 
@@ -3324,7 +3324,7 @@ generateSFNTDisplayIndexHTML(directory=userAgentTestDirectory, testCases=testGro
 # Generate the Manifest
 # ---------------------
 
-print "Compiling manifest..."
+print("Compiling manifest...")
 
 manifest = []
 
@@ -3366,7 +3366,7 @@ for tag, title, url in groupDefinitions:
 path = os.path.join(userAgentDirectory, "manifest.txt")
 if os.path.exists(path):
     os.remove(path)
-f = open(path, "wb")
+f = open(path, "w")
 f.write("\n".join(manifest))
 f.close()
 
@@ -3387,4 +3387,4 @@ for path in filesOnDisk:
     identifier = identifier.split(".")[0]
     identifier = identifier.replace("-ref", "")
     if identifier not in registeredIdentifiers and identifier not in skip:
-        print "Unknown file:", path
+        print("Unknown file:", path)

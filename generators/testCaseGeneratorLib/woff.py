@@ -212,7 +212,7 @@ def transformGlyf(font, glyphBBox="", alt255UInt16=False):
                 nPoints = glyph.endPtsOfContours[i] - lastPointIndex + (i == 0)
                 data = pack255UInt16(nPoints, alternate=alternate255UInt16)
                 if nPoints == 506 and alt255UInt16:
-                    num = [ord(v) for v in data]
+                    num = [v for v in data]
                     if alternate255UInt16 == 0:
                         assert num == [254, 0]
                     elif alternate255UInt16 == 1:
@@ -384,7 +384,7 @@ def packTestDirectory(directory, knownTags=knownTableTags, skipTransformLength=F
     data = b""
     directory = [(entry["tag"], entry) for entry in directory]
     if not isCollection:
-        directory = sorted(directory)
+       directory = sorted(directory, key=lambda t: t[0])
     if unsortGlyfLoca:
         loca = None
         glyf = None
@@ -401,7 +401,7 @@ def packTestDirectory(directory, knownTags=knownTableTags, skipTransformLength=F
             data += struct.pack(">B", _setTransformBits(knownTableTags.index(tag), transformFlag))
         else:
             data += struct.pack(">B", _setTransformBits(unknownTableTagFlag, transformFlag))
-            data += struct.pack(">4s", tag)
+            data += struct.pack(">4s", bytes(tag, "utf-8"))
         data += packBase128(table["origLength"], bug=Base128Bug)
         transformed = False
         if tag in transformedTables:

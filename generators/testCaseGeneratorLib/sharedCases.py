@@ -217,7 +217,7 @@ makeHeaderIncorrectTotalSfntSize2Credits = [dict(title="Khaled Hosny", role="aut
 def makeExtraneousData0():
     header, directory, tableData = defaultTestData()
     bogusByteLength = 4
-    bogusBytes = "\0" * bogusByteLength
+    bogusBytes = b"\0" * bogusByteLength
     header["length"] += bogusByteLength
     data = padData(packTestHeader(header) + bogusBytes + packTestDirectory(directory) + tableData)
     return data

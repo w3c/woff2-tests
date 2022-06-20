@@ -211,7 +211,7 @@ def generateSFNTDisplayTestHTML(
     )
     # write the file
     path = os.path.join(directory, fileName) + ".xht"
-    f = open(path, "wb")
+    f = open(path, "w")
     f.write(html_string)
     f.close()
 
@@ -245,7 +245,7 @@ def generateSFNTDisplayRefHTML(
     )
     # write the file
     path = os.path.join(directory, fileName) + "-ref.xht"
-    f = open(path, "wb")
+    f = open(path, "w")
     f.write(html_string)
     f.close()
 
@@ -358,7 +358,7 @@ def generateSFNTDisplayIndexHTML(directory=None, testCases=[]):
     html_string = "\n".join(html_string)
     # write
     path = os.path.join(directory, "testcaseindex.xht")
-    f = open(path, "wb")
+    f = open(path, "w")
     f.write(html_string)
     f.close()
 
