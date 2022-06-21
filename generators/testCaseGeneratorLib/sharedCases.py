@@ -25,6 +25,7 @@ def makeMetadataTest(metadata):
     """
     metadata = metadata.strip()
     # convert to tabs
+    metadata = str(metadata)
     metadata = metadata.replace("    ", "\t")
     # store
     originalMetadata = metadata
@@ -216,7 +217,7 @@ makeHeaderIncorrectTotalSfntSize2Credits = [dict(title="Khaled Hosny", role="aut
 def makeExtraneousData0():
     header, directory, tableData = defaultTestData()
     bogusByteLength = 4
-    bogusBytes = "\0" * bogusByteLength
+    bogusBytes = b"\0" * bogusByteLength
     header["length"] += bogusByteLength
     data = padData(packTestHeader(header) + bogusBytes + packTestDirectory(directory) + tableData)
     return data
@@ -230,9 +231,12 @@ makeExtraneousData0Credits =  [dict(title="Khaled Hosny", role="author", link="h
 def makeExtraneousData1():
     header, directory, tableData = defaultTestData()
     bogusByteLength = 4
-    bogusBytes = "\0" * bogusByteLength
+    bogusBytes = b"\0" * bogusByteLength
     header["length"] += bogusByteLength
-    data = padData(packTestHeader(header) + packTestDirectory(directory) + bogusBytes + tableData)
+    data = padData(packTestHeader(header)
+                   + packTestDirectory(directory)
+                   + bogusBytes
+                   + tableData)
     return data
 
 makeExtraneousData1Title = "Extraneous Data Between Directory and Table Data"
@@ -244,7 +248,7 @@ makeExtraneousData1Credits = [dict(title="Tal Leming", role="author", link="http
 def makeExtraneousData2():
     header, directory, tableData = defaultTestData()
     bogusByteLength = 4
-    bogusBytes = "\0" * bogusByteLength
+    bogusBytes = b"\0" * bogusByteLength
     header["length"] += bogusByteLength
     data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData) + bogusBytes
     return data
@@ -258,7 +262,7 @@ makeExtraneousData2Credits = [dict(title="Tal Leming", role="author", link="http
 def makeExtraneousData3():
     header, directory, tableData, metadata = defaultTestData(metadata=testDataWOFFMetadata)
     bogusByteLength = 4
-    bogusBytes = "\0" * bogusByteLength
+    bogusBytes = b"\0" * bogusByteLength
     header["length"] += bogusByteLength
     header["metaOffset"] += bogusByteLength
     data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData) + bogusBytes + packTestMetadata(metadata)
@@ -273,7 +277,7 @@ makeExtraneousData3Credits = [dict(title="Tal Leming", role="author", link="http
 def makeExtraneousData4():
     header, directory, tableData, privateData = defaultTestData(privateData=testDataWOFFPrivateData)
     bogusByteLength = 4
-    bogusBytes = "\0" * bogusByteLength
+    bogusBytes = b"\0" * bogusByteLength
     header["length"] += bogusByteLength
     header["privOffset"] += bogusByteLength
     data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData) + bogusBytes + packTestPrivateData(privateData)
@@ -288,7 +292,7 @@ makeExtraneousData4Credits = [dict(title="Tal Leming", role="author", link="http
 def makeExtraneousData5():
     header, directory, tableData, metadata, privateData = defaultTestData(metadata=testDataWOFFMetadata, privateData=testDataWOFFPrivateData)
     bogusByteLength = 4
-    bogusBytes = "\0" * bogusByteLength
+    bogusBytes = b"\0" * bogusByteLength
     header["length"] += bogusByteLength
     header["privOffset"] += bogusByteLength
     data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData) + packTestMetadata(metadata, havePrivateData=True) + bogusBytes + packTestPrivateData(privateData)
@@ -303,7 +307,7 @@ makeExtraneousData5Credits = [dict(title="Tal Leming", role="author", link="http
 def makeExtraneousData6():
     header, directory, tableData, metadata = defaultTestData(metadata=testDataWOFFMetadata)
     bogusByteLength = 4
-    bogusBytes = "\0" * bogusByteLength
+    bogusBytes = b"\0" * bogusByteLength
     header["length"] += bogusByteLength
     data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData) + packTestMetadata(metadata) + bogusBytes
     return data
@@ -317,7 +321,7 @@ makeExtraneousData6Credits = [dict(title="Tal Leming", role="author", link="http
 def makeExtraneousData7():
     header, directory, tableData, privateData = defaultTestData(privateData=testDataWOFFPrivateData)
     bogusByteLength = 4
-    bogusBytes = "\0" * bogusByteLength
+    bogusBytes = b"\0" * bogusByteLength
     header["length"] += bogusByteLength
     data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData) + packTestPrivateData(privateData) + bogusBytes
     return data
@@ -484,14 +488,14 @@ def getModifiedSFNTData(path=sfntTTFSourcePath, noTransform=False, nonZeroLoca=F
     for tag in tableOrder:
         tableChecksums[tag] = font.reader.tables[tag].checkSum
         if nonZeroLoca and tag == "loca":
-            tableData[tag] = (font.getTableData(tag), "\0" * 4)
+            tableData[tag] = (font.getTableData(tag), b"\0" * 4)
         elif longLoca and tag == "loca":
-            tableData[tag] = ("\0" * len(loca) * 4, "")
+            tableData[tag] = (b"\0" * len(loca) * 4, b"")
         elif noTransform:
             tableData[tag] = (font.getTableData(tag), font.getTableData(tag))
         else:
             tableData[tag] = transformTable(font, tag)
-    totalData = "".join([tableData[tag][1] for tag in tableOrder])
+    totalData = b"".join([tableData[tag][1] for tag in tableOrder])
     compData = brotli.compress(totalData, brotli.MODE_FONT)
     if len(compData) >= len(totalData):
         compData = totalData
@@ -584,7 +588,7 @@ def makeLSB1():
     for entry in woffDirectory:
         if entry["tag"] == "hmtx":
             assert entry["transformFlag"] == 1
-            flags = ord(woffTableData[offset])
+            flags = woffTableData[offset]
             assert flags & (1 << 0)
             assert flags & (1 << 1)
         offset += entry["transformLength"]
@@ -599,7 +603,7 @@ def makeHmtxTransform1():
     for entry in directory:
         if entry["tag"] == "hmtx":
             assert entry["transformFlag"] == 1
-            flags = ord(decompressedTableData[offset])
+            flags = decompressedTableData[offset]
             assert flags & (1 << 0)
             assert flags & (1 << 1)
         offset += entry["transformLength"]
@@ -617,11 +621,11 @@ def makeHmtxTransform2():
     for entry in directory:
         if entry["tag"] == "hmtx":
             assert entry["transformFlag"] == 1
-            flags = ord(decompressedTableData[offset])
+            flags = decompressedTableData[offset]
             for bit in range(2, 8):
                 flags |= 1 << bit
             decompressedTableData = decompressedTableData[:offset] + struct.pack(">B", flags) + decompressedTableData[offset+1:]
-            flags = ord(decompressedTableData[offset])
+            flags = decompressedTableData[offset]
             assert flags == 255
         offset += entry["transformLength"]
 
@@ -645,8 +649,8 @@ def makeHmtxTransform3():
     for entry in directory:
         if entry["tag"] == "hmtx":
             assert entry["transformFlag"] == 1
-            decompressedTableData = decompressedTableData[:offset] + "\0" + decompressedTableData[offset+1:]
-            flags = ord(decompressedTableData[offset])
+            decompressedTableData = decompressedTableData[:offset] + b"\0" + decompressedTableData[offset+1:]
+            flags = decompressedTableData[offset]
             assert flags == 0
         offset += entry["transformLength"]
 
@@ -687,7 +691,10 @@ def makeMetadataCompression1():
     diff = header["metaOrigLength"] - header["metaLength"]
     header["length"] += diff
     header["metaLength"] = header["metaOrigLength"]
-    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData) + packTestMetadata(metadata)
+    data = (padData(packTestHeader(header)
+                   + packTestDirectory(directory)
+                   + tableData)
+            + bytes(packTestMetadata(metadata), "utf-8"))
     return data
 
 makeMetadataCompression1Title = "Metadata No Compression"
@@ -696,7 +703,7 @@ makeMetadataCompression1Credits = [dict(title="Tal Leming", role="author", link=
 
 def makeMetadataCompression2():
     header, directory, tableData, metadata = defaultTestData(metadata=testDataWOFFMetadata)
-    metadata = metadata[0], zlib.compress(metadata[0])
+    metadata = metadata[0], zlib.compress(bytes(metadata[0], "utf-8"))
     diff = len(metadata[1]) - header["metaLength"]
     header["metaLength"] += diff
     header["length"] += diff
@@ -882,7 +889,7 @@ metadataEncoding2Metadata = """
 </metadata>
 """.strip().replace("    ", "\t").encode("utf-16")
 if metadataEncoding2Metadata.startswith(codecs.BOM_UTF16):
-    metadataEncoding2Metadata = metadataEncoding2Metadata.replace(codecs.BOM_UTF16, "")
+    metadataEncoding2Metadata = metadataEncoding2Metadata.replace(codecs.BOM_UTF16, b"")
 metadataEncoding2Title = "Invalid Encoding: UTF-16"
 metadataEncoding2Description = "The xml encoding is set to UTF-16."
 metadataEncoding2Credits = [dict(title="Tal Leming", role="author", link="http://typesupply.com")]

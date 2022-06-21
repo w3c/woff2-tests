@@ -139,7 +139,7 @@ def writeTest(identifier, title, description, data, specLink=None, credits=[], s
 
     flavor: The flavor of the WOFF data. The options are CFF or TTF.
     """
-    print "Compiling %s..." % identifier
+    print("Compiling %s..." % identifier)
     assert identifier not in registeredIdentifiers, "Duplicate identifier! %s" % identifier
     assert title not in registeredTitles, "Duplicate title! %s" % title
     assert description not in registeredDescriptions, "Duplicate description! %s" % description
@@ -200,7 +200,7 @@ def makeDSIG(flavor="CFF"):
     # adjust the header
     header["numTables"] += 1
     # store the data
-    data = "\0" * 4
+    data = b"\0" * 4
     tableData["DSIG"] = data
     # offset the directory entries
     for entry in directory:
@@ -705,7 +705,7 @@ def makeUnknownTables():
     sorter = [(entry["offset"], entry["length"]) for entry in directory]
     offset, length = max(sorter)
     offset = offset + length
-    data = "\0" * 4
+    data = b"\0" * 4
     checksum = calcTableChecksum(None, data)
     for tag in dummyTables:
         tableData[tag] = data
@@ -739,7 +739,7 @@ writeTest(
 # Generate the Index
 # ------------------
 
-print "Compiling index..."
+print("Compiling index...")
 
 testGroups = []
 
@@ -753,7 +753,7 @@ generateAuthoringToolIndexHTML(directory=authoringToolTestDirectory, testCases=t
 # Generate the zip
 # ----------------
 
-print "Compiling zip file..."
+print("Compiling zip file...")
 
 zipPath = os.path.join(authoringToolTestDirectory, "AuthoringToolTestFonts.zip")
 if os.path.exists(zipPath):
@@ -773,7 +773,7 @@ allBinariesZip.close()
 # Generate the Manifest
 # ---------------------
 
-print "Compiling manifest..."
+print("Compiling manifest...")
 
 manifest = []
 
@@ -802,7 +802,7 @@ for tag, title, url, note in groupDefinitions:
 path = os.path.join(authoringToolDirectory, "manifest.txt")
 if os.path.exists(path):
     os.remove(path)
-f = open(path, "wb")
+f = open(path, "w")
 f.write("\n".join(manifest))
 f.close()
 
@@ -820,4 +820,4 @@ for path in filesOnDisk:
     identifier = os.path.basename(path)
     identifier = identifier.split(".")[0]
     if identifier not in registeredIdentifiers:
-        print "Unknown file:", path
+        print("Unknown file:", path)

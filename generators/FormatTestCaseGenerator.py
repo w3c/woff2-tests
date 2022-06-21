@@ -115,7 +115,7 @@ def writeTest(identifier, title, description, data, specLink=None, credits=[], v
     valid: A boolean indicating if the WOFF2 is valid.
     """
 
-    print "Compiling %s..." % identifier
+    print("Compiling %s..." % identifier)
     assert identifier not in registeredIdentifiers, "Duplicate identifier! %s" % identifier
     assert title not in registeredTitles, "Duplicate title! %s" % title
     assert description not in registeredDescriptions, "Duplicate description! %s" % description
@@ -289,7 +289,7 @@ writeTest(
 
 def makeHeaderInvalidFlavor1():
     header, directory, tableData = defaultTestData()
-    header["flavor"] = "\000\001\000\000"
+    header["flavor"] = b"\000\001\000\000"
     data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
     return data
 
@@ -307,7 +307,7 @@ writeTest(
 
 def makeHeaderInvalidFlavor2():
     header, directory, tableData = defaultTestData(flavor="ttf")
-    header["flavor"] = "OTTO"
+    header["flavor"] = b"OTTO"
     data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
     return data
 
@@ -532,7 +532,7 @@ def makeMetadataPadding1():
     paddingLength = calcPaddingLength(len(metadata))
     assert paddingLength
     header["length"] += paddingLength
-    metadata += "\0" * paddingLength
+    metadata += b"\0" * paddingLength
     data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData) + metadata
     return data
 
@@ -656,7 +656,7 @@ def makeDataBlockPrivateData2():
     header, directory, tableData, privateData = defaultTestData(privateData=testDataWOFFPrivateData)
     header["length"] += 4
     data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData) + packTestPrivateData(privateData)
-    data += 4 * '\0'
+    data += 4 * b"\0"
     return data
 
 writeTest(
@@ -892,7 +892,7 @@ def makeMetadataPadding1():
     paddingLength = calcPaddingLength(header["metaLength"])
     assert paddingLength > 0
     metadata, compMetadata = metadata
-    compMetadata += ("\x01" * paddingLength)
+    compMetadata += (b"\x01" * paddingLength)
     metadata = (metadata, compMetadata)
     data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData) + packTestMetadata(metadata) + packTestPrivateData(privateData)
     return data
@@ -2809,7 +2809,7 @@ writeMetadataTest(
 # Generate the Index
 # ------------------
 
-print "Compiling index..."
+print("Compiling index...")
 
 testGroups = []
 
@@ -2823,7 +2823,7 @@ generateFormatIndexHTML(directory=formatTestDirectory, testCases=testGroups)
 # Generate the zip
 # ----------------
 
-print "Compiling zip file..."
+print("Compiling zip file...")
 
 zipPath = os.path.join(formatTestDirectory, "FormatTestFonts.zip")
 if os.path.exists(zipPath):
@@ -2842,7 +2842,7 @@ allBinariesZip.close()
 # Generate the Manifest
 # ---------------------
 
-print "Compiling manifest..."
+print("Compiling manifest...")
 
 manifest = []
 
@@ -2871,7 +2871,7 @@ for tag, title, url in groupDefinitions:
 path = os.path.join(formatDirectory, "manifest.txt")
 if os.path.exists(path):
     os.remove(path)
-f = open(path, "wb")
+f = open(path, "w")
 f.write("\n".join(manifest))
 f.close()
 
@@ -2886,4 +2886,4 @@ for path in filesOnDisk:
     identifier = os.path.basename(path)
     identifier = identifier.split(".")[0]
     if identifier not in registeredIdentifiers:
-        print "Unknown file:", path
+        print("Unknown file:", path)

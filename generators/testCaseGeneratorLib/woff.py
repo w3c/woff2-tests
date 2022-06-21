@@ -6,7 +6,7 @@ import struct
 from copy import deepcopy
 from fontTools.misc import sstruct
 from fontTools.misc.arrayTools import calcIntBounds
-from utilities import padData, calcHeadCheckSumAdjustment
+from testCaseGeneratorLib.utilities import padData, calcHeadCheckSumAdjustment
 
 # ------------------
 # struct Description
@@ -91,7 +91,7 @@ def transformTable(font, tag, glyphBBox="", alt255UInt16=False):
         if tag == "glyf":
             transformedData = transformGlyf(font, glyphBBox=glyphBBox, alt255UInt16=alt255UInt16)
         elif tag == "loca":
-            transformedData = ""
+            transformedData = b""
         elif tag == "hmtx":
             transformedData = transformHmtx(font)
         else:
@@ -135,8 +135,8 @@ def packTriplet(x, y, onCurve):
     xySignBits = xSignBit + 2 * ySignBit
 
     fmt = ">B"
-    flags = ""
-    glyphs = ""
+    flags = b""
+    glyphs = b""
     if x == 0 and absY < 1280:
         flags += struct.pack(fmt, onCurveBit + ((absY & 0xf00) >> 7) + ySignBit)
         glyphs += struct.pack(fmt, absY & 0xff)
@@ -168,17 +168,17 @@ def transformGlyf(font, glyphBBox="", alt255UInt16=False):
     glyf = font["glyf"]
     head = font["head"]
 
-    nContourStream = ""
-    nPointsStream = ""
-    flagStream = ""
-    glyphStream = ""
-    compositeStream = ""
-    bboxStream = ""
-    instructionStream = ""
+    nContourStream = b""
+    nPointsStream = b""
+    flagStream = b""
+    glyphStream = b""
+    compositeStream = b""
+    bboxStream = b""
+    instructionStream = b""
     bboxBitmap = []
-    bboxBitmapStream = ""
+    bboxBitmapStream = b""
 
-    for i in range(4 * ((len(glyf.keys()) + 31) / 32)):
+    for i in range(4 * int((len(glyf.keys()) + 31) / 32)):
         bboxBitmap.append(0)
 
     for glyphName in glyf.glyphOrder:
@@ -212,7 +212,7 @@ def transformGlyf(font, glyphBBox="", alt255UInt16=False):
                 nPoints = glyph.endPtsOfContours[i] - lastPointIndex + (i == 0)
                 data = pack255UInt16(nPoints, alternate=alternate255UInt16)
                 if nPoints == 506 and alt255UInt16:
-                    num = [ord(v) for v in data]
+                    num = [v for v in data]
                     if alternate255UInt16 == 0:
                         assert num == [254, 0]
                     elif alternate255UInt16 == 1:
@@ -265,7 +265,7 @@ def transformGlyf(font, glyphBBox="", alt255UInt16=False):
             # bboxStream
             bboxStream += struct.pack(">hhhh", glyph.xMin, glyph.yMin, glyph.xMax, glyph.yMax)
 
-    bboxBitmapStream = "".join([struct.pack(">B", v) for v in bboxBitmap])
+    bboxBitmapStream = b"".join([struct.pack(">B", v) for v in bboxBitmap])
 
     header = deepcopy(woffTransformedGlyfHeader)
     header["numGlyphs"] = len(glyf.keys())
@@ -358,7 +358,7 @@ def base128Size(n):
 
 def packBase128(n, bug=False):
     size = base128Size(n)
-    ret = ""
+    ret = b""
     if bug:
         ret += struct.pack(">B", 0x80)
     for i in range(size):
@@ -381,10 +381,10 @@ def _setTransformBits(flag, tranasform):
     return flag
 
 def packTestDirectory(directory, knownTags=knownTableTags, skipTransformLength=False, isCollection=False, unsortGlyfLoca=False, Base128Bug=False):
-    data = ""
+    data = b""
     directory = [(entry["tag"], entry) for entry in directory]
     if not isCollection:
-        directory = sorted(directory)
+       directory = sorted(directory, key=lambda t: t[0])
     if unsortGlyfLoca:
         loca = None
         glyf = None
@@ -401,7 +401,7 @@ def packTestDirectory(directory, knownTags=knownTableTags, skipTransformLength=F
             data += struct.pack(">B", _setTransformBits(knownTableTags.index(tag), transformFlag))
         else:
             data += struct.pack(">B", _setTransformBits(unknownTableTagFlag, transformFlag))
-            data += struct.pack(">4s", tag)
+            data += struct.pack(">4s", bytes(tag, "utf-8"))
         data += packBase128(table["origLength"], bug=Base128Bug)
         transformed = False
         if tag in transformedTables:
@@ -419,7 +419,7 @@ def packTestCollectionHeader(header):
     return struct.pack(">L", header["version"]) + pack255UInt16(header["numFonts"])
 
 def packTestCollectionDirectory(directory):
-    data = ""
+    data = b""
     for entry in directory:
         data += pack255UInt16(entry["numTables"])
         data += struct.pack(">4s", entry["flavor"])
@@ -427,7 +427,9 @@ def packTestCollectionDirectory(directory):
             data += pack255UInt16(entry["index"][i])
     return data
 
-def packTestMetadata((origMetadata, compMetadata), havePrivateData=False):
+def packTestMetadata(metadata, havePrivateData=False):
+    origMetadata = metadata[0]
+    compMetadata = metadata[1]
     if havePrivateData:
         compMetadata = padData(compMetadata)
     return compMetadata

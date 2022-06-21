@@ -10,8 +10,8 @@ from fontTools.ttLib import TTFont, getSearchRange
 from fontTools.ttLib.sfnt import \
     SFNTDirectoryEntry, sfntDirectoryFormat, sfntDirectorySize, sfntDirectoryEntryFormat, sfntDirectoryEntrySize, \
     ttcHeaderFormat, ttcHeaderSize
-from utilities import padData, calcPaddingLength, calcHeadCheckSumAdjustmentSFNT, calcTableChecksum
-from woff import packTestCollectionDirectory, packTestDirectory, packTestCollectionHeader, packTestHeader, transformTable
+from testCaseGeneratorLib.utilities import padData, calcPaddingLength, calcHeadCheckSumAdjustmentSFNT, calcTableChecksum
+from testCaseGeneratorLib.woff import packTestCollectionDirectory, packTestDirectory, packTestCollectionHeader, packTestHeader, transformTable
 
 def getTTFont(path, **kwargs):
     return TTFont(path, recalcTimestamp=False, **kwargs)
@@ -36,7 +36,7 @@ def getSFNTData(pathOrFile, unsortGlyfLoca=False, glyphBBox="", alt255UInt16=Fal
     for tag in tableOrder:
         tableChecksums[tag] = font.reader.tables[tag].checkSum
         tableData[tag] = transformTable(font, tag, glyphBBox=glyphBBox, alt255UInt16=alt255UInt16)
-    totalData = "".join([tableData[tag][1] for tag in tableOrder])
+    totalData = b"".join([tableData[tag][1] for tag in tableOrder])
     compData = brotli.compress(totalData, brotli.MODE_FONT)
     if len(compData) >= len(totalData):
         compData = totalData
@@ -77,10 +77,10 @@ def getSFNTCollectionData(pathOrFiles, modifyNames=True, reverseNames=False, DSI
         offset += sfntDirectorySize + (len(tags) * sfntDirectoryEntrySize)
 
     if DSIG:
-        data = "\0" * 4
+        data = b"\0" * 4
         tables.append(data)
         offset += len(data)
-        fontData += struct.pack(">4s", "DSIG")
+        fontData += struct.pack(">4s", b"DSIG")
         fontData += struct.pack(">L", len(data))
         fontData += struct.pack(">L", offset)
 
@@ -139,7 +139,7 @@ def getSFNTCollectionData(pathOrFiles, modifyNames=True, reverseNames=False, DSI
     return fontData
 
 def getWOFFCollectionData(pathOrFiles, MismatchGlyfLoca=False, reverseNames=False):
-    from defaultData import defaultTestData
+    from testCaseGeneratorLib.defaultData import defaultTestData
 
     tableChecksums = []
     tableData = []
@@ -193,7 +193,9 @@ def getWOFFCollectionData(pathOrFiles, MismatchGlyfLoca=False, reverseNames=Fals
                     tableChecksums.append([tag, font.reader.tables[tag].checkSum])
                     tableOrder.append(tag)
                 tableIndices[tag] = tableData.index([tag, data])
-        collectionDirectory.append(dict(numTables=len(tableIndices), flavor=font.sfntVersion, index=tableIndices))
+        collectionDirectory.append(dict(numTables=len(tableIndices),
+                                        flavor=bytes(font.sfntVersion, "utf-8"),
+                                        index=tableIndices))
         font.close()
         del font
 
@@ -201,7 +203,7 @@ def getWOFFCollectionData(pathOrFiles, MismatchGlyfLoca=False, reverseNames=Fals
         locaIndices.reverse()
         for i, entry in enumerate(collectionDirectory):
             entry["index"]["loca"] = locaIndices[i]
-    totalData = "".join([data[1][1] for data in tableData])
+    totalData = b"".join([data[1][1] for data in tableData])
     compData = brotli.compress(totalData, brotli.MODE_FONT)
     if len(compData) >= len(totalData):
         compData = totalData
@@ -231,9 +233,9 @@ def packSFNT(header, directory, tableData, flavor="cff",
     # update the checkSum
     if calcCheckSum:
         if flavor == "cff":
-            f = "OTTO"
+            f = b"OTTO"
         else:
-            f = "\000\001\000\000"
+            f = b"\000\001\000\000"
         calcHeadCheckSumAdjustmentSFNT(directory, tableData, flavor=f)
     # update the header
     cSearchRange, cEntrySelector, cRangeShift = getSearchRange(len(directory), 16)
@@ -244,9 +246,9 @@ def packSFNT(header, directory, tableData, flavor="cff",
     if rangeShift is None:
         rangeShift = cRangeShift
     if flavor == "cff":
-        header["sfntVersion"] = "OTTO"
+        header["sfntVersion"] = b"OTTO"
     else:
-        header["sfntVersion"] = "\000\001\000\000"
+        header["sfntVersion"] = b"\000\001\000\000"
     header["searchRange"] = searchRange
     header["entrySelector"] = entrySelector
     header["rangeShift"] = rangeShift

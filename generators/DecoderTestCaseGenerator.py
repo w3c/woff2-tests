@@ -132,7 +132,7 @@ def writeTest(identifier, title, description, data, specLink=None, credits=[], r
 
     flavor: The flavor of the WOFF data. The options are CFF or TTF.
     """
-    print "Compiling %s..." % identifier
+    print("Compiling %s..." % identifier)
     assert identifier not in registeredIdentifiers, "Duplicate identifier! %s" % identifier
     assert title not in registeredTitles, "Duplicate title! %s" % title
     assert description not in registeredDescriptions, "Duplicate description! %s" % description
@@ -204,7 +204,7 @@ def writeTestCollection(identifier, title, description, data, specLink=None, cre
         number = "%03d" % (i + 1)
         test_identifier = identifier + "-" + number
         test_title = title + " " + number
-        print "Compiling %s..." % test_identifier
+        print("Compiling %s..." % test_identifier)
 
         assert test_title not in registeredTitles, "Duplicate title! %s" % test_title
         assert test_identifier not in registeredIdentifiers, "Duplicate identifier! %s" % test_identifier
@@ -427,7 +427,7 @@ writeTestCollection(
 # Generate the Index
 # ------------------
 
-print "Compiling index..."
+print("Compiling index...")
 
 testGroups = []
 
@@ -441,7 +441,7 @@ generateDecoderIndexHTML(directory=decoderTestDirectory, testCases=testGroups, n
 # Generate the zip
 # ----------------
 
-print "Compiling zip file..."
+print("Compiling zip file...")
 
 zipPath = os.path.join(decoderTestDirectory, "DecoderTestFonts.zip")
 if os.path.exists(zipPath):
@@ -463,7 +463,7 @@ allBinariesZip.close()
 # Generate the Manifest
 # ---------------------
 
-print "Compiling manifest..."
+print("Compiling manifest...")
 
 manifest = []
 
@@ -492,7 +492,7 @@ for tag, title, url, note in groupDefinitions:
 path = os.path.join(decoderDirectory, "manifest.txt")
 if os.path.exists(path):
     os.remove(path)
-f = open(path, "wb")
+f = open(path, "w")
 f.write("\n".join(manifest))
 f.close()
 
@@ -509,4 +509,4 @@ for path in filesOnDisk:
     identifier = os.path.basename(path)
     identifier = identifier.split(".")[0]
     if identifier not in registeredIdentifiers:
-        print "Unknown file:", path
+        print("Unknown file:", path)

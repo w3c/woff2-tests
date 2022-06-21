@@ -24,7 +24,7 @@ def padData(data):
     """
     Pad with null bytes.
     """
-    data += "\0" * calcPaddingLength(len(data))
+    data += b"\0" * calcPaddingLength(len(data))
     return data
 
 # ---------
@@ -45,7 +45,7 @@ def calcTableChecksum(tag, data):
     Calculate the checksum for the given table.
     """
     if tag == "head":
-        checksum = calcChecksum(data[:8] + '\0\0\0\0' + data[12:])
+        checksum = calcChecksum(data[:8] + b"\0\0\0\0" + data[12:])
     else:
         checksum = calcChecksum(data)
     return checksum & 0xffffffff
@@ -94,7 +94,7 @@ def calcHeadCheckSumAdjustmentSFNT(directory, tableData, flavor=None):
             if entry["tag"] == "CFF ":
                 flavor = "OTTO"
                 break
-    assert flavor in ("OTTO", "\000\001\000\000")
+    assert flavor in (b"OTTO", b"\000\001\000\000")
     # make the sfnt header
     searchRange, entrySelector, rangeShift = getSearchRange(len(directory), 16)
     sfntHeaderData = dict(

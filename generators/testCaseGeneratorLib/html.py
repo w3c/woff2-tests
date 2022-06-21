@@ -3,9 +3,9 @@ Test case HTML generator.
 """
 
 import os
-import cgi
+import html
 
-from paths import userAgentTestResourcesDirectory
+from testCaseGeneratorLib.paths import userAgentTestResourcesDirectory
 
 # ------------------------
 # Specification URLs
@@ -64,7 +64,7 @@ pre {
 """.strip()
 
 def escapeAttributeText(text):
-    text = cgi.escape(text)
+    text = html.escape(text)
     replacements = {
         "\"" : "&quot;",
     }
@@ -87,19 +87,19 @@ def _generateSFNTDisplayTestHTML(
     assert title is not None
     assert specLinks
     assert assertion is not None
-    html = [
+    html_string = [
         "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">",
         doNotEditWarning,
         "<html xmlns=\"http://www.w3.org/1999/xhtml\">"
     ]
     # head
-    html.append("\t<head>")
+    html_string.append("\t<head>")
     ## encoding
     s = "\t\t<meta http-equiv=\"content-type\" content=\"text/html;charset=UTF-8\"/>"
-    html.append(s)
+    html_string.append(s)
     ## title
-    s = "\t\t<title>WOFF Test: %s</title>" % cgi.escape(title)
-    html.append(s)
+    s = "\t\t<title>WOFF Test: %s</title>" % html.escape(title)
+    html_string.append(s)
     ## author
     for credit in credits:
         role = credit.get("role")
@@ -109,37 +109,37 @@ def _generateSFNTDisplayTestHTML(
         s = "\t\t<link rel=\"%s\" title=\"%s\" href=\"%s\" />" % (role, title, link)
         if date:
             s += " <!-- %s -->" % date
-        html.append(s)
+        html_string.append(s)
     ## link
     assert chapterURL is not None
     s = "\t\t<link rel=\"help\" href=\"%s\" />" % chapterURL
-    html.append(s)
+    html_string.append(s)
     for link in specLinks:
         s = "\t\t<link rel=\"help\" href=\"%s\" />" % link
-        html.append(s)
+        html_string.append(s)
     ## reviewer
     s = '\t\t<link rel="reviewer" title="Chris Lilley" href="mailto:chris@w3.org" />'
-    html.append(s)
+    html_string.append(s)
     # matching reference
     if refFileName:
         s = '\t\t<link rel="match" href="%s" />' % refFileName
-        html.append(s)
+        html_string.append(s)
     ## flags
     if flags:
         s = "\t\t<meta name=\"flags\" content=\"%s\" />" % " ".join(flags)
-        html.append(s)
+        html_string.append(s)
     ## assertion
     s = "\t\t<meta name=\"assert\" content=\"%s\" />" % escapeAttributeText(assertion)
-    html.append(s)
+    html_string.append(s)
     ## css
-    html.append("\t\t<style type=\"text/css\"><![CDATA[")
+    html_string.append("\t\t<style type=\"text/css\"><![CDATA[")
     s = "\n".join(["\t\t\t" + line for line in css.splitlines()])
-    html.append(s)
-    html.append("\t\t]]></style>")
+    html_string.append(s)
+    html_string.append("\t\t]]></style>")
     ## close
-    html.append("\t</head>")
+    html_string.append("\t</head>")
     # body
-    html.append("\t<body>")
+    html_string.append("\t<body>")
     ## note
     if metadataIsValid is None:
         s = "\t\t<p>Test passes if the word PASS appears below.</p>"
@@ -150,31 +150,31 @@ def _generateSFNTDisplayTestHTML(
         else:
             s = "\t\t<p>Test passes if the word PASS appears below.</p>\n"
             s += "\t\t<p>The Extended Metadata Block is valid and may be displayed to the user upon request.</p>"
-    html.append(s)
+    html_string.append(s)
     # extra notes
     for note in extraSFNTNotes:
-        s = "\t\t<p>%s</p>" % cgi.escape(note)
-        html.append(s)
+        s = "\t\t<p>%s</p>" % html.escape(note)
+        html_string.append(s)
     for note in extraMetadataNotes:
-        s = "\t\t<p>%s</p>" % cgi.escape(note)
-        html.append(s)
+        s = "\t\t<p>%s</p>" % html.escape(note)
+        html_string.append(s)
     ## test case
     s = "\t\t<div class=\"test\">%s</div>" % bodyCharacter
-    html.append(s)
+    html_string.append(s)
     ## show metadata
     if metadataToDisplay:
         s = "\t\t<p>The XML contained in the Extended Metadata Block is below.</p>"
-        html.append(s)
-        html.append("\t\t<pre>")
-        html.append(cgi.escape(metadataToDisplay))
-        html.append("\t\t</pre>")
+        html_string.append(s)
+        html_string.append("\t\t<pre>")
+        html_string.append(html.escape(metadataToDisplay))
+        html_string.append("\t\t</pre>")
     ## close
-    html.append("\t</body>")
+    html_string.append("\t</body>")
     # close
-    html.append("</html>")
+    html_string.append("</html>")
     # finalize
-    html = "\n".join(html)
-    return html
+    html_string = "\n".join(html_string)
+    return html_string
 
 def generateSFNTDisplayTestHTML(
     fileName=None, directory=None, flavor=None, title=None,
@@ -194,7 +194,7 @@ def generateSFNTDisplayTestHTML(
         specLinks += sfntDisplaySpecLink
     if metadataDisplaySpecLink:
         specLinks.append(metadataDisplaySpecLink)
-    html = _generateSFNTDisplayTestHTML(
+    html_string = _generateSFNTDisplayTestHTML(
         css, bodyCharacter,
         fileName=fileName,
         refFileName='%s-ref.xht' % fileName,
@@ -211,8 +211,8 @@ def generateSFNTDisplayTestHTML(
     )
     # write the file
     path = os.path.join(directory, fileName) + ".xht"
-    f = open(path, "wb")
-    f.write(html)
+    f = open(path, "w")
+    f.write(html_string)
     f.close()
 
 def generateSFNTDisplayRefHTML(
@@ -230,7 +230,7 @@ def generateSFNTDisplayRefHTML(
         specLinks += sfntDisplaySpecLink
     if metadataDisplaySpecLink:
         specLinks.append(metadataDisplaySpecLink)
-    html = _generateSFNTDisplayTestHTML(
+    html_string = _generateSFNTDisplayTestHTML(
         css, bodyCharacter,
         fileName=fileName, flavor=flavor,
         title=title,
@@ -245,8 +245,8 @@ def generateSFNTDisplayRefHTML(
     )
     # write the file
     path = os.path.join(directory, fileName) + "-ref.xht"
-    f = open(path, "wb")
-    f.write(html)
+    f = open(path, "w")
+    f.write(html_string)
     f.close()
 
 def poorManMath(text):
@@ -255,7 +255,7 @@ def poorManMath(text):
 
 def generateSFNTDisplayIndexHTML(directory=None, testCases=[]):
     testCount = sum([len(group["testCases"]) for group in testCases])
-    html = [
+    html_string = [
         "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">",
         doNotEditWarning,
         "<html xmlns=\"http://www.w3.org/1999/xhtml\">",
@@ -271,18 +271,18 @@ def generateSFNTDisplayIndexHTML(directory=None, testCases=[]):
     # add the test groups
     for group in testCases:
         title = group["title"]
-        title = cgi.escape(title)
+        title = html.escape(title)
         # write the group header
-        html.append("")
-        html.append("\t\t<h2 class=\"testCategory\">%s</h2>" % title)
+        html_string.append("")
+        html_string.append("\t\t<h2 class=\"testCategory\">%s</h2>" % title)
         # write the individual test cases
         for test in group["testCases"]:
             identifier = test["identifier"]
             title = test["title"]
-            title = cgi.escape(title)
+            title = html.escape(title)
             title = poorManMath(title)
             assertion = test["assertion"]
-            assertion = cgi.escape(assertion)
+            assertion = html.escape(assertion)
             assertion = poorManMath(assertion)
             sfntExpectation = test["sfntExpectation"]
             if sfntExpectation:
@@ -299,28 +299,28 @@ def generateSFNTDisplayIndexHTML(directory=None, testCases=[]):
                 metadataExpectation = "Reject"
             metadataURL = test["metadataURL"]
             # start the test case div
-            html.append("\t\t<div class=\"testCase\" id=\"%s\">" % identifier)
+            html_string.append("\t\t<div class=\"testCase\" id=\"%s\">" % identifier)
             # start the overview div
-            html.append("\t\t\t<div class=\"testCaseOverview\">")
+            html_string.append("\t\t\t<div class=\"testCaseOverview\">")
             # title
-            html.append("\t\t\t\t<h3><a href=\"#%s\">%s</a>: %s</h3>" % (identifier, identifier, title))
+            html_string.append("\t\t\t\t<h3><a href=\"#%s\">%s</a>: %s</h3>" % (identifier, identifier, title))
             # assertion
-            html.append("\t\t\t\t<p>%s</p>" % assertion)
+            html_string.append("\t\t\t\t<p>%s</p>" % assertion)
             # close the overview div
-            html.append("\t\t\t</div>")
+            html_string.append("\t\t\t</div>")
             # start the details div
-            html.append("\t\t\t<div class=\"testCaseDetails\">")
+            html_string.append("\t\t\t<div class=\"testCaseDetails\">")
             # start the pages div
-            html.append("\t\t\t\t<div class=\"testCasePages\">")
+            html_string.append("\t\t\t\t<div class=\"testCasePages\">")
             # test page
-            html.append("\t\t\t\t\t<p><a href=\"%s.xht\">Test</a></p>" % identifier)
+            html_string.append("\t\t\t\t\t<p><a href=\"%s.xht\">Test</a></p>" % identifier)
             # reference page
             if test["hasReferenceRendering"]:
-                html.append("\t\t\t\t\t<p><a href=\"%s-ref.xht\">Reference Rendering</a></p>" % identifier)
+                html_string.append("\t\t\t\t\t<p><a href=\"%s-ref.xht\">Reference Rendering</a></p>" % identifier)
             # close the pages div
-            html.append("\t\t\t\t</div>")
+            html_string.append("\t\t\t\t</div>")
             # start the expectations div
-            html.append("\t\t\t\t<div class=\"testCaseExpectations\">")
+            html_string.append("\t\t\t\t<div class=\"testCaseExpectations\">")
             # sfnt expectation
             string = "SFNT Expectation: %s" % sfntExpectation
             if sfntURL:
@@ -333,7 +333,7 @@ def generateSFNTDisplayIndexHTML(directory=None, testCases=[]):
                         url = "<a href=\"%s\">documentation</a>" % url
                         links.append(url)
                 string += " (%s)" % " ".join(links)
-            html.append("\t\t\t\t\t<p>%s</p>" % string)
+            html_string.append("\t\t\t\t\t<p>%s</p>" % string)
             # metadata expectation
             string = "Metadata Expectation: %s" % metadataExpectation
             if metadataURL:
@@ -342,29 +342,29 @@ def generateSFNTDisplayIndexHTML(directory=None, testCases=[]):
                 else:
                     s = "(documentation)"
                 string += " <a href=\"%s\">%s</a>" % (metadataURL, s)
-            html.append("\t\t\t\t\t<p>%s</p>" % string)
+            html_string.append("\t\t\t\t\t<p>%s</p>" % string)
             # close the expectations div
-            html.append("\t\t\t\t</div>")
+            html_string.append("\t\t\t\t</div>")
             # close the details div
-            html.append("\t\t\t</div>")
+            html_string.append("\t\t\t</div>")
             # close the test case div
-            html.append("\t\t</div>")
+            html_string.append("\t\t</div>")
 
     # close body
-    html.append("\t</body>")
+    html_string.append("\t</body>")
     # close html
-    html.append("</html>")
+    html_string.append("</html>")
     # finalize
-    html = "\n".join(html)
+    html_string = "\n".join(html_string)
     # write
     path = os.path.join(directory, "testcaseindex.xht")
-    f = open(path, "wb")
-    f.write(html)
+    f = open(path, "w")
+    f.write(html_string)
     f.close()
 
 def generateFormatIndexHTML(directory=None, testCases=[]):
     testCount = sum([len(group["testCases"]) for group in testCases])
-    html = [
+    html_string = [
         "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">",
         doNotEditWarning,
         "<html xmlns=\"http://www.w3.org/1999/xhtml\">",
@@ -378,23 +378,23 @@ def generateFormatIndexHTML(directory=None, testCases=[]):
         "\t\t<h1>WOFF 2.0: Format Test Suite (%d tests)</h1>" % testCount,
     ]
     # add a download note
-    html.append("\t\t<div class=\"mainNote\">")
-    html.append("\t\t\tThe files used in these test can be obtained individually <a href=\"../xhtml1\">here</a> or as a single zip file <a href=\"FormatTestFonts.zip\">here</a>.")
-    html.append("\t\t</div>")
+    html_string.append("\t\t<div class=\"mainNote\">")
+    html_string.append("\t\t\tThe files used in these test can be obtained individually <a href=\"../xhtml1\">here</a> or as a single zip file <a href=\"FormatTestFonts.zip\">here</a>.")
+    html_string.append("\t\t</div>")
     # add the test groups
     for group in testCases:
         title = group["title"]
-        title = cgi.escape(title)
+        title = html.escape(title)
         # write the group header
-        html.append("")
-        html.append("\t\t<h2 class=\"testCategory\">%s</h2>" % title)
+        html_string.append("")
+        html_string.append("\t\t<h2 class=\"testCategory\">%s</h2>" % title)
         # write the individual test cases
         for test in group["testCases"]:
             identifier = test["identifier"]
             title = test["title"]
-            title = cgi.escape(title)
+            title = html.escape(title)
             description = test["description"]
-            description = cgi.escape(description)
+            description = html.escape(description)
             valid = test["valid"]
             if valid:
                 valid = "Yes"
@@ -402,52 +402,52 @@ def generateFormatIndexHTML(directory=None, testCases=[]):
                 valid = "No"
             specLink = test["specLink"]
             # start the test case div
-            html.append("\t\t<div class=\"testCase\" id=\"%s\">" % identifier)
+            html_string.append("\t\t<div class=\"testCase\" id=\"%s\">" % identifier)
             # start the overview div
-            html.append("\t\t\t<div class=\"testCaseOverview\">")
+            html_string.append("\t\t\t<div class=\"testCaseOverview\">")
             # title
-            html.append("\t\t\t\t<h3><a href=\"#%s\">%s</a>: %s</h3>" % (identifier, identifier, title))
+            html_string.append("\t\t\t\t<h3><a href=\"#%s\">%s</a>: %s</h3>" % (identifier, identifier, title))
             # assertion
-            html.append("\t\t\t\t<p>%s</p>" % description)
+            html_string.append("\t\t\t\t<p>%s</p>" % description)
             # close the overview div
-            html.append("\t\t\t</div>")
+            html_string.append("\t\t\t</div>")
             # start the details div
-            html.append("\t\t\t<div class=\"testCaseDetails\">")
+            html_string.append("\t\t\t<div class=\"testCaseDetails\">")
             # validity
             string = "Valid: <span id=\"%s-validity\">%s</span>" % (identifier, valid)
-            html.append("\t\t\t\t\t<p>%s</p>" % string)
+            html_string.append("\t\t\t\t\t<p>%s</p>" % string)
             # documentation
             if specLink is not None:
                 links = specLink.split(' ')
 
-                html.append("\t\t\t\t\t<p>")
+                html_string.append("\t\t\t\t\t<p>")
                 for link in links:
                     name = 'Documentation'
                     if '#' in link:
                         name = link.split('#')[1]
                     string = "\t\t\t\t\t\t<a href=\"%s\">%s</a> " % (link, name)
-                    html.append(string)
-                html.append("\t\t\t\t\t</p>")
+                    html_string.append(string)
+                html_string.append("\t\t\t\t\t</p>")
 
             # close the details div
-            html.append("\t\t\t</div>")
+            html_string.append("\t\t\t</div>")
             # close the test case div
-            html.append("\t\t</div>")
+            html_string.append("\t\t</div>")
     # close body
-    html.append("\t</body>")
+    html_string.append("\t</body>")
     # close html
-    html.append("</html>")
+    html_string.append("</html>")
     # finalize
-    html = "\n".join(html)
+    html_string = "\n".join(html_string)
     # write
     path = os.path.join(directory, "testcaseindex.xht")
-    f = open(path, "wb")
-    f.write(html)
+    f = open(path, "w")
+    f.write(html_string)
     f.close()
 
 def generateAuthoringToolIndexHTML(directory=None, testCases=[], note=None):
     testCount = sum([len(group["testCases"]) for group in testCases])
-    html = [
+    html_string = [
         "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">",
         doNotEditWarning,
         "<html xmlns=\"http://www.w3.org/1999/xhtml\">",
@@ -461,36 +461,36 @@ def generateAuthoringToolIndexHTML(directory=None, testCases=[], note=None):
         "\t\t<h1>WOFF 2.0: Authoring Tool Test Suite (%d tests)</h1>" % testCount,
     ]
     # add a download note
-    html.append("\t\t<div class=\"mainNote\">")
-    html.append("\t\t\tThe files used in these test can be obtained individually <a href=\"../xhtml1\">here</a> or as a single zip file <a href=\"AuthoringToolTestFonts.zip\">here</a>.")
-    html.append("\t\t</div>")
+    html_string.append("\t\t<div class=\"mainNote\">")
+    html_string.append("\t\t\tThe files used in these test can be obtained individually <a href=\"../xhtml1\">here</a> or as a single zip file <a href=\"AuthoringToolTestFonts.zip\">here</a>.")
+    html_string.append("\t\t</div>")
     # add the note
     if note:
-        html.append("\t\t<div class=\"mainNote\">")
+        html_string.append("\t\t<div class=\"mainNote\">")
         for line in note.splitlines():
-            html.append("\t\t\t" + line)
-        html.append("\t\t</div>")
+            html_string.append("\t\t\t" + line)
+        html_string.append("\t\t</div>")
     # add the test groups
     for group in testCases:
         title = group["title"]
-        title = cgi.escape(title)
+        title = html.escape(title)
         # write the group header
-        html.append("")
-        html.append("\t\t<h2 class=\"testCategory\">%s</h2>" % title)
+        html_string.append("")
+        html_string.append("\t\t<h2 class=\"testCategory\">%s</h2>" % title)
         # write the group note
         note = group["note"]
         if note:
-            html.append("\t\t<div class=\"testCategoryNote\">")
+            html_string.append("\t\t<div class=\"testCategoryNote\">")
             for line in note.splitlines():
-                html.append("\t\t\t" + line)
-            html.append("\t\t</div>")
+                html_string.append("\t\t\t" + line)
+            html_string.append("\t\t</div>")
         # write the individual test cases
         for test in group["testCases"]:
             identifier = test["identifier"]
             title = test["title"]
-            title = cgi.escape(title)
+            title = html.escape(title)
             description = test["description"]
-            description = cgi.escape(description)
+            description = html.escape(description)
             shouldConvert = test["shouldConvert"]
             if shouldConvert:
                 shouldConvert = "Yes"
@@ -498,52 +498,52 @@ def generateAuthoringToolIndexHTML(directory=None, testCases=[], note=None):
                 shouldConvert = "No"
             specLink = test["specLink"]
             # start the test case div
-            html.append("\t\t<div class=\"testCase\" id=\"%s\">" % identifier)
+            html_string.append("\t\t<div class=\"testCase\" id=\"%s\">" % identifier)
             # start the overview div
-            html.append("\t\t\t<div class=\"testCaseOverview\">")
+            html_string.append("\t\t\t<div class=\"testCaseOverview\">")
             # title
-            html.append("\t\t\t\t<h3><a href=\"#%s\">%s</a>: %s</h3>" % (identifier, identifier, title))
+            html_string.append("\t\t\t\t<h3><a href=\"#%s\">%s</a>: %s</h3>" % (identifier, identifier, title))
             # assertion
-            html.append("\t\t\t\t<p>%s</p>" % description)
+            html_string.append("\t\t\t\t<p>%s</p>" % description)
             # close the overview div
-            html.append("\t\t\t</div>")
+            html_string.append("\t\t\t</div>")
             # start the details div
-            html.append("\t\t\t<div class=\"testCaseDetails\">")
+            html_string.append("\t\t\t<div class=\"testCaseDetails\">")
             # validity
             string = "Should Convert to WOFF: <span id=\"%s-shouldconvert\">%s</span>" % (identifier, shouldConvert)
-            html.append("\t\t\t\t\t<p>%s</p>" % string)
+            html_string.append("\t\t\t\t\t<p>%s</p>" % string)
             # documentation
             if specLink is not None:
                 links = specLink.split(' ')
 
-                html.append("\t\t\t\t\t<p>")
+                html_string.append("\t\t\t\t\t<p>")
                 for link in links:
                     name = 'Documentation'
                     if '#' in link:
                         name = link.split('#')[1]
                     string = "\t\t\t\t\t\t<a href=\"%s\">%s</a> " % (link, name)
-                    html.append(string)
-                html.append("\t\t\t\t\t</p>")
+                    html_string.append(string)
+                html_string.append("\t\t\t\t\t</p>")
 
             # close the details div
-            html.append("\t\t\t</div>")
+            html_string.append("\t\t\t</div>")
             # close the test case div
-            html.append("\t\t</div>")
+            html_string.append("\t\t</div>")
     # close body
-    html.append("\t</body>")
+    html_string.append("\t</body>")
     # close html
-    html.append("</html>")
+    html_string.append("</html>")
     # finalize
-    html = "\n".join(html)
+    html_string = "\n".join(html_string)
     # write
     path = os.path.join(directory, "testcaseindex.xht")
-    f = open(path, "wb")
-    f.write(html)
+    f = open(path, "w")
+    f.write(html_string)
     f.close()
 
 def generateDecoderIndexHTML(directory=None, testCases=[], note=None):
     testCount = sum([len(group["testCases"]) for group in testCases])
-    html = [
+    html_string = [
         "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">",
         doNotEditWarning,
         "<html xmlns=\"http://www.w3.org/1999/xhtml\">",
@@ -557,36 +557,36 @@ def generateDecoderIndexHTML(directory=None, testCases=[], note=None):
         "\t\t<h1>WOFF 2.0: Decoder Test Suite (%d tests)</h1>" % testCount,
     ]
     # add a download note
-    html.append("\t\t<div class=\"mainNote\">")
-    html.append("\t\t\tThe files used in these test can be obtained individually <a href=\"../xhtml1\">here</a> or as a single zip file <a href=\"AuthoringToolTestFonts.zip\">here</a>.")
-    html.append("\t\t</div>")
+    html_string.append("\t\t<div class=\"mainNote\">")
+    html_string.append("\t\t\tThe files used in these test can be obtained individually <a href=\"../xhtml1\">here</a> or as a single zip file <a href=\"AuthoringToolTestFonts.zip\">here</a>.")
+    html_string.append("\t\t</div>")
     # add the note
     if note:
-        html.append("\t\t<div class=\"mainNote\">")
+        html_string.append("\t\t<div class=\"mainNote\">")
         for line in note.splitlines():
-            html.append("\t\t\t" + line)
-        html.append("\t\t</div>")
+            html_string.append("\t\t\t" + line)
+        html_string.append("\t\t</div>")
     # add the test groups
     for group in testCases:
         title = group["title"]
-        title = cgi.escape(title)
+        title = html.escape(title)
         # write the group header
-        html.append("")
-        html.append("\t\t<h2 class=\"testCategory\">%s</h2>" % title)
+        html_string.append("")
+        html_string.append("\t\t<h2 class=\"testCategory\">%s</h2>" % title)
         # write the group note
         note = group["note"]
         if note:
-            html.append("\t\t<div class=\"testCategoryNote\">")
+            html_string.append("\t\t<div class=\"testCategoryNote\">")
             for line in note.splitlines():
-                html.append("\t\t\t" + line)
-            html.append("\t\t</div>")
+                html_string.append("\t\t\t" + line)
+            html_string.append("\t\t</div>")
         # write the individual test cases
         for test in group["testCases"]:
             identifier = test["identifier"]
             title = test["title"]
-            title = cgi.escape(title)
+            title = html.escape(title)
             description = test["description"]
-            description = cgi.escape(description)
+            description = html.escape(description)
             roundTrip = test["roundTrip"]
             if roundTrip:
                 roundTrip = "Yes"
@@ -594,47 +594,47 @@ def generateDecoderIndexHTML(directory=None, testCases=[], note=None):
                 roundTrip = "No"
             specLink = test["specLink"]
             # start the test case div
-            html.append("\t\t<div class=\"testCase\" id=\"%s\">" % identifier)
+            html_string.append("\t\t<div class=\"testCase\" id=\"%s\">" % identifier)
             # start the overview div
-            html.append("\t\t\t<div class=\"testCaseOverview\">")
+            html_string.append("\t\t\t<div class=\"testCaseOverview\">")
             # title
-            html.append("\t\t\t\t<h3><a href=\"#%s\">%s</a>: %s</h3>" % (identifier, identifier, title))
+            html_string.append("\t\t\t\t<h3><a href=\"#%s\">%s</a>: %s</h3>" % (identifier, identifier, title))
             # assertion
-            html.append("\t\t\t\t<p>%s</p>" % description)
+            html_string.append("\t\t\t\t<p>%s</p>" % description)
             # close the overview div
-            html.append("\t\t\t</div>")
+            html_string.append("\t\t\t</div>")
             # start the details div
-            html.append("\t\t\t<div class=\"testCaseDetails\">")
+            html_string.append("\t\t\t<div class=\"testCaseDetails\">")
             # validity
             string = "Round-Trip Test: <span id=\"%s-shouldconvert\">%s</span>" % (identifier, roundTrip)
-            html.append("\t\t\t\t\t<p>%s</p>" % string)
+            html_string.append("\t\t\t\t\t<p>%s</p>" % string)
             # documentation
             if specLink is not None:
                 links = specLink.split(' ')
 
-                html.append("\t\t\t\t\t<p>")
+                html_string.append("\t\t\t\t\t<p>")
                 for link in links:
                     name = 'Documentation'
                     if '#' in link:
                         name = link.split('#')[1]
                     string = "\t\t\t\t\t\t<a href=\"%s\">%s</a> " % (link, name)
-                    html.append(string)
-                html.append("\t\t\t\t\t</p>")
+                    html_string.append(string)
+                html_string.append("\t\t\t\t\t</p>")
 
             # close the details div
-            html.append("\t\t\t</div>")
+            html_string.append("\t\t\t</div>")
             # close the test case div
-            html.append("\t\t</div>")
+            html_string.append("\t\t</div>")
     # close body
-    html.append("\t</body>")
+    html_string.append("\t</body>")
     # close html
-    html.append("</html>")
+    html_string.append("</html>")
     # finalize
-    html = "\n".join(html)
+    html_string = "\n".join(html_string)
     # write
     path = os.path.join(directory, "testcaseindex.xht")
-    f = open(path, "wb")
-    f.write(html)
+    f = open(path, "w")
+    f.write(html_string)
     f.close()
 
 
