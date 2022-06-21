@@ -403,6 +403,36 @@ writeTest(
     flavor="TTF"
 )
 
+def makeGlyfWithOverlapBit():
+    font = getTTFont(sfntTTFSourcePath, recalcBBoxes=True)
+    glyf = font["glyf"]
+
+    for glyphName in glyf.keys():
+        glyph = glyf[glyphName]
+        if glyph.numberOfContours > 0:
+            glyph.flags[0] |= 0x40 # flagOverlapSimple
+
+    tableData = getSFNTData(font)[0]
+    font.close()
+    del font
+    header, directory, tableData = defaultSFNTTestData(tableData=tableData, flavor="TTF")
+    data = packSFNT(header, directory, tableData, flavor="TTF")
+    return data
+
+writeTest(
+    identifier="tabledata-transform-glyf-006",
+    title="Valid TTF SFNT with Overlap Simple Bit",
+    description=("TTF flavored SFNT font containing glyphs with the overlap simple bit set, the "
+                 "transformed glyf table in the output WOFF font must have overlapBitmap with 1 for "
+                 "all glyphs that have outlines."),
+    shouldConvert=True,
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    specLink="#glyf_table_format",
+    data=makeGlyfWithOverlapBit(),
+    flavor="TTF"
+)
+
+
 # -----------
 # Collections
 # -----------
