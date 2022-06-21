@@ -3198,7 +3198,7 @@ available2a = """
 			@import url("test-fonts.css");
 			@font-face {
 				font-family: "WOFF Test";
-				src: url("%s/available-002.woff2#1") format("woff2");
+				src: url("available-002.woff2#WOFFTestTTF0-Regular") format("woff2");
 			}
 			body {
 				font-size: 20px;
@@ -3217,7 +3217,7 @@ available2a = """
 		<div class="test">P</div>
 	</body>
 </html>
-""".strip() % (doNotEditWarning, expandSpecLinks("#conform-mustLoadFontCollection"), os.path.basename(userAgentTestResourcesDirectory))
+""".strip() % (doNotEditWarning, expandSpecLinks("#conform-mustLoadFontCollection"))
 p = os.path.join(userAgentTestResourcesDirectory, "available-002a.xht")
 f = open(p, "w")
 f.write(available2a)
@@ -3239,7 +3239,7 @@ available2b = """
 			@import url("test-fonts.css");
 			@font-face {
 				font-family: "WOFF Test";
-				src: url("available-002.woff2#2") format("woff2");
+				src: url("available-002.woff2#WOFFTestTTF1-Regular") format("woff2");
 			}
 			body {
 				font-size: 20px;
