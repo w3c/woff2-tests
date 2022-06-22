@@ -34,6 +34,7 @@ from testCaseGeneratorLib.paths import resourcesDirectory, authoringToolDirector
 from testCaseGeneratorLib.html import generateAuthoringToolIndexHTML, expandSpecLinks
 from testCaseGeneratorLib.utilities import calcPaddingLength, calcTableChecksum
 from testCaseGeneratorLib.sharedCases import makeLSB1
+from testCaseGeneratorLib.sharedCases import makeGlyfOverlapBitmapSFNT
 
 # ------------------
 # Directory Creation
@@ -403,22 +404,6 @@ writeTest(
     flavor="TTF"
 )
 
-def makeGlyfWithOverlapBit():
-    font = getTTFont(sfntTTFSourcePath, recalcBBoxes=True)
-    glyf = font["glyf"]
-
-    for glyphName in glyf.keys():
-        glyph = glyf[glyphName]
-        if glyph.numberOfContours > 0:
-            glyph.flags[0] |= 0x40 # flagOverlapSimple
-
-    tableData = getSFNTData(font)[0]
-    font.close()
-    del font
-    header, directory, tableData = defaultSFNTTestData(tableData=tableData, flavor="TTF")
-    data = packSFNT(header, directory, tableData, flavor="TTF")
-    return data
-
 writeTest(
     identifier="tabledata-transform-glyf-006",
     title="Valid TTF SFNT with Overlap Simple Bit",
@@ -427,8 +412,8 @@ writeTest(
                  "all glyphs that have outlines."),
     shouldConvert=True,
     credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
-    specLink="#glyf_table_format",
-    data=makeGlyfWithOverlapBit(),
+    specLink="#glyf_table_format", # TODO use conformance link
+    data=makeGlyfOverlapBitmapSFNT(),
     flavor="TTF"
 )
 
