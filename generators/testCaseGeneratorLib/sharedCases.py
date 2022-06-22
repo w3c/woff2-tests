@@ -626,6 +626,15 @@ def makeGlyfOverlapBitmapSFNT():
     data = packSFNT(header, directory, tableData, flavor="TTF")
     return data
 
+def makeGlyfNoOverlapBitmapSFNT():
+    font = getTTFont(sfntTTFSourcePath, recalcBBoxes=True)
+    tableData = getSFNTData(font)[0]
+    font.close()
+    del font
+    header, directory, tableData = defaultSFNTTestData(tableData=tableData, flavor="TTF")
+    data = packSFNT(header, directory, tableData, flavor="TTF")
+    return data
+
 
 def makeGlyfOverlapBitmap():
     header, directory, tableData = defaultTestData(flavor="TTF")
@@ -649,6 +658,19 @@ def makeGlyfOverlapBitmap():
             entry["transformLength"] += 1
 
         offset += entry["transformLength"]
+
+    tableData = brotli.compress(decompressedTableData, brotli.MODE_FONT)
+
+    header["length"] = woffHeaderSize + len(packTestDirectory(directory)) + len(tableData)
+    header["length"] += calcPaddingLength(header["length"])
+    header["totalCompressedSize"] = len(tableData)
+
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
+    return data
+
+def makeGlyfNoOverlapBitmap():
+    header, directory, tableData = defaultTestData(flavor="TTF")
+    decompressedTableData = brotli.decompress(tableData)
 
     tableData = brotli.compress(decompressedTableData, brotli.MODE_FONT)
 

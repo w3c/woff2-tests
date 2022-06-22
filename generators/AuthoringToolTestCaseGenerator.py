@@ -34,7 +34,7 @@ from testCaseGeneratorLib.paths import resourcesDirectory, authoringToolDirector
 from testCaseGeneratorLib.html import generateAuthoringToolIndexHTML, expandSpecLinks
 from testCaseGeneratorLib.utilities import calcPaddingLength, calcTableChecksum
 from testCaseGeneratorLib.sharedCases import makeLSB1
-from testCaseGeneratorLib.sharedCases import makeGlyfOverlapBitmapSFNT
+from testCaseGeneratorLib.sharedCases import makeGlyfOverlapBitmapSFNT, makeGlyfNoOverlapBitmapSFNT
 
 # ------------------
 # Directory Creation
@@ -412,8 +412,20 @@ writeTest(
                  "all glyphs that have outlines."),
     shouldConvert=True,
     credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
-    specLink="#glyf_table_format", # TODO use conformance link
+    specLink="#conform-hasOverlap",
     data=makeGlyfOverlapBitmapSFNT(),
+    flavor="TTF"
+)
+
+writeTest(
+    identifier="tabledata-transform-glyf-007",
+    title="Valid TTF SFNT with no Overlap Simple Bit",
+    description=("TTF flavored SFNT font containing no glyphs with the overlap simple bit set, the "
+                 "transformed glyf table in the output WOFF font must not include an overlapBitmap."),
+    shouldConvert=True,
+    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    specLink="#conform-noOverlap",
+    data=makeGlyfNoOverlapBitmapSFNT(),
     flavor="TTF"
 )
 
