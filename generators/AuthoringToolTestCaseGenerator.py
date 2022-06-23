@@ -34,6 +34,7 @@ from testCaseGeneratorLib.paths import resourcesDirectory, authoringToolDirector
 from testCaseGeneratorLib.html import generateAuthoringToolIndexHTML, expandSpecLinks
 from testCaseGeneratorLib.utilities import calcPaddingLength, calcTableChecksum
 from testCaseGeneratorLib.sharedCases import makeLSB1
+from testCaseGeneratorLib.sharedCases import makeGlyfOverlapBitmapSFNT, makeGlyfNoOverlapBitmapSFNT
 
 # ------------------
 # Directory Creation
@@ -402,6 +403,32 @@ writeTest(
     data=makeLSB1(),
     flavor="TTF"
 )
+
+writeTest(
+    identifier="tabledata-transform-glyf-006",
+    title="Valid TTF SFNT with Overlap Simple Bit",
+    description=("TTF flavored SFNT font containing glyphs with the overlap simple bit set, the "
+                 "transformed glyf table in the output WOFF font must have overlapBitmap with 1 for "
+                 "all glyphs that have outlines."),
+    shouldConvert=True,
+    credits=[dict(title="Garret Rieger", role="author")],
+    specLink="#conform-hasOverlap",
+    data=makeGlyfOverlapBitmapSFNT(),
+    flavor="TTF"
+)
+
+writeTest(
+    identifier="tabledata-transform-glyf-007",
+    title="Valid TTF SFNT with no Overlap Simple Bit",
+    description=("TTF flavored SFNT font containing no glyphs with the overlap simple bit set, the "
+                 "transformed glyf table in the output WOFF font must not include an overlapBitmap."),
+    shouldConvert=True,
+    credits=[dict(title="Garret Rieger", role="author")],
+    specLink="#conform-noOverlap",
+    data=makeGlyfNoOverlapBitmapSFNT(),
+    flavor="TTF"
+)
+
 
 # -----------
 # Collections

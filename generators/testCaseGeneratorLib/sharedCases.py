@@ -16,7 +16,7 @@ from testCaseGeneratorLib.defaultData import defaultTestData, defaultSFNTTestDat
     sfntCFFTableData, testCFFDataWOFFDirectory
 from testCaseGeneratorLib.paths import sfntTTFSourcePath, sfntTTFCompositeSourcePath
 from testCaseGeneratorLib.utilities import calcPaddingLength, padData, calcTableChecksum, stripMetadata
-from testCaseGeneratorLib.sfnt import getSFNTData, packSFNT
+from testCaseGeneratorLib.sfnt import getSFNTData, packSFNT, getTTFont
 
 def makeMetadataTest(metadata):
     """
@@ -607,6 +607,77 @@ def makeHmtxTransform1():
             assert flags & (1 << 0)
             assert flags & (1 << 1)
         offset += entry["transformLength"]
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
+    return data
+
+def makeGlyfOverlapBitmapSFNT():
+    font = getTTFont(sfntTTFSourcePath, recalcBBoxes=True)
+    glyf = font["glyf"]
+
+    for glyphName in glyf.keys():
+        glyph = glyf[glyphName]
+        if glyph.numberOfContours > 0:
+            glyph.flags[0] |= 0x40 # flagOverlapSimple
+
+    tableData = getSFNTData(font)[0]
+    font.close()
+    del font
+    header, directory, tableData = defaultSFNTTestData(tableData=tableData, flavor="TTF")
+    data = packSFNT(header, directory, tableData, flavor="TTF")
+    return data
+
+def makeGlyfNoOverlapBitmapSFNT():
+    font = getTTFont(sfntTTFSourcePath, recalcBBoxes=True)
+    tableData = getSFNTData(font)[0]
+    font.close()
+    del font
+    header, directory, tableData = defaultSFNTTestData(tableData=tableData, flavor="TTF")
+    data = packSFNT(header, directory, tableData, flavor="TTF")
+    return data
+
+
+def makeGlyfOverlapBitmap():
+    header, directory, tableData = defaultTestData(flavor="TTF")
+    decompressedTableData = brotli.decompress(tableData)
+    offset = 0
+    for entry in directory:
+        if entry["tag"] == "glyf":
+            assert entry["transformFlag"] == 0
+            flagsOffset = offset + 3
+            nextTableOffset = offset + entry["transformLength"]
+
+            flags = decompressedTableData[flagsOffset]
+            flags |= (1 << 0)
+
+            decompressedTableData = (decompressedTableData[:flagsOffset]
+                                     + struct.pack(">B", flags)
+                                     + decompressedTableData[flagsOffset + 1:nextTableOffset]
+                                     + struct.pack(">B", 0b00110000)
+                                     + decompressedTableData[nextTableOffset:])
+
+            entry["transformLength"] += 1
+
+        offset += entry["transformLength"]
+
+    tableData = brotli.compress(decompressedTableData, brotli.MODE_FONT)
+
+    header["length"] = woffHeaderSize + len(packTestDirectory(directory)) + len(tableData)
+    header["length"] += calcPaddingLength(header["length"])
+    header["totalCompressedSize"] = len(tableData)
+
+    data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
+    return data
+
+def makeGlyfNoOverlapBitmap():
+    header, directory, tableData = defaultTestData(flavor="TTF")
+    decompressedTableData = brotli.decompress(tableData)
+
+    tableData = brotli.compress(decompressedTableData, brotli.MODE_FONT)
+
+    header["length"] = woffHeaderSize + len(packTestDirectory(directory)) + len(tableData)
+    header["length"] += calcPaddingLength(header["length"])
+    header["totalCompressedSize"] = len(tableData)
+
     data = padData(packTestHeader(header) + packTestDirectory(directory) + tableData)
     return data
 

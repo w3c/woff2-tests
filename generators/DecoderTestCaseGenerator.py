@@ -302,6 +302,39 @@ writeTest(
     data=makeHmtxLSB1(),
 )
 
+def makeGlyfWithOverlaps():
+    sfntdata = makeGlyfOverlapBitmapSFNT()
+    woffdata = makeGlyfOverlapBitmap()
+    return woffdata, sfntdata
+
+def makeGlyfWithNoOverlaps():
+    sfntdata = makeGlyfNoOverlapBitmapSFNT()
+    woffdata = makeGlyfNoOverlapBitmap()
+    return woffdata, sfntdata
+
+writeTest(
+    identifier="roundtrip-glyf-overlaps-001",
+    title="Font with Overlap Bitmap",
+    description="TTF flavored font with glyphs that have the overlap simple bit set. The encoder/decoder must keep the bits the same.",
+    roundTrip=True,
+    flavor="TTF",
+    credits=[dict(title="Garret Rieger", role="author")],
+    specLink="#conform-hasOverlap #conform-mustCheckOptionsFlag0 #conform-mustReconstructOverlap",
+    data=makeGlyfWithOverlaps(),
+)
+
+writeTest(
+    identifier="roundtrip-glyf-overlaps-002",
+    title="Font with No Overlap Bitmap",
+    description=("TTF flavored font with no glyphs that have the overlap simple bit set. "
+                 "The encoder/decoder must keep the bits the same."),
+    roundTrip=True,
+    flavor="TTF",
+    credits=[dict(title="Garret Rieger", role="author")],
+    specLink="#conform-noOverlap #conform-mustZeroOverlap",
+    data=makeGlyfWithNoOverlaps(),
+)
+
 writeTest(
     identifier="validation-loca-format-001",
     title=makeValidLoca1Title,
