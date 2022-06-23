@@ -318,7 +318,7 @@ writeTest(
     description="TTF flavored font with glyphs that have the overlap simple bit set. The encoder/decoder must keep the bits the same.",
     roundTrip=True,
     flavor="TTF",
-    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    credits=[dict(title="Garret Rieger", role="author")],
     specLink="#conform-hasOverlap #conform-mustCheckOptionsFlag0 #conform-mustReconstructOverlap",
     data=makeGlyfWithOverlaps(),
 )
@@ -330,7 +330,7 @@ writeTest(
                  "The encoder/decoder must keep the bits the same."),
     roundTrip=True,
     flavor="TTF",
-    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    credits=[dict(title="Garret Rieger", role="author")],
     specLink="#conform-noOverlap #conform-mustZeroOverlap",
     data=makeGlyfWithNoOverlaps(),
 )

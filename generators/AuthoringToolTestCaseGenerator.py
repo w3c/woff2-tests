@@ -411,7 +411,7 @@ writeTest(
                  "transformed glyf table in the output WOFF font must have overlapBitmap with 1 for "
                  "all glyphs that have outlines."),
     shouldConvert=True,
-    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    credits=[dict(title="Garret Rieger", role="author")],
     specLink="#conform-hasOverlap",
     data=makeGlyfOverlapBitmapSFNT(),
     flavor="TTF"
@@ -423,7 +423,7 @@ writeTest(
     description=("TTF flavored SFNT font containing no glyphs with the overlap simple bit set, the "
                  "transformed glyf table in the output WOFF font must not include an overlapBitmap."),
     shouldConvert=True,
-    credits=[dict(title="Khaled Hosny", role="author", link="http://khaledhosny.org")],
+    credits=[dict(title="Garret Rieger", role="author")],
     specLink="#conform-noOverlap",
     data=makeGlyfNoOverlapBitmapSFNT(),
     flavor="TTF"
