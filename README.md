@@ -19,6 +19,8 @@ To compile a particular test suite, simply run the relevant script:
 
     >>> python AuthoringToolTestCaseGenerator.py
 
+    >>> python DecoderTestCaseGenerator.py
+
     >>> python FormatTestCaseGenerator.py
 
     >>> python UserAgentTestCaseGenerator.py
